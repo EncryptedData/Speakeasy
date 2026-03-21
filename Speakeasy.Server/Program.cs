@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
+using Speakeasy.Server.Models.Extensions;
 
 namespace Speakeasy.Server;
 
@@ -51,6 +52,8 @@ public class Program
                     NamingStrategy = new CamelCaseNamingStrategy(),
                 };
             });
+
+        services.AddModelServices(config);
     }
 
     private static void ConfigureApplication(WebApplication app)
