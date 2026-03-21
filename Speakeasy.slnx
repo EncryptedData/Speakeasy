@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Speakeasy.Server.Controllers.ApiVersion1/Speakeasy.Server.Controllers.ApiVersion1.csproj" />
   <Project Path="Speakeasy.Server/Speakeasy.Server.csproj" />
 </Solution>

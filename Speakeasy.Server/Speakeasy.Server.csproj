@@ -13,4 +13,8 @@
       <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Speakeasy.Server.Controllers.ApiVersion1\Speakeasy.Server.Controllers.ApiVersion1.csproj" />
+    </ItemGroup>
+
 </Project>
