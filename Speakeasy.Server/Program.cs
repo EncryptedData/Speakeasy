@@ -1,14 +1,46 @@
+using Serilog;
+using Serilog.Events;
+
 namespace Speakeasy.Server;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
 
-        app.MapGet("/", () => "Hello World!");
+        try
+        {
+            var builder = WebApplication.CreateBuilder(args);
+            ConfigureServices(builder.Services, builder.Configuration);
+            
+            var app = builder.Build();
 
-        app.Run();
+            app.MapGet("/", () => "Hello World!");
+
+            await app.RunAsync();
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "An uncaught exception has occured. Speakeasy is closing...");
+        }
+        finally
+        {
+            await Log.CloseAndFlushAsync();
+        }
+        return 0;
+    }
+
+    private static void ConfigureServices(IServiceCollection services, IConfiguration config)
+    {
+        services.AddSerilog((sp, lc) => lc
+            .ReadFrom.Configuration(config)
+            .ReadFrom.Services(sp)
+            .Enrich.FromLogContext()
+            .WriteTo.Console());
     }
 }
