@@ -1,2 +1,3 @@
 <Solution>
+  <Project Path="Speakeasy.Server/Speakeasy.Server.csproj" />
 </Solution>
