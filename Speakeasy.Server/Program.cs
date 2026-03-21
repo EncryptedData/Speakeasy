@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
 
@@ -42,5 +43,14 @@ public class Program
             .ReadFrom.Services(sp)
             .Enrich.FromLogContext()
             .WriteTo.Console());
+
+        services.AddControllers()
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+                };
+            });
     }
 }
