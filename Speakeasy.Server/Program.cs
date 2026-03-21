@@ -20,8 +20,7 @@ public class Program
             ConfigureServices(builder.Services, builder.Configuration);
             
             var app = builder.Build();
-
-            app.MapGet("/", () => "Hello World!");
+            ConfigureApplication(app);
 
             await app.RunAsync();
         }
@@ -52,5 +51,12 @@ public class Program
                     NamingStrategy = new CamelCaseNamingStrategy(),
                 };
             });
+    }
+
+    private static void ConfigureApplication(WebApplication app)
+    {
+        // Use attribute base routing
+        app.UseRouting();
+        app.MapControllers();
     }
 }
