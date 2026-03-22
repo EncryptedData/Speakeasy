@@ -1,1 +1,75 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@theme {
+    --color-bg-base: #111827; /* gray-900 — page background */
+    --color-bg-surface: #1f2937; /* gray-800 — cards, panels */
+    --color-bg-elevated: #374151; /* gray-700 — modals, dropdowns */
+    --color-bg-input: #1f2937; /* gray-800 — text inputs */
+
+    --color-text-primary: #f9fafb; /* gray-50  — main content */
+    --color-text-muted: #9ca3af; /* gray-400 — timestamps, labels */
+    --color-text-subtle: #6b7280; /* gray-500 — placeholders */
+
+    --color-accent: #4ade80; /* green-400 — primary actions, highlights */
+    --color-accent-hover: #22c55e; /* green-500 — hover state */
+
+    --color-border: #374151; /* gray-700 — dividers, input borders */
+    --color-border-focus: #4ade80; /* green-400 — focused inputs */
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --color-bg-base: #f9fafb; /* gray-50  — page background */
+        --color-bg-surface: #f3f4f6; /* gray-100 — cards, panels */
+        --color-bg-elevated: #e5e7eb; /* gray-200 — modals, dropdowns */
+        --color-bg-input: #ffffff; /* white    — text inputs */
+
+        --color-text-primary: #111827; /* gray-900 — main content */
+        --color-text-muted: #6b7280; /* gray-500 — timestamps, labels */
+        --color-text-subtle: #9ca3af; /* gray-400 — placeholders */
+
+        --color-accent: #16a34a; /* green-600 — primary actions, highlights */
+        --color-accent-hover: #15803d; /* green-700 — hover state */
+
+        --color-border: #d1d5db; /* gray-300 — dividers, input borders */
+        --color-border-focus: #16a34a; /* green-600 — focused inputs */
+    }
+}
+
+:root[data-theme="light"] {
+    --color-bg-base: #f9fafb;
+    --color-bg-surface: #f3f4f6;
+    --color-bg-elevated: #e5e7eb;
+    --color-bg-input: #ffffff;
+
+    --color-text-primary: #111827;
+    --color-text-muted: #6b7280;
+    --color-text-subtle: #9ca3af;
+
+    --color-accent: #16a34a;
+    --color-accent-hover: #15803d;
+
+    --color-border: #d1d5db;
+    --color-border-focus: #16a34a;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+}
+
+#root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
