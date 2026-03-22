@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
+using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
 
 namespace Speakeasy.Server.Models.Extensions;
@@ -17,6 +19,9 @@ public static class ServiceCollectionInterfaceExtensions
             SpeakeasyDbContextOptionsConfigurator.Configure(builder, connectionStringOptions));
         services.AddDbContextFactory<SpeakeasyDbContext>(builder =>
             SpeakeasyDbContextOptionsConfigurator.Configure(builder, connectionStringOptions));
+
+        services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
+        services.AddScoped<UnitOfWork>();
 
         return services;
     }
