@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
+using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models.Extensions;
 
 namespace Speakeasy.Server;
@@ -54,6 +55,8 @@ public class Program
             });
 
         services.AddModelServices(config);
+
+        services.AddSignalR();
     }
 
     private static void ConfigureApplication(WebApplication app)
@@ -61,5 +64,6 @@ public class Program
         // Use attribute base routing
         app.UseRouting();
         app.MapControllers();
+        app.MapHub<SpeakeasyV1Hub>("/hub/v1");
     }
 }
