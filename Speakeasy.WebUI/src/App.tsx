@@ -9,17 +9,22 @@ const App: Component = () => {
   });
 
   return (
-    <div>
-      <p class="text-4xl text-accent text-center py-20">
-        Hello tailwind; Sup!!
-      </p>
-      <Chat />
-      <button
-        class="block mx-auto text-text-muted"
-        onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-      >
-        Toggle theme (current: {theme()})
-      </button>
+    <div class="flex flex-1">
+      <div class="flex-1">
+        <p class="text-4xl text-accent text-center py-20">
+          Hello tailwind; Sup!!
+        </p>
+
+        <button
+          class="block mx-auto text-text-muted"
+          onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+        >
+          Toggle theme (current: {theme()})
+        </button>
+      </div>
+      <div class="flex flex-4">
+        <Chat />
+      </div>
     </div>
   );
 };

@@ -58,37 +58,39 @@ export const Chat: Component<ChatProps> = (props) => {
   let loadingChats = false;
 
   return (
-    <div class="p-4" style={{ height: "500px" }}>
-      <VList
-        class="p-4"
-        data={chats}
-        shift
-        onScroll={async (offset) => {
-          if (offset < 400) {
-            if (loadingChats) {
-              return;
+    <div class="p-4 flex flex-col flex-1">
+      <div class="flex-1">
+        <VList
+          class="p-4"
+          data={chats}
+          shift
+          onScroll={async (offset) => {
+            if (offset < 400) {
+              if (loadingChats) {
+                return;
+              }
+              console.log("loading more");
+
+              loadingChats = true;
+              const moreChats = await loadChats();
+              setChats((c) => [...moreChats, ...c]);
+
+              // Stop us from infinitely loading a ton of chats as we onScroll
+              // TODO: Once we have better pagination, we will need to update this logic
+              setTimeout(() => (loadingChats = false), 1000);
             }
-            console.log("loading more");
-
-            loadingChats = true;
-            const moreChats = await loadChats();
-            setChats((c) => [...moreChats, ...c]);
-
-            // Stop us from infinitely loading a ton of chats as we onScroll
-            // TODO: Once we have better pagination, we will need to update this logic
-            setTimeout(() => (loadingChats = false), 1000);
-          }
-        }}
-      >
-        {(data, index) => {
-          return (
-            <div class="pb-1 flex gap-4">
-              <ChatProfile user={users()[data.userId]} />
-              <div>{data.message}</div>
-            </div>
-          );
-        }}
-      </VList>
+          }}
+        >
+          {(data, index) => {
+            return (
+              <div class="pb-1 flex gap-4">
+                <ChatProfile user={users()[data.userId]} />
+                <div>{data.message}</div>
+              </div>
+            );
+          }}
+        </VList>
+      </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
