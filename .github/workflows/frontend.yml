@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: "24"
           cache: "pnpm"
+          cache-dependency-path: Speakeasy.WebUI/pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm build
       - run: pnpm test
