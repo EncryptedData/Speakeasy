@@ -13,7 +13,7 @@ export const ProfileButton: Component<ProfileButtonProps> = (props) => {
     return (
         <>
         <button type="menu" class="" onClick={onClick_button}>
-            <img src={props.profilePicture}></img>
+            <img src={props.profilePicture} style={{ height: "32px", width: "32px"}}></img>
             <div>{props.name}</div>
         </button>
         </>

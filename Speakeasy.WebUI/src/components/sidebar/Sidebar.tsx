@@ -8,7 +8,7 @@ import { ProfileButton } from "./ProfileButton";
 async function loadProfile() {
     const user: User = { 
         userId: createUniqueId(), // this is not what this method is for, but im lazy
-        profilePicture: "",
+        profilePicture: "../../assets/ph_profileIcon.png",
         username: "someuser"
     }
     return user
