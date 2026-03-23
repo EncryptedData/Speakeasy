@@ -1,14 +1,7 @@
-import { Accessor, createEffect, createMemo, createSignal } from "solid-js";
+import { Accessor, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-export type ChatMessage = {
-  id: string;
-  author: string;
-  createdOn: Date;
-  currentText: string;
-  isPending?: boolean;
-  lastEditedOn?: Date;
-};
+import { ChatMessage } from "../models/ChatMessage";
 
 /// TEMP NONSENSE
 const STRINGS = [
@@ -59,20 +52,32 @@ const continuationTokens: Record<string, string> = {};
 
 export type ChatStoreOps = {
   isLoading: () => boolean;
+
+  /** Prepends the next page of messages to the channel's message list. */
   loadNextPage: () => Promise<void>;
+
+  /**
+   * Appends an optimistic message to the channel, then confirms it after the send completes.
+   * The message is marked as pending until the send resolves.
+   */
   sendMessage: (message: string) => Promise<void>;
 };
 
+// TODO: Maybe better suited as context at a higher level so that it survives hot reload
 const [chatStore, updateChatStore] = createStore<ChatStore>({
   messages: {},
 });
 
+/**
+ * Returns a reactive accessor for the messages in a channel, and operations for interacting with them.
+ * Lazily loads the first page of messages when first called for a given channel.
+ */
 export function useChatStore(
   channelId: string,
 ): [Accessor<ChatMessage[]>, ChatStoreOps] {
-  const messages = createMemo(() => chatStore.messages[channelId] || []);
   const [isLoading, setIsLoading] = createSignal(false);
 
+  // Load the first page of messages if they haven't been loaded yet.
   createEffect(async () => {
     if (!!chatStore.messages[channelId]) {
       return;
@@ -81,7 +86,6 @@ export function useChatStore(
     setIsLoading(true);
     try {
       const chats = await loadChats(channelId, undefined);
-      console.log("loaded chats", channelId, chats);
       updateChatStore("messages", channelId, chats);
       continuationTokens[channelId] = chats[0]?.id || "";
     } finally {
@@ -90,7 +94,7 @@ export function useChatStore(
   });
 
   return [
-    messages,
+    () => chatStore.messages[channelId] || [],
     {
       isLoading: isLoading,
       loadNextPage: async () => {
@@ -128,7 +132,12 @@ export function useChatStore(
           },
         ]);
 
-        await new Promise((r) => setTimeout(r, 1500));
+        let didSendFail = false;
+        try {
+          await new Promise((r) => setTimeout(r, 1500));
+        } catch {
+          didSendFail = true;
+        }
 
         updateChatStore(
           "messages",
@@ -137,6 +146,7 @@ export function useChatStore(
             const matchingMessage = innerMessages.find((m) => m.id === tempId);
             if (matchingMessage) {
               matchingMessage.isPending = false;
+              matchingMessage.didSendFail = didSendFail;
             }
           }),
         );
