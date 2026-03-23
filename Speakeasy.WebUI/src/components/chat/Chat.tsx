@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import { VList } from "virtua/solid";
 
 import { User } from "../../models/User";
