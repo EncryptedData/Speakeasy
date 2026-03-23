@@ -1,10 +1,16 @@
 @import "tailwindcss";
 
 @theme {
+    --color-bg-chat: #030712; /* gray-950 — chat area background */
+
     --color-bg-base: #111827; /* gray-900 — page background */
     --color-bg-surface: #1f2937; /* gray-800 — cards, panels */
     --color-bg-elevated: #374151; /* gray-700 — modals, dropdowns */
     --color-bg-input: #1f2937; /* gray-800 — text inputs */
+
+    --color-bg-base-hover: #1f2937; /* gray-800 — hover on bg-base */
+    --color-bg-surface-hover: #374151; /* gray-700 — hover on bg-surface */
+    --color-bg-elevated-hover: #4b5563; /* gray-600 — hover on bg-elevated */
 
     --color-text-primary: #f9fafb; /* gray-50  — main content */
     --color-text-muted: #9ca3af; /* gray-400 — timestamps, labels */
@@ -19,10 +25,16 @@
 
 @media (prefers-color-scheme: light) {
     :root:not([data-theme="dark"]) {
+        --color-bg-chat: #ffffff; /* white — chat area background */
+
         --color-bg-base: #f9fafb; /* gray-50  — page background */
         --color-bg-surface: #f3f4f6; /* gray-100 — cards, panels */
         --color-bg-elevated: #e5e7eb; /* gray-200 — modals, dropdowns */
-        --color-bg-input: #ffffff; /* white    — text inputs */
+        --color-bg-input: #f3f4f6; /* gray-100 — text inputs */
+
+        --color-bg-base-hover: #f3f4f6; /* gray-100 — hover on bg-base */
+        --color-bg-surface-hover: #e5e7eb; /* gray-200 — hover on bg-surface */
+        --color-bg-elevated-hover: #d1d5db; /* gray-300 — hover on bg-elevated */
 
         --color-text-primary: #111827; /* gray-900 — main content */
         --color-text-muted: #6b7280; /* gray-500 — timestamps, labels */
@@ -37,10 +49,16 @@
 }
 
 :root[data-theme="light"] {
-    --color-bg-base: #f9fafb;
-    --color-bg-surface: #f3f4f6;
-    --color-bg-elevated: #e5e7eb;
-    --color-bg-input: #ffffff;
+    --color-bg-chat: #ffffff; /* white — chat area background */
+
+    --color-bg-base: #f9fafb; /* gray-50  — page background */
+    --color-bg-surface: #f3f4f6; /* gray-100 — cards, panels */
+    --color-bg-elevated: #e5e7eb; /* gray-200 — modals, dropdowns */
+    --color-bg-input: #f3f4f6; /* gray-100 — text inputs */
+
+    --color-bg-base-hover: #f3f4f6;
+    --color-bg-surface-hover: #e5e7eb;
+    --color-bg-elevated-hover: #d1d5db;
 
     --color-text-primary: #111827;
     --color-text-muted: #6b7280;
@@ -72,4 +90,8 @@ html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+}
+
+input {
+    border-radius: 4px;
 }

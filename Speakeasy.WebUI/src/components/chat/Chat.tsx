@@ -1,8 +1,9 @@
-import { Component, createEffect, createSignal } from "solid-js";
+import { Component, createSignal, Show } from "solid-js";
 import { VList } from "virtua/solid";
 
 import { User } from "../../models/User";
 import { useChatStore } from "../../stores/chatStore";
+import { TextField } from "../input/textField";
 import { ChatProfile } from "./ChatProfile";
 
 const [users] = createSignal<Record<string, User>>({
@@ -21,10 +22,9 @@ export const Chat: Component<ChatProps> = (props) => {
   const [message, setMessage] = createSignal("");
 
   return (
-    <div class="p-4 flex flex-col flex-1">
+    <div class="flex flex-col flex-1 bg-bg-chat">
       <div class="flex-1">
         <VList
-          class="p-4"
           data={chats()}
           shift
           onScroll={async (offset) => {
@@ -34,9 +34,17 @@ export const Chat: Component<ChatProps> = (props) => {
           }}
         >
           {(data, index) => {
+            // No need to show the profile for several messages in a row
+            const showProfile =
+              index() > 0 && chats()[index() - 1].author != data.author;
+
             return (
-              <div class="pb-1 flex gap-4">
-                <ChatProfile user={users()[data.author]} />
+              <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">
+                <div style={{ width: "50px" }}>
+                  <Show when={showProfile}>
+                    <ChatProfile user={users()[data.author]} />
+                  </Show>
+                </div>
                 <div>
                   {data.currentText} {data.isPending ? "Pending" : ""}
                 </div>
@@ -46,6 +54,7 @@ export const Chat: Component<ChatProps> = (props) => {
         </VList>
       </div>
       <form
+        class="p-4 flex"
         onSubmit={async (e) => {
           e.preventDefault();
           const sendMessagePromise = sendMessage(message());
@@ -53,13 +62,12 @@ export const Chat: Component<ChatProps> = (props) => {
           await sendMessagePromise;
         }}
       >
-        <label>
-          Message
-          <input
-            onChange={(e) => setMessage(e.currentTarget.value)}
-            value={message()}
-          />
-        </label>
+        <TextField
+          class="flex-1"
+          onChange={(e) => setMessage(e.currentTarget.value)}
+          value={message()}
+          placeholder="Enter a message..."
+        />
         <button type="submit">send</button>
       </form>
     </div>

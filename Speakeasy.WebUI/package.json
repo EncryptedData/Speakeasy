@@ -8,11 +8,12 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "echo \"No tests yet\""
+    "test": "vitest"
   },
   "license": "MIT",
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "jsdom": "^29.0.1",
     "solid-devtools": "^0.34.3",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "solid-js": "^1.9.9",
-    "virtua": "^0.48.8"
+    "virtua": "^0.48.8",
+    "vitest": "^4.1.0"
   }
 }
