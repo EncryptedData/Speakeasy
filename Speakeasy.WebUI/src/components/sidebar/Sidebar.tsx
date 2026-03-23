@@ -4,11 +4,12 @@ import { VList } from "virtua/solid";
 import { ChannelGroup } from "../../models/ChannelGroup";
 import { User } from "../../models/User";
 import { ProfileButton } from "./ProfileButton";
+import { ChannelButton } from "./ChannelButton";
 
 async function loadProfile() {
     const user: User = { 
         userId: createUniqueId(), // this is not what this method is for, but im lazy
-        profilePicture: "../../assets/ph_profileIcon.png",
+        profilePicture: "../../assets/ph_profileIcon.svg",
         username: "someuser"
     }
     return user
@@ -66,6 +67,10 @@ function onClick_channel() {
     return;
 }
 
+function onClick_addChannel() {
+    
+}
+
 export type SidebarProps = {};
 
 export const Sidebar: Component<SidebarProps> = (props) => {
@@ -81,18 +86,17 @@ export const Sidebar: Component<SidebarProps> = (props) => {
     });
 
     return (
-        <div class="">
-            <VList data={channels} class="" style={{ height: "600px"}}>
+        <div id="sidebar" class="flex flex-col">
+            <VList data={channels} class="flex flex-col">
                 {(d, i) => (
-                    <div>
-                        <div>
+                    <div class="flex flex-col">
+                        <div class="flex flex-row">
                             <p>{d.header}</p>
+                            <button class="menu-button" onClick={onClick_addChannel}>+</button>
                         </div>
                         <VList data={d.channels} style={{ height: `${d.channels.length * 24}px`}}>
                             {(d, i) => (
-                                <div>
-                                    <p>{d.name}</p>
-                                </div>
+                                <ChannelButton id={d.id} name={d.name} description={d.description} />
                             )}
                         </VList>
                     </div>

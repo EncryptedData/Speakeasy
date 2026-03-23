@@ -12,9 +12,9 @@ function onClick_button() {
 export const ProfileButton: Component<ProfileButtonProps> = (props) => {
     return (
         <>
-        <button type="menu" class="" onClick={onClick_button}>
-            <img src={props.profilePicture} style={{ height: "32px", width: "32px"}}></img>
-            <div>{props.name}</div>
+        <button type="menu" class="flex flex-row" onClick={onClick_button}>
+            <img class="flex svg-primary" src={props.profilePicture} style={{ stroke: "var(--color-text-primary)", height: "32px", width: "32px"}}></img>
+            <p class="flex">{props.name}</p>
         </button>
         </>
     )

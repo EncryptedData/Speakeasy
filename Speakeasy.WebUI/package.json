@@ -20,6 +20,7 @@
     "vite-plugin-solid": "^2.11.8"
   },
   "dependencies": {
+    "corvu": "^0.7.2",
     "solid-js": "^1.9.9",
     "virtua": "^0.48.8"
   }
