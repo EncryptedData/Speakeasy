@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { User } from "../../models/User";
+import { User } from "@models/User";
 
 export type ChatProfileProps = {
   user: User;

@@ -1,7 +1,7 @@
 import { Accessor, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import { ChatMessage } from "../models/ChatMessage";
+import { ChatMessage } from "@models/ChatMessage";
 
 /// TEMP NONSENSE
 const STRINGS = [
