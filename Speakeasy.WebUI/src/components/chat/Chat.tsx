@@ -1,5 +1,7 @@
+import "./chat.css";
 import { Component, createSignal, Show } from "solid-js";
-import { VList } from "virtua/solid";
+import { VList, VListHandle } from "virtua/solid";
+import { FiSend } from "solid-icons/fi";
 
 import { User } from "../../models/User";
 import { useChatStore } from "../../stores/chatStore";
@@ -20,16 +22,30 @@ export const Chat: Component<ChatProps> = (props) => {
   const [chats, { loadNextPage, sendMessage }] = useChatStore("channel1");
 
   const [message, setMessage] = createSignal("");
+  const [shift, setShift] = createSignal(true);
+
+  let vlistRef: VListHandle | undefined;
 
   return (
     <div class="flex flex-col flex-1 bg-bg-chat">
       <div class="flex-1">
         <VList
+          ref={(r) => (vlistRef = r)}
           data={chats()}
-          shift
+          shift={shift()}
           onScroll={async (offset) => {
             if (offset < 400) {
+              // const firstVisible = vlistRef?.findItemIndex(offset) ?? 0;
+              // const countBefore = chats().length;
               await loadNextPage();
+              // const prepended = chats().length - countBefore;
+              // if (prepended > 0) {
+              //   queueMicrotask(() => {
+              //     vlistRef?.scrollToIndex(firstVisible + prepended, {
+              //       align: "start",
+              //     });
+              //   });
+              // }
             }
           }}
         >
@@ -40,7 +56,7 @@ export const Chat: Component<ChatProps> = (props) => {
 
             return (
               <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">
-                <div style={{ width: "50px" }}>
+                <div style={{ width: "50px", "min-width": "50px" }}>
                   <Show when={showProfile}>
                     <ChatProfile user={users()[data.author]} />
                   </Show>
@@ -55,20 +71,39 @@ export const Chat: Component<ChatProps> = (props) => {
       </div>
       <form
         class="p-4 flex"
-        onSubmit={async (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
-          const sendMessagePromise = sendMessage(message());
+
+          // Shift _must_ be false when adding to the end of the list (bottom of the chat window)
+          // Otherwise the cache within the vlist does not update items heights correctly
+          // I'm sure this will not cause us grief in the future
+          setShift(false);
+          sendMessage(message());
           setMessage("");
-          await sendMessagePromise;
+          setShift(true);
+
+          // When vlist gets its signal, shift will be false, which means list won't auto scroll
+          // to the bottom. So, do it manually after the render cycle
+          queueMicrotask(() => {
+            vlistRef?.scrollToIndex(chats().length - 1);
+          });
         }}
       >
-        <TextField
-          class="flex-1"
-          onChange={(e) => setMessage(e.currentTarget.value)}
-          value={message()}
-          placeholder="Enter a message..."
-        />
-        <button type="submit">send</button>
+        <div class="flex-1 flex chat__input">
+          <TextField
+            class="flex-1 pr-12"
+            onChange={(e) => setMessage(e.currentTarget.value)}
+            value={message()}
+            placeholder="Enter a message..."
+          />
+          <button
+            class="p-2 rounded bg-bg-surface hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
+            disabled={!message()}
+            type="submit"
+          >
+            <FiSend />
+          </button>
+        </div>
       </form>
     </div>
   );
