@@ -10,7 +10,13 @@ const App: Component = () => {
 
   return (
     <div>
-      <Sidebar/>
+      <Sidebar />
+      <button
+        class="block mx-auto text-text-muted"
+        onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
+      >
+        Toggle theme (current: {theme()})
+      </button>
     </div>
   );
 };
