@@ -103,6 +103,9 @@ export function useChatStore(
         }
 
         const continuationToken = continuationTokens[channelId];
+        if (!continuationToken) {
+          return;
+        }
 
         setIsLoading(true);
         try {
