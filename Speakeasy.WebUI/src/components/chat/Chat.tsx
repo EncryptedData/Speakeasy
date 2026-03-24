@@ -35,17 +35,7 @@ export const Chat: Component<ChatProps> = (props) => {
           shift={shift()}
           onScroll={async (offset) => {
             if (offset < 400) {
-              // const firstVisible = vlistRef?.findItemIndex(offset) ?? 0;
-              // const countBefore = chats().length;
               await loadNextPage();
-              // const prepended = chats().length - countBefore;
-              // if (prepended > 0) {
-              //   queueMicrotask(() => {
-              //     vlistRef?.scrollToIndex(firstVisible + prepended, {
-              //       align: "start",
-              //     });
-              //   });
-              // }
             }
           }}
         >

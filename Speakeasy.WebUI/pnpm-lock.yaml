@@ -17,9 +17,6 @@ importers:
       virtua:
         specifier: ^0.48.8
         version: 0.48.8(solid-js@1.9.11)
-      vitest:
-        specifier: ^4.1.0
-        version: 4.1.0(jsdom@29.0.1)(vite@7.3.1(jiti@2.6.1)(lightningcss@1.32.0))
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.1.13
@@ -45,6 +42,9 @@ importers:
       vite-tsconfig-paths:
         specifier: ^6.1.1
         version: 6.1.1(typescript@5.9.3)(vite@7.3.1(jiti@2.6.1)(lightningcss@1.32.0))
+      vitest:
+        specifier: ^4.1.0
+        version: 4.1.0(jsdom@29.0.1)(vite@7.3.1(jiti@2.6.1)(lightningcss@1.32.0))
 
 packages:
 
