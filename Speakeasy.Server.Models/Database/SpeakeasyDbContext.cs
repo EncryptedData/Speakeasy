@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Speakeasy.Server.Models.Database;
 
-public class SpeakeasyDbContext : DbContext
+public class SpeakeasyDbContext : IdentityDbContext<User>
 {
     public SpeakeasyDbContext(DbContextOptions<SpeakeasyDbContext> options) :
         base(options)
@@ -14,6 +15,4 @@ public class SpeakeasyDbContext : DbContext
     public DbSet<Channel> Channels { get; set; }
     
     public DbSet<Message> Messages { get; set; }
-    
-    public DbSet<User> Users { get; set; }
 }
