@@ -1,0 +1,11 @@
+.chat__input {
+    position: relative;
+}
+
+.chat__input button {
+    cursor: pointer;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
