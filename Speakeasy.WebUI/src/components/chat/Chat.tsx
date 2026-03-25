@@ -7,6 +7,7 @@ import { User } from "../../models/User";
 import { useChatStore } from "../../stores/chatStore";
 import { TextField } from "../input/textField";
 import { ChatProfile } from "./ChatProfile";
+import { SlateEditor } from "@components/input/slateEditor";
 
 const [users] = createSignal<Record<string, User>>({
   ["me"]: { userId: "1", profilePicture: "", username: "User1" },
@@ -80,11 +81,16 @@ export const Chat: Component<ChatProps> = (props) => {
         }}
       >
         <div class="flex-1 flex chat__input">
-          <TextField
+          {/*<TextField
             class="flex-1 pr-12"
             onChange={(e) => setMessage(e.currentTarget.value)}
             value={message()}
             placeholder="Enter a message..."
+          />*/}
+          <SlateEditor
+            class="flex-1 pr-12"
+            onChange={(e) => setMessage(e)}
+            value={message()}
           />
           <button
             class="p-2 rounded bg-bg-surface hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
