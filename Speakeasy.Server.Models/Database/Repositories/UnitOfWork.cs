@@ -12,7 +12,6 @@ public class UnitOfWork : IUnitOfWork
         ChannelRepository = new ChannelRepository(_context);
         GroupRepository = new GroupRepository(_context);
         MessageRepository = new MessageRepository(_context);
-        UserRepository = new UserRepository(_context);
     }
     
     public IChannelRepository ChannelRepository { get; }
@@ -20,8 +19,6 @@ public class UnitOfWork : IUnitOfWork
     public IGroupRepository GroupRepository { get; }
     
     public IMessageRepository MessageRepository { get; }
-    
-    public IUserRepository UserRepository { get; }
     
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {

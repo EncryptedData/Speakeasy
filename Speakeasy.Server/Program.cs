@@ -2,7 +2,10 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
 using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
-using Speakeasy.Server.Models.Extensions;
+using Speakeasy.Server.Models.Abstractions;
+using Speakeasy.Server.Models.Database;
+using Speakeasy.Server.Models.Database.Repositories;
+using Speakeasy.Server.Models.Options;
 
 namespace Speakeasy.Server;
 
@@ -54,7 +57,23 @@ public class Program
                 };
             });
 
-        services.AddModelServices(config);
+        var connectionStringOptions = config.GetSection("ConnectionStrings").Get<ConnectionStringOptions>();
+        ArgumentNullException.ThrowIfNull(connectionStringOptions);
+
+        // Add database services
+        services.AddSingleton(connectionStringOptions);
+        services.AddDbContext<SpeakeasyDbContext>(builder =>
+            SpeakeasyDbContextOptionsConfigurator.Configure(builder, connectionStringOptions));
+        services.AddDbContextFactory<SpeakeasyDbContext>(builder =>
+            SpeakeasyDbContextOptionsConfigurator.Configure(builder, connectionStringOptions));
+        
+        services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        // Add ASP.NET Core Identity services
+        services.AddAuthorization();
+        services.AddIdentityApiEndpoints<User>()
+            .AddEntityFrameworkStores<SpeakeasyDbContext>();
 
         services.AddSignalR();
     }
@@ -63,7 +82,9 @@ public class Program
     {
         // Use attribute base routing
         app.UseRouting();
+        app.UseAuthorization();
         app.MapControllers();
+        app.MapIdentityApi<User>();
         app.MapHub<SpeakeasyV1Hub>("/hub/v1");
     }
 }
