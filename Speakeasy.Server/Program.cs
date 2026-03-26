@@ -68,7 +68,7 @@ public class Program
             SpeakeasyDbContextOptionsConfigurator.Configure(builder, connectionStringOptions));
         
         services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
-        services.AddScoped<UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         // Add ASP.NET Core Identity services
         services.AddAuthorization();
