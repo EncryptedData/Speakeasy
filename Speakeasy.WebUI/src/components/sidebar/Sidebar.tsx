@@ -1,10 +1,9 @@
-import { Component, createSignal, onMount, createUniqueId } from "solid-js";
+import { Component, onMount, createUniqueId } from "solid-js";
 import { createStore } from "solid-js/store";
 import { VList } from "virtua/solid";
 import { ChannelGroup } from "../../models/ChannelGroup";
 import { User } from "../../models/User";
 import { ProfileButton } from "./ProfileButton";
-import { ChannelButton } from "./ChannelButton";
 import { ChannelGroupList } from "./ChannelGroupList";
 
 async function loadProfile() {
