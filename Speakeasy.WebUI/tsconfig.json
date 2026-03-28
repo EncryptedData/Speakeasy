@@ -12,6 +12,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "noUncheckedIndexedAccess": true,
 
     // Type Checking & Safety
     "strict": true,
@@ -21,7 +22,7 @@
     "paths": {
       "@models/*": ["./src/models/*"],
       "@stores/*": ["./src/stores/*"],
-      "@components/*": ["./src/components/*"]
-    }
-  }
+      "@components/*": ["./src/components/*"],
+    },
+  },
 }

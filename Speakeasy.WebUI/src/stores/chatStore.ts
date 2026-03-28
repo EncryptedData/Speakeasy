@@ -28,7 +28,7 @@ async function loadChats(
     outChatMessages.push({
       id: Date.now().toString(),
       author: (userIndex + 1).toString(),
-      currentText: STRINGS[strIndex],
+      currentText: STRINGS[strIndex]!,
       isPending: false,
       createdOn: new Date(),
     });
