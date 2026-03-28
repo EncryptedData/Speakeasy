@@ -25,9 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
-        <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\10.0.4\ref\net10.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Http.Abstractions" />
     </ItemGroup>
 
 </Project>
