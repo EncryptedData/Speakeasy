@@ -4,12 +4,11 @@ import Accordion from "corvu/accordion"
 
 export type ChannelGroupProps = {
     id: string,
-    description: string,
     name: string,
     channels: Channel[],
 };
 
-export const ChannelGroup: Component<ChannelGroupProps> = (props) => {
+export const ChannelGroupList: Component<ChannelGroupProps> = (props) => {
     return (
         <Accordion>
             <Accordion.Item>

@@ -5,6 +5,7 @@ import { ChannelGroup } from "../../models/ChannelGroup";
 import { User } from "../../models/User";
 import { ProfileButton } from "./ProfileButton";
 import { ChannelButton } from "./ChannelButton";
+import { ChannelGroupList } from "./ChannelGroupList";
 
 async function loadProfile() {
     const user: User = { 
@@ -71,7 +72,9 @@ function onClick_addChannel() {
     
 }
 
-export type SidebarProps = {};
+export type SidebarProps = {
+    collapsed?: boolean
+};
 
 export const Sidebar: Component<SidebarProps> = (props) => {
     const [channels, setChannelGroups] = createStore<ChannelGroup[]>([]);
@@ -89,17 +92,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
         <div id="sidebar" class="flex flex-col">
             <VList data={channels} class="flex flex-col">
                 {(d, i) => (
-                    <div class="flex flex-col">
-                        <div class="flex flex-row">
-                            <p>{d.header}</p>
-                            <button class="menu-button" onClick={onClick_addChannel}>+</button>
-                        </div>
-                        <VList data={d.channels} style={{ height: `${d.channels.length * 24}px`}}>
-                            {(d, i) => (
-                                <ChannelButton id={d.id} name={d.name} description={d.description} />
-                            )}
-                        </VList>
-                    </div>
+                    <ChannelGroupList id={d.id} channels={d.channels} name={d.header} />
                 )}
             </VList>
             <ProfileButton name={profile.username} profilePicture={profile.profilePicture}/>
