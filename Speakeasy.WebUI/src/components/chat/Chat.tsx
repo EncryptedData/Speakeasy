@@ -22,7 +22,7 @@ export type ChatProps = {};
 export const Chat: Component<ChatProps> = (props) => {
   const [chats, { loadNextPage, sendMessage }] = useChatStore("channel1");
 
-  const [message, setMessage] = createSignal("");
+  const [message, setMessage] = createSignal(" wo why _strike_");
   const [shift, setShift] = createSignal(true);
 
   let vlistRef: VListHandle | undefined;

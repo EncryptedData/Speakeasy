@@ -1,6 +1,9 @@
-import { Component, createEffect, createSignal, type JSX } from "solid-js";
+import { Component, createEffect, onCleanup, type JSX } from "solid-js";
+import { schema } from "prosemirror-schema-basic";
+import type { EditorView } from "prosemirror-view";
+import { EditorState } from "prosemirror-state";
 
-import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/solid";
+import { createEditorView } from "./createEditorView";
 
 export type SlateEditorProps = Omit<
   JSX.HTMLAttributes<HTMLDivElement>,
@@ -11,36 +14,32 @@ export type SlateEditorProps = Omit<
 };
 
 export const SlateEditor: Component<SlateEditorProps> = (props) => {
-  const [container, setContainer] = createSignal<HTMLDivElement>();
-  // const editor = createTiptapEditor(() => ({
-  //   editorProps: {
-  //     attributes: {
-  //       class: `chat__input p-4 bg-bg-input rounded-sm ${props.class || ""}`,
-  //     },
-  //   },
-  //   element: container()!,
-  //   extensions: [
-  //     StarterKit,
-  //     Link.configure({
-  //       openOnClick: false,
-  //       HTMLAttributes: {
-  //         rel: "noopener noreferrer",
-  //         target: null,
-  //       },
-  //     }),
-  //     Strike,
-  //   ],
-  //   content: `XD! ~~oopsie daisies~~`,
-  // }));
+  let view: EditorView | undefined;
 
-  // const json = useEditorJSON(editor);
-  // createEffect(() => {
-  //   console.log(JSON.stringify(json(), null, 2));
-  // });
+  const editorRef = (el: HTMLDivElement) => {
+    view = createEditorView(
+      el,
+      {},
+      [],
+      (state) => {
+        props.onChange(state.doc.textContent);
+      },
+      props.value || undefined,
+    );
+    onCleanup(() => view?.destroy());
+  };
+
+  createEffect(() => {
+    if (props.value === "" && view) {
+      view.updateState(
+        EditorState.create({ schema, plugins: view.state.plugins }),
+      );
+    }
+  });
 
   return (
-    <ProsemirrorAdapterProvider>
-      <div class={"flex-1"} id="editor" ref={(r) => setContainer(r)} />
-    </ProsemirrorAdapterProvider>
+    <div class={`flex flex-col flex-1 ${props.class ?? ""}`}>
+      <div ref={editorRef} class="flex-1 p-2" />
+    </div>
   );
 };
