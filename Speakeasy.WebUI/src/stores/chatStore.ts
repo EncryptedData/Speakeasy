@@ -48,7 +48,7 @@ export type ChatStore = {
 /**
  * ChannelId -> Message ContinuationToken
  */
-const continuationTokens: Record<string, string> = {};
+const continuationTokens: Record<string, string | undefined> = {};
 
 export type ChatStoreOps = {
   isLoading: () => boolean;
