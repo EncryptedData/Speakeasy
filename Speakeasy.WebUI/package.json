@@ -4,14 +4,16 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "generate": "openapi-ts",
+    "start": "vite",
     "serve": "vite preview",
     "test": "vitest"
   },
   "license": "MIT",
   "devDependencies": {
+    "@hey-api/openapi-ts": "0.94.5",
     "@tailwindcss/vite": "^4.1.13",
     "jsdom": "^29.0.1",
     "solid-devtools": "^0.34.3",
