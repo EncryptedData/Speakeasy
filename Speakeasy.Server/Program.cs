@@ -1,11 +1,14 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
 using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models.Abstractions;
+using Speakeasy.Server.Models.Converters;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
+using Speakeasy.Server.Models.Transmission;
 
 namespace Speakeasy.Server;
 
@@ -55,7 +58,11 @@ public class Program
                 {
                     NamingStrategy = new CamelCaseNamingStrategy(),
                 };
+
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
+
+        services.AddHttpContextAccessor();
 
         var connectionStringOptions = config.GetSection("ConnectionStrings").Get<ConnectionStringOptions>();
         ArgumentNullException.ThrowIfNull(connectionStringOptions);
@@ -69,6 +76,13 @@ public class Program
         
         services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        // Add Model converters
+        services.AddSingleton<IModelConverter<Group, GroupDto>, GroupModelConverter>();
+        
+        // These need to be scoped because it accesses the HttpContext which can't be a singleton
+        services.AddScoped<IModelConverter<Channel, ChannelDto>, ChannelModelConverter>();
+        services.AddScoped<IModelConverter<Message, MessageDto>, MessageModelConverter>();
         
         // Add ASP.NET Core Identity services
         services.AddAuthorization();
