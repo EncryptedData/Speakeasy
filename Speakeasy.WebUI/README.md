@@ -35,4 +35,7 @@ Your app is ready to be deployed!
 
 You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
 
-## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)
+## Updating generated API types
+
+1. Run the server. Default configuration points to localhost:5194
+2. Run the generation command: `pnpm generate`. This will update all types in `src/models/api`
