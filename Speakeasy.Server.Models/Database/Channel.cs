@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Speakeasy.Server.Models.Abstractions;
+#pragma warning disable CS8618
 
 namespace Speakeasy.Server.Models.Database;
 
