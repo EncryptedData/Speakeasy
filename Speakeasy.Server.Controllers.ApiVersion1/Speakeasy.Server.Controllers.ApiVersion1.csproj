@@ -14,4 +14,8 @@
       <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.9" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Speakeasy.Server.Models\Speakeasy.Server.Models.csproj" />
+    </ItemGroup>
+
 </Project>

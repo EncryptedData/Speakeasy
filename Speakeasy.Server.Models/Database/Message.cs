@@ -21,4 +21,6 @@ public class Message : IEntity
     public string CurrentText { get; set; }
     
     public List<MessageEdits> Edits { get; set; }
+    
+    public Channel Channel { get; set; }
 }

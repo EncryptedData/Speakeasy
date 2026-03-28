@@ -12,6 +12,11 @@ public abstract class BaseRepository<T> : IRepository<T>
     {
         _db = db;
     }
+
+    protected virtual IQueryable<T> ApplyIncludes(IQueryable<T> query)
+    {
+        return query;
+    }
     
     public async Task<T?> GetByIdAsync(Guid id, bool trackEntity = true)
     {
@@ -21,6 +26,8 @@ public abstract class BaseRepository<T> : IRepository<T>
         {
             query.AsNoTracking();
         }
+
+        query = ApplyIncludes(query);
 
         return await query.FirstOrDefaultAsync(e => e.Id == id);
     }
