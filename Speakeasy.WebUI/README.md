@@ -35,7 +35,29 @@ Your app is ready to be deployed!
 
 You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
 
-## Updating generated API types
+## Generated API types
+
+We have the ability to generate type-safe clients and models for the api using `openapi-ts`. These are contained in `./src/api`
+
+### Usage
+
+```typescript
+// Import generated types
+import type { MessageDto } from '@api';
+
+// Import generated clients
+import { getApiV1ChannelByIdMessages } from "@api";
+
+const response = await getApiV1ChannelByIdMessages({
+  path: { id: "myChannelId" },
+  query: {
+    LastMessageId: "MessageId",
+  },
+});
+
+```
+
+### Regenerating
 
 1. Run the server. Default configuration points to localhost:5194
-2. Run the generation command: `pnpm generate`. This will update all types in `src/models/api`
+2. Run the generation command: `pnpm generate`. This will update all types in `src/api`
