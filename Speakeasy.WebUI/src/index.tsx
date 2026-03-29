@@ -20,10 +20,10 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 const AuthLayout = (props: RouteSectionProps) => {
-  const { authLoading } = useAuthContext();
+  const { authState } = useAuthContext();
   return (
     <Show
-      when={!authLoading()}
+      when={authState() !== "loading"}
       fallback={
         <div class="flex flex-1 items-center justify-center">Loading...</div>
       }

@@ -1,8 +1,7 @@
 import {
   createContext,
   createEffect,
-  createMemo,
-  createResource,
+  createSignal,
   onCleanup,
   ParentComponent,
   useContext,
@@ -19,21 +18,21 @@ export type StoredCredentials = {
   expirationMs: number;
 };
 
+type AuthState = "loading" | "authenticated" | "unauthenticated";
+
 export type AuthContext = {
-  accessToken: () => string;
-  authLoading: () => boolean;
+  authState: () => AuthState;
   email: () => string | undefined;
-  logout: () => void;
   isLoggedIn: () => boolean;
+  logout: () => void;
   updateAuth: (newAuth: AccessTokenResponse) => void;
 };
 
 const AuthContext = createContext<AuthContext>({
-  accessToken: () => "",
-  authLoading: () => true,
-  email: () => "",
-  logout: () => {},
+  authState: () => "loading" as AuthState,
+  email: () => undefined,
   isLoggedIn: () => false,
+  logout: () => {},
   updateAuth: () => {},
 });
 
@@ -46,102 +45,118 @@ export const AuthProvider: ParentComponent = (props) => {
     }),
   );
 
-  // Automatically refresh the token if we can
+  const [authState, setAuthState] = createSignal<AuthState>("loading");
+  const [email, setEmail] = createSignal<string | undefined>();
+
+  const clearAuth = () => {
+    setAuthStore({ accessToken: "", refreshToken: "", expirationMs: 0 });
+    setEmail(undefined);
+    setAuthState("unauthenticated");
+    localStorage.clear();
+  };
+
+  const applyTokens = (response: AccessTokenResponse) => {
+    setAuthStore({
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      expirationMs: Date.now() + Number(response.expiresIn) * 1000,
+    });
+  };
+
   createEffect(() => {
+    const token = authStore.accessToken;
+    const refreshToken = authStore.refreshToken;
     const expirationMs = authStore.expirationMs;
-    const token = authStore.refreshToken;
 
-    if (!token) return;
+    if (!token) {
+      setEmail(undefined);
+      setAuthState("unauthenticated");
+      return;
+    }
 
-    const msUntilExpiry = expirationMs - Date.now();
+    setAuthState("loading");
 
-    const timeout = setTimeout(async () => {
-      const refreshResponse = await postRefresh({
-        body: {
-          refreshToken: token,
-        },
+    validateSession(token, refreshToken, expirationMs);
+  });
+
+  async function validateSession(
+    token: string,
+    refreshToken: string,
+    expirationMs: number,
+  ) {
+    // If expired, try to refresh before validating
+    if (expirationMs <= Date.now()) {
+      if (!refreshToken) {
+        clearAuth();
+        return;
+      }
+
+      const refreshResult = await postRefresh({
+        body: { refreshToken },
       });
 
-      if (refreshResponse.error) {
-        setAuthStore({
-          accessToken: "",
-          refreshToken: "",
-          expirationMs: 0,
-        });
-      } else if (refreshResponse.data) {
-        setAuthStore({
-          accessToken: refreshResponse.data.accessToken,
-          refreshToken: refreshResponse.data.refreshToken,
-          expirationMs: Date.now() + Number(refreshResponse.data.expiresIn) * 1000,
-        });
+      if (refreshResult.error || !refreshResult.data) {
+        clearAuth();
+        return;
       }
-    // Refresh 60s before expiry. If msUntilExpiry < 60_000 (token already close to
-    // or past expiry), the delay is negative — browsers clamp this to 0 and fire
-    // immediately, which is the correct behavior.
-    }, msUntilExpiry - 60_000);
+
+      // Store update re-triggers the effect with the fresh token,
+      // which will then proceed to /manage/info
+      applyTokens(refreshResult.data);
+      return;
+    }
+
+    // Token is valid — verify the session with the server
+    const info = await getManageInfo({ auth: () => token });
+
+    if (info.data?.email) {
+      setEmail(info.data.email);
+      setAuthState("authenticated");
+    } else {
+      clearAuth();
+    }
+  }
+
+  // Schedule a proactive refresh before the token expires
+  createEffect(() => {
+    const expirationMs = authStore.expirationMs;
+    const refreshToken = authStore.refreshToken;
+
+    if (!refreshToken || !expirationMs) return;
+
+    const msUntilRefresh = expirationMs - Date.now() - 60_000;
+
+    // Don't schedule if token is already expired — the validation
+    // effect above handles that case immediately
+    if (msUntilRefresh <= 0) return;
+
+    const timeout = setTimeout(async () => {
+      const result = await postRefresh({
+        body: { refreshToken },
+      });
+
+      if (result.data) {
+        applyTokens(result.data);
+      } else {
+        clearAuth();
+      }
+    }, msUntilRefresh);
 
     onCleanup(() => clearTimeout(timeout));
   });
 
-  // Automatically retrieve user info (/manage/info) as our token changes
-  const manageInfoInput = createMemo(() =>
-    !!authStore.accessToken
-      ? ({
-          auth: () => authStore.accessToken,
-        } satisfies Parameters<typeof getManageInfo>[0])
-      : null,
-  );
-  const [info, { mutate }] = createResource(manageInfoInput, getManageInfo);
-
-  const logout = () => {
-    // Remove credentials
-    setAuthStore({
-      accessToken: "",
-      refreshToken: "",
-      expirationMs: 0,
-    });
-
-    // Clear /manage/info user data
-    mutate(undefined);
-
-    // Double check we cleared stored local data
-    localStorage.clear();
-  };
-
-  createEffect(() => {
-    if (!authStore.accessToken) {
-      mutate(undefined);
-    }
+  // Configure our api client to use the current access token
+  client.setConfig({
+    auth: () => authStore.accessToken,
   });
 
   const value: AuthContext = {
-    accessToken: () => authStore.accessToken,
-    email: () => info()?.data?.email,
-    isLoggedIn: () => !!info()?.data?.email,
-    logout: logout,
-    authLoading: () => {
-      if (!authStore.accessToken) {
-        return false;
-      }
-
-      if (info.state === "ready") {
-        return false;
-      }
-
-      return true;
-    },
-    updateAuth: (response: AccessTokenResponse) =>
-      setAuthStore({
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        expirationMs: Date.now() + Number(response.expiresIn) * 1000,
-      }),
+    authState,
+    email,
+    isLoggedIn: () => authState() === "authenticated",
+    logout: clearAuth,
+    updateAuth: applyTokens,
   };
-
-  // Configure our api client to grab our access token
-  client.setConfig({
-    auth: () => value.accessToken(),
-  });
 
   return (
     <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
