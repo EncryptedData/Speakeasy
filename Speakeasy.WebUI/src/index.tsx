@@ -1,15 +1,12 @@
 /* @refresh reload */
-import "./index.css";
-import { render } from "solid-js/web";
-import { Navigate, Route, Router } from "@solidjs/router";
 import type { RouteSectionProps } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Navigate, Route, Router } from "@solidjs/router";
 import "solid-devtools";
+import { lazy, Show } from "solid-js";
+import { render } from "solid-js/web";
+import "./index.css";
 
-import App from "./App";
-import { AuthProvider } from "@context/authContext";
-import { LoginPage } from "@components/auth/loginPage";
-import { useAuthContext } from "@context/authContext";
+import { AuthProvider, useAuthContext } from "@context/authContext";
 
 const root = document.getElementById("root");
 
@@ -18,6 +15,9 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
     "Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?",
   );
 }
+
+const App = lazy(() => import("./App"));
+const LoginPage = lazy(() => import("@components/auth/loginPage"));
 
 const AuthLayout = (props: RouteSectionProps) => {
   const { authState } = useAuthContext();
