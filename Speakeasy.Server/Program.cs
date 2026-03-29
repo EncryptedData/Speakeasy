@@ -143,7 +143,8 @@ public class Program
         app.UseRouting();
         app.UseAuthorization();
         app.MapControllers();
-        app.MapIdentityApi<User>();
+        app.MapGroup("api/v1/auth")
+            .MapIdentityApi<User>();
         app.MapHub<SpeakeasyV1Hub>("/hub/v1");
 
         if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("local"))
