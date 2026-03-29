@@ -89,6 +89,8 @@ public class Program
         services.AddIdentityApiEndpoints<User>()
             .AddEntityFrameworkStores<SpeakeasyDbContext>();
 
+        services.AddOpenApi();
+
         services.AddSignalR();
     }
 
@@ -100,5 +102,11 @@ public class Program
         app.MapControllers();
         app.MapIdentityApi<User>();
         app.MapHub<SpeakeasyV1Hub>("/hub/v1");
+
+        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("local"))
+        {
+            // Map default endpoint at /openapi/v1.json
+            app.MapOpenApi();
+        }
     }
 }

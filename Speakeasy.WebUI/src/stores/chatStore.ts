@@ -28,7 +28,7 @@ async function loadChats(
     outChatMessages.push({
       id: Date.now().toString(),
       author: (userIndex + 1).toString(),
-      currentText: STRINGS[strIndex],
+      currentText: STRINGS[strIndex]!,
       isPending: false,
       createdOn: new Date(),
     });
@@ -48,7 +48,7 @@ export type ChatStore = {
 /**
  * ChannelId -> Message ContinuationToken
  */
-const continuationTokens: Record<string, string> = {};
+const continuationTokens: Record<string, string | undefined> = {};
 
 export type ChatStoreOps = {
   isLoading: () => boolean;
