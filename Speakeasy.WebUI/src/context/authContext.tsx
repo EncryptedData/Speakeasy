@@ -9,7 +9,11 @@ import {
 import { createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
 
-import { AccessTokenResponse, getManageInfo, postRefresh } from "@api";
+import {
+  AccessTokenResponse,
+  getApiV1AuthManageInfo,
+  postApiV1AuthRefresh,
+} from "@api";
 import { client } from "../api/client.gen";
 
 export type StoredCredentials = {
@@ -91,7 +95,7 @@ export const AuthProvider: ParentComponent = (props) => {
         return;
       }
 
-      const refreshResult = await postRefresh({
+      const refreshResult = await postApiV1AuthRefresh({
         body: { refreshToken },
       });
 
@@ -107,7 +111,7 @@ export const AuthProvider: ParentComponent = (props) => {
     }
 
     // Token is valid — verify the session with the server
-    const info = await getManageInfo({ auth: () => token });
+    const info = await getApiV1AuthManageInfo({ auth: () => token });
 
     if (info.data?.email) {
       setEmail(info.data.email);
@@ -131,7 +135,7 @@ export const AuthProvider: ParentComponent = (props) => {
     if (msUntilRefresh <= 0) return;
 
     const timeout = setTimeout(async () => {
-      const result = await postRefresh({
+      const result = await postApiV1AuthRefresh({
         body: { refreshToken },
       });
 

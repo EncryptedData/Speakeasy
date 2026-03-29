@@ -103,65 +103,65 @@ export type TwoFactorResponse = {
     isMachineRemembered: boolean;
 };
 
-export type PostRegisterData = {
+export type PostApiV1AuthRegisterData = {
     body: RegisterRequest;
     path?: never;
     query?: never;
-    url: '/register';
+    url: '/api/v1/auth/register';
 };
 
-export type PostRegisterErrors = {
+export type PostApiV1AuthRegisterErrors = {
     /**
      * Bad Request
      */
     400: HttpValidationProblemDetails;
 };
 
-export type PostRegisterError = PostRegisterErrors[keyof PostRegisterErrors];
+export type PostApiV1AuthRegisterError = PostApiV1AuthRegisterErrors[keyof PostApiV1AuthRegisterErrors];
 
-export type PostRegisterResponses = {
+export type PostApiV1AuthRegisterResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type PostLoginData = {
+export type PostApiV1AuthLoginData = {
     body: LoginRequest;
     path?: never;
     query?: {
         useCookies?: boolean;
         useSessionCookies?: boolean;
     };
-    url: '/login';
+    url: '/api/v1/auth/login';
 };
 
-export type PostLoginResponses = {
+export type PostApiV1AuthLoginResponses = {
     /**
      * OK
      */
     200: AccessTokenResponse;
 };
 
-export type PostLoginResponse = PostLoginResponses[keyof PostLoginResponses];
+export type PostApiV1AuthLoginResponse = PostApiV1AuthLoginResponses[keyof PostApiV1AuthLoginResponses];
 
-export type PostRefreshData = {
+export type PostApiV1AuthRefreshData = {
     body: RefreshRequest;
     path?: never;
     query?: never;
-    url: '/refresh';
+    url: '/api/v1/auth/refresh';
 };
 
-export type PostRefreshResponses = {
+export type PostApiV1AuthRefreshResponses = {
     /**
      * OK
      */
     200: AccessTokenResponse;
 };
 
-export type PostRefreshResponse = PostRefreshResponses[keyof PostRefreshResponses];
+export type PostApiV1AuthRefreshResponse = PostApiV1AuthRefreshResponses[keyof PostApiV1AuthRefreshResponses];
 
-export type MapIdentityApiConfirmEmailData = {
+export type MapIdentityApiApiV1AuthConfirmEmailData = {
     body?: never;
     path?: never;
     query: {
@@ -169,84 +169,84 @@ export type MapIdentityApiConfirmEmailData = {
         code: string;
         changedEmail?: string;
     };
-    url: '/confirmEmail';
+    url: '/api/v1/auth/confirmEmail';
 };
 
-export type MapIdentityApiConfirmEmailResponses = {
+export type MapIdentityApiApiV1AuthConfirmEmailResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type PostResendConfirmationEmailData = {
+export type PostApiV1AuthResendConfirmationEmailData = {
     body: ResendConfirmationEmailRequest;
     path?: never;
     query?: never;
-    url: '/resendConfirmationEmail';
+    url: '/api/v1/auth/resendConfirmationEmail';
 };
 
-export type PostResendConfirmationEmailResponses = {
+export type PostApiV1AuthResendConfirmationEmailResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type PostForgotPasswordData = {
+export type PostApiV1AuthForgotPasswordData = {
     body: ForgotPasswordRequest;
     path?: never;
     query?: never;
-    url: '/forgotPassword';
+    url: '/api/v1/auth/forgotPassword';
 };
 
-export type PostForgotPasswordErrors = {
+export type PostApiV1AuthForgotPasswordErrors = {
     /**
      * Bad Request
      */
     400: HttpValidationProblemDetails;
 };
 
-export type PostForgotPasswordError = PostForgotPasswordErrors[keyof PostForgotPasswordErrors];
+export type PostApiV1AuthForgotPasswordError = PostApiV1AuthForgotPasswordErrors[keyof PostApiV1AuthForgotPasswordErrors];
 
-export type PostForgotPasswordResponses = {
+export type PostApiV1AuthForgotPasswordResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type PostResetPasswordData = {
+export type PostApiV1AuthResetPasswordData = {
     body: ResetPasswordRequest;
     path?: never;
     query?: never;
-    url: '/resetPassword';
+    url: '/api/v1/auth/resetPassword';
 };
 
-export type PostResetPasswordErrors = {
+export type PostApiV1AuthResetPasswordErrors = {
     /**
      * Bad Request
      */
     400: HttpValidationProblemDetails;
 };
 
-export type PostResetPasswordError = PostResetPasswordErrors[keyof PostResetPasswordErrors];
+export type PostApiV1AuthResetPasswordError = PostApiV1AuthResetPasswordErrors[keyof PostApiV1AuthResetPasswordErrors];
 
-export type PostResetPasswordResponses = {
+export type PostApiV1AuthResetPasswordResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type PostManage2FaData = {
+export type PostApiV1AuthManage2FaData = {
     body: TwoFactorRequest;
     path?: never;
     query?: never;
-    url: '/manage/2fa';
+    url: '/api/v1/auth/manage/2fa';
 };
 
-export type PostManage2FaErrors = {
+export type PostApiV1AuthManage2FaErrors = {
     /**
      * Bad Request
      */
@@ -257,25 +257,25 @@ export type PostManage2FaErrors = {
     404: unknown;
 };
 
-export type PostManage2FaError = PostManage2FaErrors[keyof PostManage2FaErrors];
+export type PostApiV1AuthManage2FaError = PostApiV1AuthManage2FaErrors[keyof PostApiV1AuthManage2FaErrors];
 
-export type PostManage2FaResponses = {
+export type PostApiV1AuthManage2FaResponses = {
     /**
      * OK
      */
     200: TwoFactorResponse;
 };
 
-export type PostManage2FaResponse = PostManage2FaResponses[keyof PostManage2FaResponses];
+export type PostApiV1AuthManage2FaResponse = PostApiV1AuthManage2FaResponses[keyof PostApiV1AuthManage2FaResponses];
 
-export type GetManageInfoData = {
+export type GetApiV1AuthManageInfoData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/manage/info';
+    url: '/api/v1/auth/manage/info';
 };
 
-export type GetManageInfoErrors = {
+export type GetApiV1AuthManageInfoErrors = {
     /**
      * Bad Request
      */
@@ -286,25 +286,25 @@ export type GetManageInfoErrors = {
     404: unknown;
 };
 
-export type GetManageInfoError = GetManageInfoErrors[keyof GetManageInfoErrors];
+export type GetApiV1AuthManageInfoError = GetApiV1AuthManageInfoErrors[keyof GetApiV1AuthManageInfoErrors];
 
-export type GetManageInfoResponses = {
+export type GetApiV1AuthManageInfoResponses = {
     /**
      * OK
      */
     200: InfoResponse;
 };
 
-export type GetManageInfoResponse = GetManageInfoResponses[keyof GetManageInfoResponses];
+export type GetApiV1AuthManageInfoResponse = GetApiV1AuthManageInfoResponses[keyof GetApiV1AuthManageInfoResponses];
 
-export type PostManageInfoData = {
+export type PostApiV1AuthManageInfoData = {
     body: InfoRequest;
     path?: never;
     query?: never;
-    url: '/manage/info';
+    url: '/api/v1/auth/manage/info';
 };
 
-export type PostManageInfoErrors = {
+export type PostApiV1AuthManageInfoErrors = {
     /**
      * Bad Request
      */
@@ -315,16 +315,16 @@ export type PostManageInfoErrors = {
     404: unknown;
 };
 
-export type PostManageInfoError = PostManageInfoErrors[keyof PostManageInfoErrors];
+export type PostApiV1AuthManageInfoError = PostApiV1AuthManageInfoErrors[keyof PostApiV1AuthManageInfoErrors];
 
-export type PostManageInfoResponses = {
+export type PostApiV1AuthManageInfoResponses = {
     /**
      * OK
      */
     200: InfoResponse;
 };
 
-export type PostManageInfoResponse = PostManageInfoResponses[keyof PostManageInfoResponses];
+export type PostApiV1AuthManageInfoResponse = PostApiV1AuthManageInfoResponses[keyof PostApiV1AuthManageInfoResponses];
 
 export type PostApiV1ChannelData = {
     body: ChannelDto;

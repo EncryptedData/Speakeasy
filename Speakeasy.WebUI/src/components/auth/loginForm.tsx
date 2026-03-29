@@ -1,6 +1,6 @@
 import { Component, createSignal } from "solid-js";
 
-import { postLogin, postRegister } from "@api";
+import { postApiV1AuthLogin, postApiV1AuthRegister } from "@api";
 import { TextField } from "@components/input/textField";
 import { useAuthContext } from "@context/authContext";
 import { Label } from "@components/input/label";
@@ -14,7 +14,9 @@ export type LoginFormProps = {
 export const LoginForm: Component<LoginFormProps> = (props) => {
   const { updateAuth } = useAuthContext();
 
-  const [mode, setMode] = createSignal<LoginFormProps["mode"]>(props.mode ?? "login");
+  const [mode, setMode] = createSignal<LoginFormProps["mode"]>(
+    props.mode ?? "login",
+  );
 
   // TODO: Choose form library, if we want
   const [email, setEmail] = createSignal("");
@@ -27,7 +29,7 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
         e.preventDefault();
 
         if (mode() === "register") {
-          const registerResponse = await postRegister({
+          const registerResponse = await postApiV1AuthRegister({
             body: {
               email: email(),
               password: password(),
@@ -41,7 +43,7 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
           }
         }
 
-        const loginResponse = await postLogin({
+        const loginResponse = await postApiV1AuthLogin({
           body: {
             email: email(),
             password: password(),
