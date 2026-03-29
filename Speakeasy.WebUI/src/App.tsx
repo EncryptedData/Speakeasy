@@ -1,8 +1,8 @@
-import { createEffect, createSignal, Show, type Component } from "solid-js";
+import { createEffect, createSignal, type Component } from "solid-js";
 
 import { Chat } from "@components/chat/Chat";
 import { useAuthContext } from "@context/authContext";
-import { redirect, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 import { Button } from "@components/input/button";
 
 const App: Component = () => {
@@ -12,14 +12,11 @@ const App: Component = () => {
     document.documentElement.dataset.theme = theme();
   });
 
-  const { isLoggedIn, authLoading, logout } = useAuthContext();
+  const { isLoggedIn, logout } = useAuthContext();
   const navigate = useNavigate();
   createEffect(() => {
-    // TODO: should probably have loading indicator or something idk
-    if (!authLoading() && !isLoggedIn()) {
-      navigate("/login", {
-        replace: true,
-      });
+    if (!isLoggedIn()) {
+      navigate("/login", { replace: true });
     }
   });
 

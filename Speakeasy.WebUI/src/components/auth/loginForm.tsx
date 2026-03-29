@@ -14,7 +14,7 @@ export type LoginFormProps = {
 export const LoginForm: Component<LoginFormProps> = (props) => {
   const { updateAuth } = useAuthContext();
 
-  const [mode, setMode] = createSignal<LoginFormProps["mode"]>("login");
+  const [mode, setMode] = createSignal<LoginFormProps["mode"]>(props.mode ?? "login");
 
   // TODO: Choose form library, if we want
   const [email, setEmail] = createSignal("");
@@ -53,9 +53,8 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
           console.error(loginResponse.error);
         } else if (loginResponse.data) {
           updateAuth(loginResponse.data);
+          props.onAuthComplete?.();
         }
-
-        props.onAuthComplete?.();
       }}
     >
       <Label>

@@ -16,7 +16,7 @@ import { client } from "../api/client.gen";
 export type StoredCredentials = {
   accessToken: string;
   refreshToken: string;
-  expiration: Date;
+  expirationMs: number;
 };
 
 export type AuthContext = {
@@ -42,18 +42,18 @@ export const AuthProvider: ParentComponent = (props) => {
     createStore<StoredCredentials>({
       accessToken: "",
       refreshToken: "",
-      expiration: new Date(),
+      expirationMs: 0,
     }),
   );
 
   // Automatically refresh the token if we can
   createEffect(() => {
-    const expiration = authStore.expiration;
+    const expirationMs = authStore.expirationMs;
     const token = authStore.refreshToken;
 
     if (!token) return;
 
-    const msUntilExpiry = new Date(expiration).getTime() - Date.now();
+    const msUntilExpiry = expirationMs - Date.now();
 
     const timeout = setTimeout(async () => {
       const refreshResponse = await postRefresh({
@@ -66,17 +66,18 @@ export const AuthProvider: ParentComponent = (props) => {
         setAuthStore({
           accessToken: "",
           refreshToken: "",
-          expiration: new Date(),
+          expirationMs: 0,
         });
       } else if (refreshResponse.data) {
         setAuthStore({
           accessToken: refreshResponse.data.accessToken,
           refreshToken: refreshResponse.data.refreshToken,
-          expiration: new Date(
-            Date.now() + Number(refreshResponse.data.expiresIn) * 1000,
-          ),
+          expirationMs: Date.now() + Number(refreshResponse.data.expiresIn) * 1000,
         });
       }
+    // Refresh 60s before expiry. If msUntilExpiry < 60_000 (token already close to
+    // or past expiry), the delay is negative — browsers clamp this to 0 and fire
+    // immediately, which is the correct behavior.
     }, msUntilExpiry - 60_000);
 
     onCleanup(() => clearTimeout(timeout));
@@ -97,7 +98,7 @@ export const AuthProvider: ParentComponent = (props) => {
     setAuthStore({
       accessToken: "",
       refreshToken: "",
-      expiration: new Date(),
+      expirationMs: 0,
     });
 
     // Clear /manage/info user data
@@ -109,7 +110,7 @@ export const AuthProvider: ParentComponent = (props) => {
 
   createEffect(() => {
     if (!authStore.accessToken) {
-      logout();
+      mutate(undefined);
     }
   });
 
@@ -123,7 +124,7 @@ export const AuthProvider: ParentComponent = (props) => {
         return false;
       }
 
-      if (info.state === "errored" || info.state === "ready") {
+      if (info.state === "ready") {
         return false;
       }
 
@@ -133,7 +134,7 @@ export const AuthProvider: ParentComponent = (props) => {
       setAuthStore({
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
-        expiration: new Date(Date.now() + Number(response.expiresIn) * 1000),
+        expirationMs: Date.now() + Number(response.expiresIn) * 1000,
       }),
   };
 

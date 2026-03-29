@@ -6,9 +6,9 @@ import { useAuthContext } from "@context/authContext";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, authLoading } = useAuthContext();
+  const { isLoggedIn } = useAuthContext();
   createEffect(() => {
-    if (isLoggedIn() && !authLoading()) {
+    if (isLoggedIn()) {
       navigate("/");
     }
   });
