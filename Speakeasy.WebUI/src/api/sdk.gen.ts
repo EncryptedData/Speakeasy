@@ -75,6 +75,7 @@ export const postResetPassword = <ThrowOnError extends boolean = false>(options:
 });
 
 export const postManage2Fa = <ThrowOnError extends boolean = false>(options: Options<PostManage2FaData, ThrowOnError>) => (options.client ?? client).post<PostManage2FaResponses, PostManage2FaErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/manage/2fa',
     ...options,
     headers: {
@@ -83,9 +84,14 @@ export const postManage2Fa = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const getManageInfo = <ThrowOnError extends boolean = false>(options?: Options<GetManageInfoData, ThrowOnError>) => (options?.client ?? client).get<GetManageInfoResponses, GetManageInfoErrors, ThrowOnError>({ url: '/manage/info', ...options });
+export const getManageInfo = <ThrowOnError extends boolean = false>(options?: Options<GetManageInfoData, ThrowOnError>) => (options?.client ?? client).get<GetManageInfoResponses, GetManageInfoErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/manage/info',
+    ...options
+});
 
 export const postManageInfo = <ThrowOnError extends boolean = false>(options: Options<PostManageInfoData, ThrowOnError>) => (options.client ?? client).post<PostManageInfoResponses, PostManageInfoErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/manage/info',
     ...options,
     headers: {
@@ -95,6 +101,7 @@ export const postManageInfo = <ThrowOnError extends boolean = false>(options: Op
 });
 
 export const postApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel',
     ...options,
     headers: {
@@ -104,6 +111,7 @@ export const postApiV1Channel = <ThrowOnError extends boolean = false>(options: 
 });
 
 export const putApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PutApiV1ChannelData, ThrowOnError>) => (options.client ?? client).put<PutApiV1ChannelResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel',
     ...options,
     headers: {
@@ -112,9 +120,14 @@ export const putApiV1Channel = <ThrowOnError extends boolean = false>(options: O
     }
 });
 
-export const getApiV1ChannelByIdMessages = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdMessagesData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdMessagesResponses, unknown, ThrowOnError>({ url: '/api/v1/Channel/{id}/messages', ...options });
+export const getApiV1ChannelByIdMessages = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdMessagesData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdMessagesResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Channel/{id}/messages',
+    ...options
+});
 
 export const postApiV1ChannelByIdMessage = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelByIdMessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelByIdMessageResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel/{id}/message',
     ...options,
     headers: {
@@ -123,15 +136,32 @@ export const postApiV1ChannelByIdMessage = <ThrowOnError extends boolean = false
     }
 });
 
-export const deleteApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1ChannelByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Channel/{id}', ...options });
+export const deleteApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1ChannelByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Channel/{id}',
+    ...options
+});
 
-export const getApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Channel/{id}', ...options });
+export const getApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Channel/{id}',
+    ...options
+});
 
-export const getApiV1GroupByIdChannels = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdChannelsData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdChannelsResponses, unknown, ThrowOnError>({ url: '/api/v1/Group/{id}/channels', ...options });
+export const getApiV1GroupByIdChannels = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdChannelsData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdChannelsResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group/{id}/channels',
+    ...options
+});
 
-export const getApiV1Group = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1GroupData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1GroupResponses, unknown, ThrowOnError>({ url: '/api/v1/Group', ...options });
+export const getApiV1Group = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1GroupData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1GroupResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group',
+    ...options
+});
 
 export const postApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PostApiV1GroupData, ThrowOnError>) => (options.client ?? client).post<PostApiV1GroupResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group',
     ...options,
     headers: {
@@ -141,6 +171,7 @@ export const postApiV1Group = <ThrowOnError extends boolean = false>(options: Op
 });
 
 export const putApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PutApiV1GroupData, ThrowOnError>) => (options.client ?? client).put<PutApiV1GroupResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group',
     ...options,
     headers: {
@@ -149,11 +180,20 @@ export const putApiV1Group = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const deleteApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1GroupByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Group/{id}', ...options });
+export const deleteApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1GroupByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group/{id}',
+    ...options
+});
 
-export const getApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Group/{id}', ...options });
+export const getApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group/{id}',
+    ...options
+});
 
 export const postApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PostApiV1MessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1MessageResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message',
     ...options,
     headers: {
@@ -163,6 +203,7 @@ export const postApiV1Message = <ThrowOnError extends boolean = false>(options: 
 });
 
 export const putApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PutApiV1MessageData, ThrowOnError>) => (options.client ?? client).put<PutApiV1MessageResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message',
     ...options,
     headers: {
@@ -171,6 +212,14 @@ export const putApiV1Message = <ThrowOnError extends boolean = false>(options: O
     }
 });
 
-export const deleteApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1MessageByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Message/{id}', ...options });
+export const deleteApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1MessageByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Message/{id}',
+    ...options
+});
 
-export const getApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1MessageByIdResponses, unknown, ThrowOnError>({ url: '/api/v1/Message/{id}', ...options });
+export const getApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1MessageByIdResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Message/{id}',
+    ...options
+});
