@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using Speakeasy.Server.Models.Abstractions;
 
 namespace Speakeasy.Server.Models.Transmission;

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
@@ -12,15 +13,18 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
 {
     private readonly IModelConverter<Message, MessageDto> _messageConverter;
     private readonly UserManager<User> _userManager;
+    private readonly ISpeakeasyV1HubService _hubService;
     
     public ChannelController(IUnitOfWork uow,
         IModelConverter<Channel, ChannelDto> channelConverter,
         IModelConverter<Message, MessageDto> messageConverter,
-        UserManager<User> userManager) : 
+        UserManager<User> userManager,
+        ISpeakeasyV1HubService hubService) : 
         base(uow.ChannelRepository, channelConverter, uow)
     {
         _messageConverter = messageConverter;
         _userManager = userManager;
+        _hubService = hubService;
     }
 
     public override async Task<ActionResult> PutAsync(ChannelDto dto)
@@ -47,6 +51,21 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
         }
         
         return await base.PostAsync(dto);
+    }
+
+    protected override async Task OnEntityCreatedAsync(ChannelDto dto)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.ChannelCreatedAsync(dto.Id!.Value));
+    }
+
+    protected override async Task OnEntityUpdatedAsync(Guid id)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.ChannelUpdatedAsync(id));
+    }
+
+    protected override async Task OnEntityDeletedAsync(Guid id)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.ChannelDeletedAsync(id));
     }
 
     [HttpGet("{id:guid}/messages")]
