@@ -7,5 +7,5 @@ export type ChatProfileProps = {
 };
 
 export const ChatProfile: Component<ChatProfileProps> = (props) => {
-  return <div>{props.user.username}</div>;
+  return <div>{props.user?.username}</div>;
 };
