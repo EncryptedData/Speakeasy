@@ -38,7 +38,9 @@ export const AuthProvider: ParentComponent = (props) => {
   const manageInfoInput = createMemo(() =>
     !!authStore.accessToken
       ? ({
-          auth: () => authStore.accessToken,
+          headers: {
+            Authorization: `Bearer ${authStore.accessToken}`,
+          },
         } satisfies Parameters<typeof getManageInfo>[0])
       : null,
   );
