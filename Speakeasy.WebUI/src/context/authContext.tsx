@@ -1,21 +1,30 @@
 import {
   createContext,
+  createEffect,
   createMemo,
   createResource,
+  onCleanup,
   ParentComponent,
   useContext,
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
-import { getManageInfo } from "@api";
+
+import { AccessTokenResponse, getManageInfo, postRefresh } from "@api";
+import { client } from "../api/client.gen";
+
+export type StoredCredentials = {
+  accessToken: string;
+  refreshToken: string;
+  expiration: Date;
+};
 
 export type AuthContext = {
   accessToken: () => string;
   authLoading: () => boolean;
   email: () => string | undefined;
   isLoggedIn: () => boolean;
-  refreshToken: () => string;
-  updateAuth: (newAuth: { accessToken: string; refreshToken: string }) => void;
+  updateAuth: (newAuth: AccessTokenResponse) => void;
 };
 
 const AuthContext = createContext<AuthContext>({
@@ -23,41 +32,98 @@ const AuthContext = createContext<AuthContext>({
   authLoading: () => true,
   email: () => "",
   isLoggedIn: () => false,
-  refreshToken: () => "",
   updateAuth: () => {},
 });
 
 export const AuthProvider: ParentComponent = (props) => {
   const [authStore, setAuthStore] = makePersisted(
-    createStore({
+    createStore<StoredCredentials>({
       accessToken: "",
       refreshToken: "",
+      expiration: new Date(),
     }),
   );
 
+  // Automatically refresh the token if we can
+  createEffect(() => {
+    const expiration = authStore.expiration;
+    const token = authStore.refreshToken;
+
+    if (!token) return;
+
+    const msUntilExpiry = new Date(expiration).getTime() - Date.now();
+    if (msUntilExpiry <= 0) return;
+
+    const timeout = setTimeout(async () => {
+      const refreshResponse = await postRefresh({
+        body: {
+          refreshToken: token,
+        },
+      });
+
+      if (refreshResponse.error) {
+        setAuthStore({
+          accessToken: "",
+          refreshToken: "",
+          expiration: new Date(),
+        });
+      } else if (refreshResponse.data) {
+        setAuthStore({
+          accessToken: refreshResponse.data.accessToken,
+          refreshToken: refreshResponse.data.refreshToken,
+          expiration: new Date(
+            Date.now() + Number(refreshResponse.data.expiresIn) * 1000,
+          ),
+        });
+      }
+    }, msUntilExpiry - 60_000);
+
+    onCleanup(() => clearTimeout(timeout));
+  });
+
+  // Automatically retrieve user info (/manage/info) as our token changes
   const manageInfoInput = createMemo(() =>
     !!authStore.accessToken
       ? ({
-          headers: {
-            Authorization: `Bearer ${authStore.accessToken}`,
-          },
+          auth: () => authStore.accessToken,
         } satisfies Parameters<typeof getManageInfo>[0])
       : null,
   );
-  const [{ latest, state }] = createResource(manageInfoInput, getManageInfo);
+  const [info, { mutate }] = createResource(manageInfoInput, getManageInfo);
+  createEffect(() => {
+    // If we end up with no access token, clear user data
+    if (!authStore.accessToken) {
+      mutate(undefined);
+    }
+  });
 
   const value: AuthContext = {
     accessToken: () => authStore.accessToken,
-    email: () => latest?.data?.email,
-    isLoggedIn: () => !!latest?.data?.email,
-    authLoading: () => state !== "unresolved" && state !== "ready",
-    refreshToken: () => authStore.refreshToken,
-    updateAuth: ({ accessToken, refreshToken }) =>
+    email: () => info()?.data?.email,
+    isLoggedIn: () => !!info()?.data?.email,
+    authLoading: () => {
+      if (!authStore.accessToken) {
+        return false;
+      }
+
+      if (info.state === "errored" || info.state === "ready") {
+        return false;
+      }
+
+      return true;
+    },
+    updateAuth: (response: AccessTokenResponse) =>
       setAuthStore({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        expiration: new Date(Date.now() + Number(response.expiresIn) * 1000),
       }),
   };
+
+  // Configure our api client to grab our access token
+  client.setConfig({
+    auth: () => value.accessToken(),
+  });
 
   return (
     <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>

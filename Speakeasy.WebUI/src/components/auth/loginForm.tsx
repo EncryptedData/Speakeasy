@@ -3,9 +3,12 @@ import { Component, createSignal } from "solid-js";
 import { postLogin, postRegister } from "@api";
 import { TextField } from "@components/input/textField";
 import { useAuthContext } from "@context/authContext";
+import { Label } from "@components/input/label";
+import { Button } from "@components/input/button";
 
 export type LoginFormProps = {
   mode?: "login" | "register";
+  onAuthComplete?: () => void;
 };
 
 export const LoginForm: Component<LoginFormProps> = (props) => {
@@ -19,6 +22,7 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
 
   return (
     <form
+      class="flex flex-col justify-center gap-2"
       onSubmit={async (e) => {
         e.preventDefault();
 
@@ -48,37 +52,38 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
           // TODO: Toast or something for errors
           console.error(loginResponse.error);
         } else if (loginResponse.data) {
-          updateAuth({
-            accessToken: loginResponse.data.accessToken,
-            refreshToken: loginResponse.data.refreshToken,
-          });
+          updateAuth(loginResponse.data);
         }
+
+        props.onAuthComplete?.();
       }}
     >
-      <label>
+      <Label>
         Email
         <TextField
           name="email"
           onChange={(e) => setEmail(e.currentTarget.value)}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Password
         <TextField
           name="password"
           type="password"
           onChange={(e) => setPassword(e.currentTarget.value)}
         />
-      </label>
-      <button type="submit">{mode() === "login" ? "Login" : "Register"}</button>
-      <button
+      </Label>
+      <Button class="mt-2" type="submit">
+        {mode() === "login" ? "Login" : "Register"}
+      </Button>
+      <Button
         onClick={() =>
           setMode((current) => (current === "login" ? "register" : "login"))
         }
         type="button"
       >
         {mode() === "login" ? "Register an account" : "I have an account"}
-      </button>
+      </Button>
     </form>
   );
 };

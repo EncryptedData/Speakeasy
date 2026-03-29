@@ -1,9 +1,8 @@
 import { createEffect, createSignal, Show, type Component } from "solid-js";
-import { Portal } from "solid-js/web";
 
 import { Chat } from "@components/chat/Chat";
-import { LoginForm } from "@components/auth/loginForm";
 import { useAuthContext } from "@context/authContext";
+import { redirect, useNavigate } from "@solidjs/router";
 
 const App: Component = () => {
   const [theme, setTheme] = createSignal<"dark" | "light">("dark");
@@ -13,32 +12,36 @@ const App: Component = () => {
   });
 
   const { isLoggedIn, authLoading } = useAuthContext();
+  const navigate = useNavigate();
+  createEffect(() => {
+    // TODO: should probably have loading indicator or something idk
+    if (!authLoading() && !isLoggedIn()) {
+      navigate("/login", {
+        replace: true,
+      });
+    }
+
+    console.log(authLoading(), isLoggedIn());
+  });
 
   return (
-    <>
-      <Portal>
-        <Show when={!authLoading() && !isLoggedIn()}>
-          <LoginForm />
-        </Show>
-      </Portal>
-      <div class="flex flex-1">
-        <div class="flex-1">
-          <p class="text-4xl text-accent text-center py-20">
-            Hello tailwind; Sup!!
-          </p>
+    <div class="flex flex-1">
+      <div class="flex-1">
+        <p class="text-4xl text-accent text-center py-20">
+          Hello tailwind; Sup!!
+        </p>
 
-          <button
-            class="block mx-auto text-text-muted"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-          >
-            Toggle theme (current: {theme()})
-          </button>
-        </div>
-        <div class="flex flex-4">
-          <Chat />
-        </div>
+        <button
+          class="block mx-auto text-text-muted"
+          onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+        >
+          Toggle theme (current: {theme()})
+        </button>
       </div>
-    </>
+      <div class="flex flex-4">
+        <Chat />
+      </div>
+    </div>
   );
 };
 
