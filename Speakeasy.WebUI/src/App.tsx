@@ -1,5 +1,9 @@
 import { createEffect, createSignal, type Component } from "solid-js";
-import { Chat } from "./components/chat/Chat";
+
+import { Chat } from "@components/chat/Chat";
+import { useAuthContext } from "@context/authContext";
+import { useNavigate } from "@solidjs/router";
+import { Button } from "@components/input/button";
 
 const App: Component = () => {
   const [theme, setTheme] = createSignal<"dark" | "light">("dark");
@@ -8,9 +12,17 @@ const App: Component = () => {
     document.documentElement.dataset.theme = theme();
   });
 
+  const { isLoggedIn, logout } = useAuthContext();
+  const navigate = useNavigate();
+  createEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login", { replace: true });
+    }
+  });
+
   return (
     <div class="flex flex-1">
-      <div class="flex-1">
+      <div class="flex-1 flex flex-col">
         <p class="text-4xl text-accent text-center py-20">
           Hello tailwind; Sup!!
         </p>
@@ -21,6 +33,9 @@ const App: Component = () => {
         >
           Toggle theme (current: {theme()})
         </button>
+        <Button class="flex mt-auto" onClick={logout} type="button">
+          Logout
+        </Button>
       </div>
       <div class="flex flex-4">
         <Chat />

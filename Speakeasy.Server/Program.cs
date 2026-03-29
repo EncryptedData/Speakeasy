@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -89,7 +91,48 @@ public class Program
         services.AddIdentityApiEndpoints<User>()
             .AddEntityFrameworkStores<SpeakeasyDbContext>();
 
-        services.AddOpenApi();
+        services.AddOpenApi(options =>
+        {
+            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            {
+                var components = document.Components ?? new OpenApiComponents();
+                document.Components = components;
+                components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Description = "Enter your bearer token from /login"
+                });
+
+                // Build a set of (path, HTTP method) pairs that require auth, so we can apply
+                // per-operation security. Must be done here (not an operation transformer) so
+                // we can pass `document` to OpenApiSecuritySchemeReference for correct serialization.
+                var authorizedEndpoints = context.DescriptionGroups
+                    .SelectMany(g => g.Items)
+                    .Where(d => d.ActionDescriptor.EndpointMetadata.OfType<IAuthorizeData>().Any()
+                             && !d.ActionDescriptor.EndpointMetadata.OfType<IAllowAnonymous>().Any())
+                    .Select(d => ($"/{d.RelativePath?.TrimStart('/')}", d.HttpMethod?.ToUpperInvariant()))
+                    .ToHashSet();
+
+                var bearerRequirement = new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+                };
+
+                foreach (var (path, pathItem) in document.Paths)
+                {
+                    foreach (var (method, operation) in pathItem.Operations ?? [])
+                    {
+                        if (authorizedEndpoints.Contains((path, method.Method.ToUpperInvariant())))
+                            operation.Security = [bearerRequirement];
+                    }
+                }
+
+                return Task.CompletedTask;
+            });
+        });
 
         services.AddSignalR();
     }
