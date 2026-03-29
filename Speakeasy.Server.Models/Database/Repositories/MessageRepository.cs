@@ -12,7 +12,8 @@ public class MessageRepository : BaseRepository<Message>, IMessageRepository
 
     protected override IQueryable<Message> ApplyIncludes(IQueryable<Message> query)
     {
-        return query.Include(e => e.Author);
+        return query.Include(e => e.Author)
+            .Include(e => e.Channel);
     }
 
     public async Task<IEnumerable<Message>> GetMessagesForChannelAsync(

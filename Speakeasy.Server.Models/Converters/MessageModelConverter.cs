@@ -57,6 +57,7 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
             IsDeleted = entity.IsDeleted,
             LastEditedOn = entity.LastEditedOn,
             AuthorId = entity.Author.Id,
+            ChannelId = entity.Channel.Id
         };
     }
 

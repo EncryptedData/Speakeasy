@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Transmission;
@@ -8,6 +9,7 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 public class GroupController : BaseRepositoryController<Group, GroupDto>
 {
     private readonly IModelConverter<Channel, ChannelDto> _channelConverter;
+    private readonly ISpeakeasyV1HubService _hubService;
     
     public GroupController(
         IUnitOfWork uow, 

@@ -21,4 +21,7 @@ public class MessageDto : ITransmissionEntity
     public bool? HasBeenEdited { get; set; }
     
     public bool? IsDeleted { get; set; }
+    
+    [JsonIgnore]
+    public Guid? ChannelId { get; set; }
 }
