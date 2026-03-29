@@ -23,6 +23,7 @@ export type AuthContext = {
   accessToken: () => string;
   authLoading: () => boolean;
   email: () => string | undefined;
+  logout: () => void;
   isLoggedIn: () => boolean;
   updateAuth: (newAuth: AccessTokenResponse) => void;
 };
@@ -31,6 +32,7 @@ const AuthContext = createContext<AuthContext>({
   accessToken: () => "",
   authLoading: () => true,
   email: () => "",
+  logout: () => {},
   isLoggedIn: () => false,
   updateAuth: () => {},
 });
@@ -52,7 +54,6 @@ export const AuthProvider: ParentComponent = (props) => {
     if (!token) return;
 
     const msUntilExpiry = new Date(expiration).getTime() - Date.now();
-    if (msUntilExpiry <= 0) return;
 
     const timeout = setTimeout(async () => {
       const refreshResponse = await postRefresh({
@@ -90,10 +91,25 @@ export const AuthProvider: ParentComponent = (props) => {
       : null,
   );
   const [info, { mutate }] = createResource(manageInfoInput, getManageInfo);
+
+  const logout = () => {
+    // Remove credentials
+    setAuthStore({
+      accessToken: "",
+      refreshToken: "",
+      expiration: new Date(),
+    });
+
+    // Clear /manage/info user data
+    mutate(undefined);
+
+    // Double check we cleared stored local data
+    localStorage.clear();
+  };
+
   createEffect(() => {
-    // If we end up with no access token, clear user data
     if (!authStore.accessToken) {
-      mutate(undefined);
+      logout();
     }
   });
 
@@ -101,6 +117,7 @@ export const AuthProvider: ParentComponent = (props) => {
     accessToken: () => authStore.accessToken,
     email: () => info()?.data?.email,
     isLoggedIn: () => !!info()?.data?.email,
+    logout: logout,
     authLoading: () => {
       if (!authStore.accessToken) {
         return false;
