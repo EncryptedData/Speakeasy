@@ -10,7 +10,6 @@ import { Virtualizer, VirtualizerHandle } from "virtua/solid";
 import { FiSend } from "solid-icons/fi";
 
 import { User } from "@models/User";
-import { useChatStore } from "@stores/chatStore";
 import { TextField } from "../input/textField";
 import { ChatProfile } from "./ChatProfile";
 import { useChatContextForChannel } from "@context/chatContext";
