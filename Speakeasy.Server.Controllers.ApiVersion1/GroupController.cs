@@ -23,7 +23,7 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
     }
 
     [HttpGet("{id}/channels")]
-    public async Task<ActionResult> GetChannelsAsync(Guid id)
+    public async Task<ActionResult<IEnumerable<ChannelDto>>> GetChannelsAsync(Guid id)
     {
         var group = await _repository.GetByIdAsync(id, trackEntity: false);
         if (group is null)
