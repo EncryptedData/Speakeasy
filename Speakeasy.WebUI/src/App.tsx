@@ -22,7 +22,7 @@ const App: Component = () => {
     }
   });
 
-  // TODO: Wire up groupIds once we can create & retrieve them
+  // TODO: Wire up group/channel ids once astrsk has a sidebar
   const [channelId, setChannelId] = createSignal("");
 
   return (
