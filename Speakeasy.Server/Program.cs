@@ -11,6 +11,8 @@ using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
 using Speakeasy.Server.Models.Transmission;
+using Speakeasy.Server.Storage;
+using Speakeasy.Server.Storage.Abstractions;
 
 namespace Speakeasy.Server;
 
@@ -136,6 +138,10 @@ public class Program
 
         services.AddSignalR();
         services.AddSingleton<ISpeakeasyV1HubService, SpeakeasyV1HubService>();
+
+        services.AddKeyedSingleton<IFileStore, LocalFileStore>(LocalFileStore.Key);
+        services.AddSingleton<IFileStore>(sp => sp.GetRequiredKeyedService<IFileStore>(LocalFileStore.Key));
+        services.AddSingleton<ITemporaryFileStore, TemporaryFileStore>();
     }
 
     private static void ConfigureApplication(WebApplication app)
