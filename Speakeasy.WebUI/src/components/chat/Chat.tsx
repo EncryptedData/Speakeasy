@@ -1,12 +1,19 @@
 import "./chat.css";
-import { Component, createSignal, Show } from "solid-js";
-import { VList, VListHandle } from "virtua/solid";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  Show,
+} from "solid-js";
+import { Virtualizer, VirtualizerHandle } from "virtua/solid";
 import { FiSend } from "solid-icons/fi";
 
-import { User } from "../../models/User";
-import { useChatStore } from "../../stores/chatStore";
+import { User } from "@models/User";
+import { useChatStore } from "@stores/chatStore";
 import { TextField } from "../input/textField";
 import { ChatProfile } from "./ChatProfile";
+import { useChatContextForChannel } from "@context/chatContext";
 
 const [users] = createSignal<Record<string, User>>({
   ["me"]: { userId: "1", profilePicture: "", username: "User1" },
@@ -16,33 +23,61 @@ const [users] = createSignal<Record<string, User>>({
   ["4"]: { userId: "4", profilePicture: "", username: "User4" },
 });
 
-export type ChatProps = {};
+export type ChatProps = {
+  channelId: Accessor<string>;
+};
 
 export const Chat: Component<ChatProps> = (props) => {
-  const [chats, { loadNextPage, sendMessage }] = useChatStore("channel1");
+  const chatContext = useChatContextForChannel(props.channelId);
+  const chats = chatContext.messages;
 
   const [message, setMessage] = createSignal("");
-  const [shift, setShift] = createSignal(true);
+  const [shift, setShift] = createSignal(false);
+  const [virtualizerHandle, setVirtualizerHandle] = createSignal<
+    VirtualizerHandle | undefined
+  >();
+  const [shouldStickToBottom, setShouldStickToBottom] = createSignal(true);
 
-  let vlistRef: VListHandle | undefined;
+  createEffect(() => {
+    const handle = virtualizerHandle();
+    if (!handle) return;
+    const lastItemIndex = chats().length - 1;
+    if (shouldStickToBottom()) {
+      handle.scrollToIndex(lastItemIndex, { align: "end" });
+    }
+  });
+
+  createEffect(() => {
+    chats();
+    setShift(false);
+  });
 
   return (
-    <div class="flex flex-col flex-1 bg-bg-chat">
-      <div class="flex-1">
-        <VList
-          ref={(r) => (vlistRef = r)}
+    <div class=" bg-bg-chat flex flex-col chat__container">
+      <div class="flex flex-col flex-1 chat__virtualizer">
+        <div class="grow" />
+        <Virtualizer
+          ref={setVirtualizerHandle}
           data={chats()}
           shift={shift()}
           onScroll={async (offset) => {
+            const handle = virtualizerHandle();
+            if (!handle) return;
+            setShouldStickToBottom(
+              offset - handle.scrollSize + handle.viewportSize >= -1.5,
+            );
+
             if (offset < 400) {
-              await loadNextPage();
+              // todo: manage race conditions here
+              setShift(true);
+              await chatContext.loadMessages();
             }
           }}
         >
           {(data, index) => {
             // No need to show the profile for several messages in a row
             const showProfile =
-              index() > 0 && chats()[index() - 1]!.author != data.author;
+              index() > 0 && chats()[index() - 1]?.author != data.author;
 
             return (
               <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">
@@ -52,31 +87,22 @@ export const Chat: Component<ChatProps> = (props) => {
                   </Show>
                 </div>
                 <div>
-                  {data.currentText} {data.isPending ? "Pending" : ""}
+                  {data.currentText}
+                  {data.isPending ? "Pending" : ""}
                 </div>
               </div>
             );
           }}
-        </VList>
+        </Virtualizer>
       </div>
       <form
         class="p-4 flex"
         onSubmit={(e) => {
           e.preventDefault();
 
-          // Shift _must_ be false when adding to the end of the list (bottom of the chat window)
-          // Otherwise the cache within the vlist does not update items heights correctly
-          // I'm sure this will not cause us grief in the future
-          setShift(false);
-          sendMessage(message());
+          setShouldStickToBottom(true);
+          chatContext.sendMessage(message());
           setMessage("");
-          setShift(true);
-
-          // When vlist gets its signal, shift will be false, which means list won't auto scroll
-          // to the bottom. So, do it manually after the render cycle
-          queueMicrotask(() => {
-            vlistRef?.scrollToIndex(chats().length - 1);
-          });
         }}
       >
         <div class="flex-1 flex chat__input">

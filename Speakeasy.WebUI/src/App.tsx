@@ -4,6 +4,8 @@ import { Chat } from "@components/chat/Chat";
 import { useAuthContext } from "@context/authContext";
 import { useNavigate } from "@solidjs/router";
 import { Button } from "@components/input/button";
+import { TextField } from "@components/input/textField";
+import { Label } from "@components/input/label";
 
 const App: Component = () => {
   const [theme, setTheme] = createSignal<"dark" | "light">("dark");
@@ -20,6 +22,9 @@ const App: Component = () => {
     }
   });
 
+  // TODO: Wire up group/channel ids once astrsk has a sidebar
+  const [channelId, setChannelId] = createSignal("");
+
   return (
     <div class="flex flex-1">
       <div class="flex-1 flex flex-col">
@@ -27,18 +32,25 @@ const App: Component = () => {
           Hello tailwind; Sup!!
         </p>
 
-        <button
-          class="block mx-auto text-text-muted"
+        <Button
+          class="block mx-auto text-text-muted m-4"
           onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
         >
           Toggle theme (current: {theme()})
-        </button>
+        </Button>
+        <Label>
+          ChannelId
+          <TextField
+            value={channelId()}
+            onChange={(e) => setChannelId(e.currentTarget.value)}
+          />
+        </Label>
         <Button class="flex mt-auto" onClick={logout} type="button">
           Logout
         </Button>
       </div>
       <div class="flex flex-4">
-        <Chat />
+        <Chat channelId={channelId} />
       </div>
     </div>
   );

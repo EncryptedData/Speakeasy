@@ -7,6 +7,7 @@ import { render } from "solid-js/web";
 import "./index.css";
 
 import { AuthProvider, useAuthContext } from "@context/authContext";
+import { ChatProvider } from "@context/chatContext";
 
 const root = document.getElementById("root");
 
@@ -36,11 +37,13 @@ const AuthLayout = (props: RouteSectionProps) => {
 render(
   () => (
     <AuthProvider>
-      <Router root={AuthLayout}>
-        <Route path="/" component={App} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="*" component={() => <Navigate href={"/"} />} />
-      </Router>
+      <ChatProvider>
+        <Router root={AuthLayout}>
+          <Route path="/" component={App} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="*" component={() => <Navigate href={"/"} />} />
+        </Router>
+      </ChatProvider>
     </AuthProvider>
   ),
   root!,

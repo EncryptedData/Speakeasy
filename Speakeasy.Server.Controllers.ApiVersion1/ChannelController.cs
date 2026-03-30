@@ -96,7 +96,7 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
     }
 
     [HttpPost("{id:guid}/message")]
-    public async Task<ActionResult> PostNewMessageAsync(Guid id,
+    public async Task<ActionResult<MessageDto>> PostNewMessageAsync(Guid id,
         [FromBody] [MaxLength(ModelConstants.Limits.MaxMessageLength)] string text)
     {
         var channel = await _repository.GetByIdAsync(id);
@@ -124,6 +124,6 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
         await _unitOfWork.MessageRepository.AddAsync(newMessage);
         await _unitOfWork.CommitAsync();
 
-        return NoContent();
+        return _messageConverter.ToTransmissionModel(newMessage);
     }
 }

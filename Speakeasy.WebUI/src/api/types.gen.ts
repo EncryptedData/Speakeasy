@@ -66,6 +66,7 @@ export type MessageDto = {
     lastEditedOn?: null | string;
     hasBeenEdited?: null | boolean;
     isDeleted?: null | boolean;
+    channelId?: null | string;
 };
 
 export type RefreshRequest = {
@@ -390,8 +391,10 @@ export type PostApiV1ChannelByIdMessageResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: MessageDto;
 };
+
+export type PostApiV1ChannelByIdMessageResponse = PostApiV1ChannelByIdMessageResponses[keyof PostApiV1ChannelByIdMessageResponses];
 
 export type DeleteApiV1ChannelByIdData = {
     body?: never;
