@@ -100,9 +100,6 @@ export const Chat: Component<ChatProps> = (props) => {
         onSubmit={(e) => {
           e.preventDefault();
 
-          // Shift _must_ be false when adding to the end of the list (bottom of the chat window)
-          // Otherwise the cache within the vlist does not update items heights correctly
-          // I'm sure this will not cause us grief in the future
           setShouldStickToBottom(true);
           chatContext.sendMessage(message());
           setMessage("");
