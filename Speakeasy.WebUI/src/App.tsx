@@ -6,6 +6,7 @@ import { useNavigate } from "@solidjs/router";
 import { Button } from "@components/input/button";
 import { TextField } from "@components/input/textField";
 import { Label } from "@components/input/label";
+import { useAppContext } from "@context/appContext";
 
 const App: Component = () => {
   const [theme, setTheme] = createSignal<"dark" | "light">("dark");
@@ -13,6 +14,8 @@ const App: Component = () => {
   createEffect(() => {
     document.documentElement.dataset.theme = theme();
   });
+
+  const { channels } = useAppContext();
 
   const { isLoggedIn, logout } = useAuthContext();
   const navigate = useNavigate();
@@ -24,6 +27,8 @@ const App: Component = () => {
 
   // TODO: Wire up group/channel ids once astrsk has a sidebar
   const [channelId, setChannelId] = createSignal("");
+
+  const firstChannelId = Object.values(channels())?.[0]?.[0]?.id;
 
   return (
     <div class="flex flex-1">
@@ -41,7 +46,7 @@ const App: Component = () => {
         <Label>
           ChannelId
           <TextField
-            value={channelId()}
+            value={channelId() || firstChannelId || ""}
             onChange={(e) => setChannelId(e.currentTarget.value)}
           />
         </Label>
@@ -50,7 +55,9 @@ const App: Component = () => {
         </Button>
       </div>
       <div class="flex flex-4">
-        <Chat channelId={channelId} />
+        <Chat
+          channelId={channelId() ? channelId : () => firstChannelId || ""}
+        />
       </div>
     </div>
   );
