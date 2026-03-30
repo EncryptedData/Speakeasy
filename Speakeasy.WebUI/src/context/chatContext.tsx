@@ -6,11 +6,15 @@ import {
   type ParentComponent,
   useContext,
 } from "solid-js";
-import { createStore, type SetStoreFunction } from "solid-js/store";
+import { createStore, produce, type SetStoreFunction } from "solid-js/store";
 
 import type { ChatMessage } from "@models/ChatMessage";
 import { useAuthContext } from "./authContext";
-import { getApiV1ChannelByIdMessages } from "@api";
+import {
+  getApiV1ChannelByIdMessages,
+  MessageDto,
+  postApiV1ChannelByIdMessage,
+} from "@api";
 
 const DEFAULT_TAKE = 75;
 
@@ -29,7 +33,7 @@ export const ChatContext = createContext<ChatContext>({
   loadingState: () => ({}),
   loadMessages: () => Promise.resolve(),
   updateMessages: () => {},
-});
+} satisfies ChatContext);
 
 type ContinuationStateValue = { continuationToken: string };
 type ContinuationState = Record<string, ContinuationStateValue>;
@@ -134,5 +138,51 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
     messages: () => chatContext.messages()[channelId()] || [],
     isLoading: () => chatContext.loadingState()[channelId()] || true,
     loadMessages: () => chatContext.loadMessages(channelId()),
+    sendMessage: async (text: string) => {
+      const tempId = Date.now().toString();
+
+      chatContext.updateMessages(channelId(), (innerMessages) => [
+        ...innerMessages,
+        {
+          id: tempId,
+          author: "me",
+          createdOn: new Date(),
+          currentText: text,
+          isPending: true,
+          lastEditedOn: undefined,
+        },
+      ]);
+
+      let createdMessage: MessageDto | undefined;
+      let didSendFail = false;
+      try {
+        const sendResponse = await postApiV1ChannelByIdMessage({
+          body: text,
+          path: { id: channelId() },
+        });
+
+        if (sendResponse.error || !sendResponse.data) {
+          // TODO: Toast or something for error
+          console.error(sendResponse.error);
+        }
+      } catch {
+        didSendFail = true;
+      }
+
+      chatContext.updateMessages(
+        channelId(),
+        produce((innerMessages) => {
+          const matchingMessage = innerMessages.find((m) => m.id === tempId);
+          if (matchingMessage) {
+            matchingMessage.id = createdMessage?.id ?? matchingMessage.id;
+            matchingMessage.isPending = false;
+            matchingMessage.didSendFail = didSendFail;
+            matchingMessage.createdOn = createdMessage?.createdOn
+              ? new Date(createdMessage.createdOn)
+              : matchingMessage.createdOn;
+          }
+        }),
+      );
+    },
   };
 }

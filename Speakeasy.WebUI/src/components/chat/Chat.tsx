@@ -28,7 +28,6 @@ export type ChatProps = {
 };
 
 export const Chat: Component<ChatProps> = (props) => {
-  const [, { sendMessage }] = useChatStore("channel1");
   const chatContext = useChatContextForChannel(props.groupId);
   const chats = chatContext.messages;
 
@@ -105,7 +104,7 @@ export const Chat: Component<ChatProps> = (props) => {
           // Otherwise the cache within the vlist does not update items heights correctly
           // I'm sure this will not cause us grief in the future
           setShouldStickToBottom(true);
-          sendMessage(message());
+          chatContext.sendMessage(message());
           setMessage("");
         }}
       >
