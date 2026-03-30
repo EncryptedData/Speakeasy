@@ -57,6 +57,8 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
 
         await _unitOfWork.CommitAsync();
 
+        await OnEntityUpdatedAsync(entity.Id);
+
         return NoContent();
     }
 
@@ -76,6 +78,8 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
 
         var updatedModel = _converter.ToTransmissionModel(entity);
 
+        await OnEntityCreatedAsync(updatedModel);
+
         return Ok(updatedModel);
     }
 
@@ -93,6 +97,14 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
         
         await _unitOfWork.CommitAsync();
 
+        await OnEntityDeletedAsync(id);
+
         return NoContent();
     }
+
+    protected abstract Task OnEntityCreatedAsync(TTransmission dto);
+
+    protected abstract Task OnEntityUpdatedAsync(Guid id);
+    
+    protected abstract Task OnEntityDeletedAsync(Guid id);
 }

@@ -135,6 +135,7 @@ public class Program
         });
 
         services.AddSignalR();
+        services.AddSingleton<ISpeakeasyV1HubService, SpeakeasyV1HubService>();
     }
 
     private static void ConfigureApplication(WebApplication app)
