@@ -54,6 +54,10 @@ export const ChatProvider: ParentComponent = (props) => {
 
   const value: ChatContext = {
     loadingState: () => loadingState,
+
+    // TODO: We should probably handle the case where the user navigates off of a channel then navigates back
+    // In this case, we probably want to re-retrieve messages they haven't seen
+    // Maybe we just let signalr handle this but idk
     loadMessages: async (channelId: string) => {
       if (loadingState[channelId]) {
         return;
