@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Transmission;
@@ -8,14 +9,17 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 public class GroupController : BaseRepositoryController<Group, GroupDto>
 {
     private readonly IModelConverter<Channel, ChannelDto> _channelConverter;
+    private readonly ISpeakeasyV1HubService _hubService;
     
     public GroupController(
         IUnitOfWork uow, 
         IModelConverter<Group, GroupDto> groupConverter,
-        IModelConverter<Channel, ChannelDto> channelConverter) : 
+        IModelConverter<Channel, ChannelDto> channelConverter,
+        ISpeakeasyV1HubService hubService) : 
         base(uow.GroupRepository, groupConverter, uow)
     {
         _channelConverter = channelConverter;
+        _hubService = hubService;
     }
 
     [HttpGet("{id}/channels")]
@@ -36,5 +40,20 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
     public ActionResult<IAsyncEnumerable<GroupDto>> GetAll()
     {
         return Ok(_unitOfWork.GroupRepository.GetAll().Select(_converter.ToTransmissionModel));
+    }
+
+    protected override async Task OnEntityCreatedAsync(GroupDto dto)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.GroupCreatedAsync(dto.Id!.Value));
+    }
+
+    protected override async Task OnEntityUpdatedAsync(Guid id)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.GroupUpdatedAsync(id));
+    }
+
+    protected override async Task OnEntityDeletedAsync(Guid id)
+    {
+        await _hubService.SendNotificationToAllAsync(e => e.GroupDeletedAsync(id));
     }
 }

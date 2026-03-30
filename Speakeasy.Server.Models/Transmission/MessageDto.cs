@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using Speakeasy.Server.Models.Abstractions;
 
 namespace Speakeasy.Server.Models.Transmission;
@@ -20,4 +21,7 @@ public class MessageDto : ITransmissionEntity
     public bool? HasBeenEdited { get; set; }
     
     public bool? IsDeleted { get; set; }
+    
+    [JsonIgnore]
+    public Guid? ChannelId { get; set; }
 }
