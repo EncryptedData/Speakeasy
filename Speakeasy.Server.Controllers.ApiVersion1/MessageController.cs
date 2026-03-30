@@ -25,6 +25,26 @@ public class MessageController : BaseRepositoryController<Message, MessageDto>
         return Task.FromResult<ActionResult<MessageDto>>(NotFound());
     }
 
+    public override async Task<ActionResult> DeleteAsync(Guid id)
+    {
+        var message = await _unitOfWork.MessageRepository.GetByIdAsync(id);
+
+        if (message is null)
+        {
+            return NotFound(ErrorDto.FromCode(ErrorCode.EntityNotFound));
+        }
+
+        if (message.IsDeleted)
+        {
+            return NoContent();
+        }
+        
+        message.IsDeleted = true;
+        await _unitOfWork.CommitAsync();
+        
+        return NoContent();
+    }
+        
     protected override async Task OnEntityCreatedAsync(MessageDto dto)
     {
         await _hubService.SendNotificationToAllAsync(e => e.MessageReceivedAsync(dto.ChannelId!.Value, dto));
