@@ -23,7 +23,7 @@ const App: Component = () => {
   });
 
   // TODO: Wire up groupIds once we can create & retrieve them
-  const [groupId, setGroupId] = createSignal("");
+  const [channelId, setChannelId] = createSignal("");
 
   return (
     <div class="flex flex-1">
@@ -39,10 +39,10 @@ const App: Component = () => {
           Toggle theme (current: {theme()})
         </Button>
         <Label>
-          GroupId
+          ChannelId
           <TextField
-            value={groupId()}
-            onChange={(e) => setGroupId(e.currentTarget.value)}
+            value={channelId()}
+            onChange={(e) => setChannelId(e.currentTarget.value)}
           />
         </Label>
         <Button class="flex mt-auto" onClick={logout} type="button">
@@ -50,7 +50,7 @@ const App: Component = () => {
         </Button>
       </div>
       <div class="flex flex-4">
-        <Chat groupId={groupId} />
+        <Chat channelId={channelId} />
       </div>
     </div>
   );

@@ -24,11 +24,11 @@ const [users] = createSignal<Record<string, User>>({
 });
 
 export type ChatProps = {
-  groupId: Accessor<string>;
+  channelId: Accessor<string>;
 };
 
 export const Chat: Component<ChatProps> = (props) => {
-  const chatContext = useChatContextForChannel(props.groupId);
+  const chatContext = useChatContextForChannel(props.channelId);
   const chats = chatContext.messages;
 
   const [message, setMessage] = createSignal("");
