@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import Popover from 'corvu/popover'
 
 export type ProfileButtonProps = {
     profilePicture: string,
@@ -11,11 +12,9 @@ function onClick_button() {
 
 export const ProfileButton: Component<ProfileButtonProps> = (props) => {
     return (
-        <>
-        <button type="menu" class="flex flex-row" onClick={onClick_button}>
-            <img class="flex svg-primary" src={props.profilePicture} style={{ stroke: "var(--color-text-primary)", height: "32px", width: "32px"}}></img>
-            <p class="flex">{props.name}</p>
+        <button class="flex flex-row">
+            <img class="m-1" src={props.profilePicture} style={{ height: "32px", width: "32px" }} />
+            <span class="m-1">{props.name}</span>
         </button>
-        </>
     )
 };

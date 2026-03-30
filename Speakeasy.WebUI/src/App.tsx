@@ -16,32 +16,30 @@ const App: Component = () => {
   });
 
   return (
-    <Resizable sizes={sizes()} onSizesChange={setSizes} orientation="horizontal" class="size-full">
+    <Resizable sizes={sizes()} onSizesChange={setSizes} orientation="horizontal" class="h-full rounded-sm">
       <Resizable.Panel
         initialSize={0.3}
         minSize={0.25}
         collapsible onCollapse={setCollapse}
         collapsedSize={0.01}
         maxSize={0.4}
-        class="">
+        class="flex flex-col justify-end">
         <Sidebar collapsed={collapsed()} />
       </Resizable.Panel>
       <Resizable.Handle aria-label="Sidebar resize handle"
         class="group basis-3 px-0.75">
-        <div class="size-full rounded-sm transition-colors group-data-active:bg-corvu-300 group-data-dragging:bg-corvu-100" />
+        <div class="h-full w-1 transition-colors group-data-active:bg-corvu-300 bg-corvu-200 group-data-dragging:bg-corvu-100" />
       </Resizable.Handle>
       <Resizable.Panel
         initialSize={0.75}
         class="flex flex-col items-center justify-center space-y-2 overflow-hidden px-4">
-        <div >
-
+        <div>
           <button class="block mx-auto text-text-muted" onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}>
             Toggle theme (current: {theme()})
           </button>
         </div>
       </Resizable.Panel>
     </Resizable>
-
   );
 };
 
