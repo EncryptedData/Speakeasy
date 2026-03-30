@@ -28,6 +28,7 @@ const App: Component = () => {
   // TODO: Wire up group/channel ids once astrsk has a sidebar
   const [channelId, setChannelId] = createSignal("");
 
+  // POC for usability: just default to the first group/channel until we have a real selector
   const firstChannelId = Object.values(channels())?.[0]?.[0]?.id;
 
   return (
@@ -46,7 +47,7 @@ const App: Component = () => {
         <Label>
           ChannelId
           <TextField
-            value={channelId() || firstChannelId || ""}
+            value={channelId() || ""}
             onChange={(e) => setChannelId(e.currentTarget.value)}
           />
         </Label>
