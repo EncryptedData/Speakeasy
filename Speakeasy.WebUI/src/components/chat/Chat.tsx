@@ -1,5 +1,11 @@
 import "./chat.css";
-import { Component, createEffect, createSignal, Show } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  Show,
+} from "solid-js";
 import { Virtualizer, VirtualizerHandle } from "virtua/solid";
 import { FiSend } from "solid-icons/fi";
 
@@ -17,13 +23,13 @@ const [users] = createSignal<Record<string, User>>({
   ["4"]: { userId: "4", profilePicture: "", username: "User4" },
 });
 
-export type ChatProps = {};
+export type ChatProps = {
+  groupId: Accessor<string>;
+};
 
 export const Chat: Component<ChatProps> = (props) => {
   const [, { sendMessage }] = useChatStore("channel1");
-  const chatContext = useChatContextForChannel(
-    "2d8853d6-e70d-4e5d-ae73-7b0927b241a5",
-  );
+  const chatContext = useChatContextForChannel(props.groupId);
   const chats = chatContext.messages;
 
   const [message, setMessage] = createSignal("");

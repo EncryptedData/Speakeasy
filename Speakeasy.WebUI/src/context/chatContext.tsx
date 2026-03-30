@@ -1,4 +1,5 @@
 import {
+  Accessor,
   createContext,
   createEffect,
   onMount,
@@ -122,18 +123,16 @@ export function useChatContext() {
   return useContext(ChatContext);
 }
 
-export function useChatContextForChannel(channelId: string) {
+export function useChatContextForChannel(channelId: Accessor<string>) {
   const chatContext = useChatContext();
 
   createEffect(() => {
-    onMount(() => {
-      chatContext.loadMessages(channelId);
-    });
+    chatContext.loadMessages(channelId());
   });
 
   return {
-    messages: () => chatContext.messages()[channelId] || [],
-    isLoading: () => chatContext.loadingState()[channelId] || true,
-    loadMessages: () => chatContext.loadMessages(channelId),
+    messages: () => chatContext.messages()[channelId()] || [],
+    isLoading: () => chatContext.loadingState()[channelId()] || true,
+    loadMessages: () => chatContext.loadMessages(channelId()),
   };
 }
