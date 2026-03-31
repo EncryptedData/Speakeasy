@@ -8,6 +8,7 @@ import "./index.css";
 
 import { AuthProvider, useAuthContext } from "@context/authContext";
 import { ChatProvider } from "@context/chatContext";
+import { AppContextProvider } from "@context/appContext";
 
 const root = document.getElementById("root");
 
@@ -38,11 +39,13 @@ render(
   () => (
     <AuthProvider>
       <ChatProvider>
-        <Router root={AuthLayout}>
-          <Route path="/" component={App} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="*" component={() => <Navigate href={"/"} />} />
-        </Router>
+        <AppContextProvider>
+          <Router root={AuthLayout}>
+            <Route path="/" component={App} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="*" component={() => <Navigate href={"/"} />} />
+          </Router>
+        </AppContextProvider>
       </ChatProvider>
     </AuthProvider>
   ),

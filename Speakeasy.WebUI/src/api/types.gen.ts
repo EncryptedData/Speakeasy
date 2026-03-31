@@ -443,8 +443,10 @@ export type GetApiV1GroupByIdChannelsResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: Array<ChannelDto>;
 };
+
+export type GetApiV1GroupByIdChannelsResponse = GetApiV1GroupByIdChannelsResponses[keyof GetApiV1GroupByIdChannelsResponses];
 
 export type GetApiV1GroupData = {
     body?: never;
