@@ -28,4 +28,8 @@
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Speakeasy.Server.Storage\Speakeasy.Server.Storage.csproj" />
+    </ItemGroup>
+
 </Project>

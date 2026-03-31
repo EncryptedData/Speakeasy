@@ -7,4 +7,6 @@ public interface IFileStore
     Task<bool> DoesFileExistAsync(Guid id);
 
     Task<Stream> GetFileAsync(Guid id);
+
+    Task RemoveAsync(Guid id);
 }

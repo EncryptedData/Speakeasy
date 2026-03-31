@@ -43,6 +43,15 @@ public class LocalFileStore : IFileStore
         return Task.FromResult<Stream>(_fileSystem.File.OpenRead(filePath));
     }
 
+    public Task RemoveAsync(Guid id)
+    {
+        string filePath = GetFilePath(id, createDirectory: false);
+        
+        _fileSystem.File.Delete(filePath);
+
+        return Task.CompletedTask;
+    }
+
     private string GetFilePath(Guid id, bool createDirectory = true)
     {
         string idStr = id.ToString();
