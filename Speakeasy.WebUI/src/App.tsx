@@ -4,7 +4,7 @@ import { Chat } from "@components/chat/Chat";
 import { useAuthContext } from "@context/authContext";
 import { useNavigate } from "@solidjs/router";
 import { Button } from "@components/input/button";
-import { TextField } from "@components/input/textField";
+import { TextInput } from "@components/input/textInput";
 import { Label } from "@components/input/label";
 import { useAppContext } from "@context/appContext";
 
@@ -46,7 +46,7 @@ const App: Component = () => {
         </Button>
         <Label>
           ChannelId
-          <TextField
+          <TextInput
             value={channelId() || ""}
             onChange={(e) => setChannelId(e.currentTarget.value)}
           />

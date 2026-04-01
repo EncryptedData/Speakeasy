@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@modular-forms/solid':
+        specifier: ^0.25.1
+        version: 0.25.1(solid-js@1.9.11)(typescript@5.9.3)
       '@solid-primitives/storage':
         specifier: ^4.3.4
         version: 4.3.4(solid-js@1.9.11)
@@ -403,6 +406,11 @@ packages:
 
   '@jsdevtools/ono@7.1.3':
     resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
+
+  '@modular-forms/solid@0.25.1':
+    resolution: {integrity: sha512-issNZ3xl4tj+1K7KT4dNTQaRq5SmVUXgUPeGTMjtrAzCeTnwM/u6vUxSuTY2bcMw4GzTxreFXLx1xMMhrFkt0A==}
+    peerDependencies:
+      solid-js: ^1.3.1
 
   '@nothing-but/utils@0.17.0':
     resolution: {integrity: sha512-TuCHcHLOqDL0SnaAxACfuRHBNRgNJcNn9X0GiH5H3YSDBVquCr3qEIG3FOQAuMyZCbu9w8nk2CHhOsn7IvhIwQ==}
@@ -1356,6 +1364,14 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  valibot@1.3.1:
+    resolution: {integrity: sha512-sfdRir/QFM0JaF22hqTroPc5xy4DimuGQVKFrzF1YfGwaS1nJot3Y8VqMdLO2Lg27fMzat2yD3pY5PbAYO39Gg==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   virtua@0.48.8:
     resolution: {integrity: sha512-jpsxOw5V4B6hg44JePRLo9DL0TV7N1lBEVtPjKpAJebXyhI2s9lfiXJESaLapNtr3vtiSk/pWHiLf7B2a6UcgQ==}
     peerDependencies:
@@ -1827,6 +1843,13 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jsdevtools/ono@7.1.3': {}
+
+  '@modular-forms/solid@0.25.1(solid-js@1.9.11)(typescript@5.9.3)':
+    dependencies:
+      solid-js: 1.9.11
+      valibot: 1.3.1(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@nothing-but/utils@0.17.0': {}
 
@@ -2684,6 +2707,10 @@ snapshots:
       browserslist: 4.28.1
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  valibot@1.3.1(typescript@5.9.3):
+    optionalDependencies:
+      typescript: 5.9.3
 
   virtua@0.48.8(solid-js@1.9.11):
     optionalDependencies:

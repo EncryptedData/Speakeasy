@@ -21,6 +21,11 @@
 
     --color-border: #374151; /* gray-700 — dividers, input borders */
     --color-border-focus: #4ade80; /* green-400 — focused inputs */
+
+    --color-error: #f87171;        /* red-400 — error text/icons */
+    --color-error-hover: #fca5a5;  /* red-300 — hover state */
+    --color-bg-error: #450a0a;     /* red-950 — error backgrounds */
+    --color-border-error: #b91c1c; /* red-700 — error borders */
 }
 
 @media (prefers-color-scheme: light) {
@@ -45,6 +50,11 @@
 
         --color-border: #d1d5db; /* gray-300 — dividers, input borders */
         --color-border-focus: #16a34a; /* green-600 — focused inputs */
+
+        --color-error: #dc2626;        /* red-600 — error text/icons */
+        --color-error-hover: #b91c1c;  /* red-700 — hover state */
+        --color-bg-error: #fef2f2;     /* red-50  — error backgrounds */
+        --color-border-error: #fca5a5; /* red-300 — error borders */
     }
 }
 
@@ -69,6 +79,11 @@
 
     --color-border: #d1d5db;
     --color-border-focus: #16a34a;
+
+    --color-error: #dc2626;        /* red-600 — error text/icons */
+    --color-error-hover: #b91c1c;  /* red-700 — hover state */
+    --color-bg-error: #fef2f2;     /* red-50  — error backgrounds */
+    --color-border-error: #fca5a5; /* red-300 — error borders */
 }
 
 html,
