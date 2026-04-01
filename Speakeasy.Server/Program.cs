@@ -13,6 +13,7 @@ using Speakeasy.Server.Models.Options;
 using Speakeasy.Server.Models.Transmission;
 using Speakeasy.Server.Storage;
 using Speakeasy.Server.Storage.Abstractions;
+using Speakeasy.Server.Storage.Validators;
 
 namespace Speakeasy.Server;
 
@@ -142,6 +143,9 @@ public class Program
         services.AddKeyedSingleton<IFileStore, LocalFileStore>(LocalFileStore.Key);
         services.AddSingleton<IFileStore>(sp => sp.GetRequiredKeyedService<IFileStore>(LocalFileStore.Key));
         services.AddSingleton<ITemporaryFileStore, TemporaryFileStore>();
+        services.AddSingleton<IImageValidator, ImageFileValidator>();
+        services.AddSingleton<IFileValidator<ImageValidationProperties>>(sp =>
+            sp.GetRequiredService<IImageValidator>());
     }
 
     private static void ConfigureApplication(WebApplication app)
