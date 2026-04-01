@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using Speakeasy.Server.Models.Abstractions;
 #pragma warning disable CS8618
 
 namespace Speakeasy.Server.Models.Database;
 
+[PrimaryKey(nameof(Id))]
 public class StoredFile : IEntity
 {
     public Guid Id { get; set; }

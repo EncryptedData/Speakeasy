@@ -6,4 +6,5 @@ namespace Speakeasy.Server.Models.Database;
 
 public class User : IdentityUser
 {
+    public StoredFile? ProfilePicture { get; set; }
 }
