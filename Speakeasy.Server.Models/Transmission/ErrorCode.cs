@@ -5,4 +5,6 @@ public enum ErrorCode
     EntityNotFound,
     MissingParameterId,
     EmptyParameterExpectedId,
+    UploadedFileLengthNotValid,
+    UploadedImageNotValid,
 }

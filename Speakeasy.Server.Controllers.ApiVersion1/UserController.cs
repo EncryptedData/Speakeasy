@@ -1,17 +1,31 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Transmission;
+using Speakeasy.Server.Storage.Abstractions;
+using Speakeasy.Server.Storage.Enums;
 
 namespace Speakeasy.Server.Controllers.ApiVersion1;
 
 public class UserController : BaseV1ApiController
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<User> _userManager;
+    private readonly IImageValidator _imageValidator;
+    private readonly ITemporaryFileStore _temporaryFileStore;
     
-    public UserController(IUnitOfWork unitOfWork)
+    public UserController(
+        IUnitOfWork unitOfWork, 
+        UserManager<User> userManager, 
+        IImageValidator imageValidator,
+        ITemporaryFileStore temporaryFileStore)
     {
         _unitOfWork = unitOfWork;
+        _userManager = userManager;
+        _imageValidator = imageValidator;
+        _temporaryFileStore = temporaryFileStore;
     }
 
     [HttpGet("{id}")]
@@ -20,10 +34,58 @@ public class UserController : BaseV1ApiController
         var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id, trackEntities: false);
         if(user is null)
         {
-            return NotFound();
+            return NotFound(ErrorDto.FromCode(ErrorCode.EntityNotFound));
         }
         
         return Ok(ToTransmissionModel(user));
+    }
+
+    [HttpPost("profile")]
+    public async Task<ActionResult> UploadProfileImageAsync(IFormFile formFile)
+    {
+        if (formFile.Length is 0)
+        {
+            return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedFileLengthNotValid));
+        }
+        
+        var user = await _userManager.GetUserAsync(User);
+        ArgumentNullException.ThrowIfNull(user);
+
+        await using var temporaryFile = _temporaryFileStore.CreateTemporaryFile();
+        var temporaryFileStream = temporaryFile.GetStream();
+
+        await formFile.CopyToAsync(temporaryFileStream);
+
+        temporaryFileStream.Position = 0;
+        var validatorResult =  await _imageValidator.ValidateAsync(temporaryFileStream);
+
+        if (validatorResult.IsValid)
+        {
+            return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedImageNotValid));
+        }
+
+        if (validatorResult.HasErrors || validatorResult.HasWarnings)
+        {
+            return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedImageNotValid));
+        }
+        
+        if (user.ProfilePicture is not null)
+        {
+            await _unitOfWork.FileRepository.DeleteFileById(user.ProfilePicture.Id);
+        }
+
+        user.ProfilePicture = new StoredFile()
+        {
+            Id = Guid.NewGuid(),
+            MimeType = validatorResult.FileProperties!.MimeType,
+            FileCategory = FileCategory.Image,
+            FileExtension = validatorResult.FileProperties.ImageType.ToString().ToLower(),
+            OriginalFileName = formFile.FileName,
+        };
+
+        await _userManager.UpdateAsync(user);
+
+        return Ok();
     }
 
     private UserDto ToTransmissionModel(User user)
