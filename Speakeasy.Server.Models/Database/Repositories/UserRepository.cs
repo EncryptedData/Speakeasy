@@ -11,18 +11,22 @@ public class UserRepository : IUserRepository
     {
         _db = context.Users;
     }
+
+    IQueryable<User> ApplyIncludes(IQueryable<User> query)
+    {
+        return query.Include(e => e.ProfilePicture);
+    }
     
     public async Task<User?> GetUserByIdAsync(string id, bool trackEntities = true)
     {
-        // User? u = await _db.FindAsync(id);
-        // return u;
-
         IQueryable<User> query = _db;
        
         if(trackEntities is false)
         {
             query = query.AsNoTracking();
         }
+
+        query = ApplyIncludes(query);
 
         return await query.FirstOrDefaultAsync(e => e.Id == id);
     }
