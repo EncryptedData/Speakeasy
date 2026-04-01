@@ -1,14 +1,27 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createEffect, createMemo, createSignal } from "solid-js";
+import {
+  createForm,
+  required,
+  email,
+  reset,
+  setError,
+} from "@modular-forms/solid";
 
 import { postApiV1AuthLogin, postApiV1AuthRegister } from "@api";
-import { TextField } from "@components/input/textField";
 import { useAuthContext } from "@context/authContext";
-import { Label } from "@components/input/label";
 import { Button } from "@components/input/button";
+import { TextField } from "@components/fields/textField";
+import { ValidationError } from "@models/validationError";
+import { getErrorMessages } from "@utilities/error";
 
 export type LoginFormProps = {
   mode?: "login" | "register";
   onAuthComplete?: () => void;
+};
+
+type LoginFormState = {
+  username: string;
+  password: string;
 };
 
 export const LoginForm: Component<LoginFormProps> = (props) => {
@@ -18,63 +31,88 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
     props.mode ?? "login",
   );
 
-  // TODO: Choose form library, if we want
-  const [email, setEmail] = createSignal("");
-  const [password, setPassword] = createSignal("");
+  const [loginForm, { Form, Field }] = createForm<LoginFormState>();
+
+  // When we change modes, clear errors
+  createEffect(() => {
+    mode();
+    reset(loginForm, {
+      keepValues: true,
+    });
+  });
 
   return (
-    <form
+    <Form
       class="flex flex-col justify-center gap-2"
-      onSubmit={async (e) => {
-        e.preventDefault();
-
+      onSubmit={async (state) => {
         if (mode() === "register") {
           const registerResponse = await postApiV1AuthRegister({
             body: {
-              email: email(),
-              password: password(),
+              email: state.username,
+              password: state.password,
             },
           });
 
           if (registerResponse.error) {
-            // TODO: Toast or something for errors
-            console.error(registerResponse.error);
+            const typed = registerResponse.error as ValidationError;
+            const errorMessages = getErrorMessages(typed, [
+              "password",
+              "username",
+            ]);
+
+            for (const [fieldName, error] of Object.entries(errorMessages)) {
+              setError(loginForm, fieldName as keyof LoginFormState, error);
+            }
             return;
           }
         }
 
         const loginResponse = await postApiV1AuthLogin({
           body: {
-            email: email(),
-            password: password(),
+            email: state.username,
+            password: state.password,
           },
         });
 
         if (loginResponse.error) {
-          // TODO: Toast or something for errors
-          console.error(loginResponse.error);
+          setError(loginForm, "password", "Invalid credentials.");
         } else if (loginResponse.data) {
           updateAuth(loginResponse.data);
           props.onAuthComplete?.();
         }
       }}
     >
-      <Label>
-        Email
-        <TextField
-          name="email"
-          onChange={(e) => setEmail(e.currentTarget.value)}
-        />
-      </Label>
-      <Label>
-        Password
-        <TextField
-          name="password"
-          type="password"
-          onChange={(e) => setPassword(e.currentTarget.value)}
-        />
-      </Label>
-      <Button class="mt-2" type="submit">
+      <Field
+        name="username"
+        validate={[
+          required("Please enter your email."),
+          email("Please enter a valid email address."),
+        ]}
+      >
+        {(field, props) => (
+          <TextField
+            {...props}
+            type="email"
+            label={"Email"}
+            value={field.value}
+            error={field.error}
+            required
+          />
+        )}
+      </Field>
+      <Field name="password" validate={required("Please enter a password.")}>
+        {(field, props) => (
+          <TextField
+            {...props}
+            type="password"
+            label={"Password"}
+            value={field.value}
+            error={field.error}
+            required
+          />
+        )}
+      </Field>
+      <Button class="mt-2" type="submit" disabled={loginForm.submitting}>
         {mode() === "login" ? "Login" : "Register"}
       </Button>
       <Button
@@ -85,6 +123,6 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
       >
         {mode() === "login" ? "Register an account" : "I have an account"}
       </Button>
-    </form>
+    </Form>
   );
 };
