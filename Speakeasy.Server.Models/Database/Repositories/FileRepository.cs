@@ -12,7 +12,7 @@ public class FileRepository : IFileRepository
     public FileRepository(IFileStore fileStore, SpeakeasyDbContext context)
     {
         _fileStore = fileStore;
-        
+        _db = context.Files;
     }
     
     public async Task AddFileAsync(Stream stream, StoredFile file)

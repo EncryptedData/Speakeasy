@@ -14,7 +14,7 @@ public class DownloadController : BaseV1ApiController
     }
     
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<FileStreamResult>> GetAsync(Guid id)
+    public async Task<ActionResult> GetAsync(Guid id)
     {
         var file = await _unitOfWork.FileRepository.GetFileByIdAsync(id);
         if (file is null)

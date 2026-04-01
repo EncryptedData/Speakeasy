@@ -1,3 +1,4 @@
+using System.IO.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Speakeasy.Server.Models.Options;
 using Speakeasy.Server.Models.Transmission;
 using Speakeasy.Server.Storage;
 using Speakeasy.Server.Storage.Abstractions;
+using Speakeasy.Server.Storage.Options;
 using Speakeasy.Server.Storage.Validators;
 
 namespace Speakeasy.Server;
@@ -140,12 +142,19 @@ public class Program
         services.AddSignalR();
         services.AddSingleton<ISpeakeasyV1HubService, SpeakeasyV1HubService>();
 
+        services.AddSingleton<IFileSystem, FileSystem>();
         services.AddKeyedSingleton<IFileStore, LocalFileStore>(LocalFileStore.Key);
         services.AddSingleton<IFileStore>(sp => sp.GetRequiredKeyedService<IFileStore>(LocalFileStore.Key));
         services.AddSingleton<ITemporaryFileStore, TemporaryFileStore>();
         services.AddSingleton<IImageValidator, ImageFileValidator>();
         services.AddSingleton<IFileValidator<ImageValidationProperties>>(sp =>
             sp.GetRequiredService<IImageValidator>());
+        services.AddSingleton<StorageOptions>(sp =>
+        {
+            var configuration = sp.GetRequiredService<IConfiguration>();
+
+            return configuration.GetSection("Storage").Get<StorageOptions>()!;
+        });
     }
 
     private static void ConfigureApplication(WebApplication app)

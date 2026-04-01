@@ -40,10 +40,10 @@ public class UserController : BaseV1ApiController
         return Ok(ToTransmissionModel(user));
     }
 
-    [HttpPost("profile")]
-    public async Task<ActionResult> UploadProfileImageAsync(IFormFile formFile)
+    [HttpPost("profile-image")]
+    public async Task<ActionResult> UploadProfileImageAsync([FromForm] IFormFile file)
     {
-        if (formFile.Length is 0)
+        if (file.Length is 0)
         {
             return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedFileLengthNotValid));
         }
@@ -54,12 +54,12 @@ public class UserController : BaseV1ApiController
         await using var temporaryFile = _temporaryFileStore.CreateTemporaryFile();
         var temporaryFileStream = temporaryFile.GetStream();
 
-        await formFile.CopyToAsync(temporaryFileStream);
+        await file.CopyToAsync(temporaryFileStream);
 
         temporaryFileStream.Position = 0;
         var validatorResult =  await _imageValidator.ValidateAsync(temporaryFileStream);
 
-        if (validatorResult.IsValid)
+        if (!validatorResult.IsValid)
         {
             return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedImageNotValid));
         }
@@ -74,15 +74,19 @@ public class UserController : BaseV1ApiController
             await _unitOfWork.FileRepository.DeleteFileById(user.ProfilePicture.Id);
         }
 
-        user.ProfilePicture = new StoredFile()
+        var storedFile = new StoredFile()
         {
             Id = Guid.NewGuid(),
             MimeType = validatorResult.FileProperties!.MimeType,
             FileCategory = FileCategory.Image,
             FileExtension = validatorResult.FileProperties.ImageType.ToString().ToLower(),
-            OriginalFileName = formFile.FileName,
+            OriginalFileName = file.FileName,
         };
 
+        await _unitOfWork.FileRepository.AddFileAsync(temporaryFileStream, storedFile);
+        await _unitOfWork.CommitAsync();
+        
+        user.ProfilePicture = storedFile;
         await _userManager.UpdateAsync(user);
 
         return Ok();
