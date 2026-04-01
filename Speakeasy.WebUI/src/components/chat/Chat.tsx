@@ -10,7 +10,7 @@ import { Virtualizer, VirtualizerHandle } from "virtua/solid";
 import { FiSend } from "solid-icons/fi";
 
 import { User } from "@models/User";
-import { TextField } from "../input/textField";
+import { TextInput } from "../input/textInput";
 import { ChatProfile } from "./ChatProfile";
 import { useChatContextForChannel } from "@context/chatContext";
 
@@ -105,7 +105,7 @@ export const Chat: Component<ChatProps> = (props) => {
         }}
       >
         <div class="flex-1 flex chat__input">
-          <TextField
+          <TextInput
             class="flex-1 pr-12"
             onChange={(e) => setMessage(e.currentTarget.value)}
             value={message()}
