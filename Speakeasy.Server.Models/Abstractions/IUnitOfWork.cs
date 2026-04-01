@@ -7,6 +7,8 @@ public interface IUnitOfWork : IAsyncDisposable
     public IGroupRepository GroupRepository { get; }
     
     public IMessageRepository MessageRepository { get; }
+    
+    public IFileRepository FileRepository { get; set; }
 
     public Task CommitAsync(CancellationToken cancellationToken = default);
 }
