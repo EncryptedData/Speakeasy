@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speakeasy.Server.Models.Database;
@@ -11,9 +12,11 @@ using Speakeasy.Server.Models.Database;
 namespace Speakeasy.Server.Models.Database.Migrations
 {
     [DbContext(typeof(SpeakeasyDbContext))]
-    partial class SpeakeasyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401042757_Added User profile image")]
+    partial class AddedUserprofileimage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
