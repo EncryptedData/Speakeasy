@@ -37,7 +37,8 @@ public class ImageFileValidator : IImageValidator
                 Warnings = []
             };
         }
-        catch (InvalidImageContentException e)
+        catch (Exception ex) when // NotSupportedException included: "The stream is not readable or the image format is not supported."
+            (ex is InvalidImageContentException or UnknownImageFormatException or NotSupportedException)
         {
             return FileValidatorResult<ImageValidationProperties>.FromErrors(FileValidationError.InvalidFormat);
         }
