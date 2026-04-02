@@ -24,6 +24,8 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
             query = query.AsNoTracking();
         }
 
+        query = ApplyIncludes(query);
+
         return query.AsAsyncEnumerable();
     }
 }

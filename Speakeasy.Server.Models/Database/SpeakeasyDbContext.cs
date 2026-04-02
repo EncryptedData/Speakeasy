@@ -15,4 +15,6 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     public DbSet<Channel> Channels { get; set; }
     
     public DbSet<Message> Messages { get; set; }
+    
+    public DbSet<StoredFile> Files { get; set; }
 }

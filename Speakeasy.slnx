@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Speakeasy.Server.Controllers.ApiVersion1/Speakeasy.Server.Controllers.ApiVersion1.csproj" />
   <Project Path="Speakeasy.Server.Models/Speakeasy.Server.Models.csproj" />
+  <Project Path="Speakeasy.Server.Storage/Speakeasy.Server.Storage.csproj" />
   <Project Path="Speakeasy.Server/Speakeasy.Server.csproj" />
 </Solution>
