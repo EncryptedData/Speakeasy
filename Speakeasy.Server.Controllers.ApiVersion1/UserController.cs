@@ -40,6 +40,18 @@ public class UserController : BaseV1ApiController
         return Ok(ToTransmissionModel(user));
     }
 
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDto>> GetMeAsync()
+    {
+        var userId = _userManager.GetUserId(User);
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId, trackEntities: false);
+        ArgumentNullException.ThrowIfNull(user);
+
+        return Ok(ToTransmissionModel(user));
+    }
+
     [HttpPost("profile-image")]
     public async Task<ActionResult> UploadProfileImageAsync([FromForm] IFormFile file)
     {
@@ -48,7 +60,10 @@ public class UserController : BaseV1ApiController
             return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedFileLengthNotValid));
         }
         
-        var user = await _userManager.GetUserAsync(User);
+        var userId = _userManager.GetUserId(User);
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
         ArgumentNullException.ThrowIfNull(user);
 
         await using var temporaryFile = _temporaryFileStore.CreateTemporaryFile();
