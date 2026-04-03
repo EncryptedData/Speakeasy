@@ -1,16 +1,53 @@
 /* @refresh reload */
-import './index.css';
-import { render } from 'solid-js/web';
-import 'solid-devtools';
+import type { RouteSectionProps } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
+import "solid-devtools";
+import { lazy, Show } from "solid-js";
+import { render } from "solid-js/web";
+import "./index.css";
 
-import App from './App';
+import { AuthProvider, useAuthContext } from "@context/authContext";
+import { ChatProvider } from "@context/chatContext";
+import { AppContextProvider } from "@context/appContext";
 
-const root = document.getElementById('root');
+const root = document.getElementById("root");
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   throw new Error(
-    'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
+    "Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?",
   );
 }
 
-render(() => <App />, root!);
+const App = lazy(() => import("./App"));
+const LoginPage = lazy(() => import("@components/auth/loginPage"));
+
+const AuthLayout = (props: RouteSectionProps) => {
+  const { authState } = useAuthContext();
+  return (
+    <Show
+      when={authState() !== "loading"}
+      fallback={
+        <div class="flex flex-1 items-center justify-center">Loading...</div>
+      }
+    >
+      {props.children}
+    </Show>
+  );
+};
+
+render(
+  () => (
+    <AuthProvider>
+      <ChatProvider>
+        <AppContextProvider>
+          <Router root={AuthLayout}>
+            <Route path="/" component={App} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="*" component={() => <Navigate href={"/"} />} />
+          </Router>
+        </AppContextProvider>
+      </ChatProvider>
+    </AuthProvider>
+  ),
+  root!,
+);

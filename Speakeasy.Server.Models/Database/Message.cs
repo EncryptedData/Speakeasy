@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Speakeasy.Server.Models.Abstractions;
+#pragma warning disable CS8618
 
 namespace Speakeasy.Server.Models.Database;
 
@@ -21,4 +22,6 @@ public class Message : IEntity
     public string CurrentText { get; set; }
     
     public List<MessageEdits> Edits { get; set; }
+    
+    public Channel Channel { get; set; }
 }

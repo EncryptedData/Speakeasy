@@ -12,16 +12,21 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "noUncheckedIndexedAccess": true,
 
     // Type Checking & Safety
+    "skipLibCheck": true,
     "strict": true,
     "types": ["vite/client"],
 
     // Path aliases
     "paths": {
+      "@api": ["./src/api/index.ts"],
       "@models/*": ["./src/models/*"],
       "@stores/*": ["./src/stores/*"],
-      "@components/*": ["./src/components/*"]
-    }
-  }
+      "@context/*": ["./src/context/*"],
+      "@components/*": ["./src/components/*"],
+      "@utilities/*": ["./src/utilities/*"],
+    },
+  },
 }

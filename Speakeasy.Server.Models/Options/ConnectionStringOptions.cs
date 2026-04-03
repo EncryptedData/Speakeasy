@@ -1,3 +1,4 @@
+#pragma warning disable CS8618
 namespace Speakeasy.Server.Models.Options;
 
 public class ConnectionStringOptions

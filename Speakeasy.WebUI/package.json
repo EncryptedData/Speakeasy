@@ -4,14 +4,17 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "generate": "openapi-ts",
+    "start": "vite",
     "serve": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "license": "MIT",
   "devDependencies": {
+    "@hey-api/openapi-ts": "0.94.5",
     "@tailwindcss/vite": "^4.1.13",
     "jsdom": "^29.0.1",
     "solid-devtools": "^0.34.3",
@@ -23,14 +26,9 @@
     "vitest": "^4.1.0"
   },
   "dependencies": {
-    "@prosemirror-adapter/solid": "*",
-    "prosemirror-example-setup": "^1.2.3",
-    "prosemirror-keymap": "^1.2.3",
-    "prosemirror-menu": "^1.3.0",
-    "prosemirror-model": "^1.25.4",
-    "prosemirror-schema-basic": "^1.2.4",
-    "prosemirror-state": "^1.4.4",
-    "prosemirror-view": "^1.41.7",
+    "@modular-forms/solid": "^0.25.1",
+    "@solid-primitives/storage": "^4.3.4",
+    "@solidjs/router": "^0.16.1",
     "solid-icons": "^1.2.0",
     "solid-js": "^1.9.9",
     "virtua": "^0.48.8"

@@ -4,10 +4,12 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.5" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
       <PackageReference Include="Serilog" Version="4.3.1" />
       <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
@@ -16,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Speakeasy.Server.Controllers.ApiVersion1\Speakeasy.Server.Controllers.ApiVersion1.csproj" />
       <ProjectReference Include="..\Speakeasy.Server.Models\Speakeasy.Server.Models.csproj" />
+      <ProjectReference Include="..\Speakeasy.Server.Storage\Speakeasy.Server.Storage.csproj" />
     </ItemGroup>
 
 </Project>
