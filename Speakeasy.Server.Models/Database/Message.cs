@@ -11,8 +11,6 @@ public class Message : IEntity
     
     public User Author { get; set; }
     
-    public DateTime CreatedOn { get; set; }
-    
     public DateTime? LastEditedOn { get; set; }
     
     public bool HasBeenEdited { get; set; }

@@ -14,8 +14,6 @@ public class MessageDto : ITransmissionEntity
     
     public string? AuthorId { get; set; }
     
-    public DateTime? CreatedOn { get; set; }
-    
     public DateTime? LastEditedOn { get; set; }
     
     public bool? HasBeenEdited { get; set; }

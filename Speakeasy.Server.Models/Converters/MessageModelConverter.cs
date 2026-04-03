@@ -26,8 +26,7 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
 
         return new Message()
         {
-            CreatedOn = DateTime.UtcNow,
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Author = user,
             CurrentText = dto.CurrentText,
             Edits = [],
@@ -43,14 +42,13 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
         {
             return new MessageDto()
             {
-                CreatedOn = entity.CreatedOn,
+                Id = entity.Id,
                 IsDeleted = entity.IsDeleted,
             };
         }
         
         return new MessageDto()
         {
-            CreatedOn = entity.CreatedOn,
             Id = entity.Id,
             CurrentText = entity.CurrentText,
             HasBeenEdited = entity.HasBeenEdited,
