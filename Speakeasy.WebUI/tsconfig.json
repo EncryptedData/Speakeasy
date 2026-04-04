@@ -22,7 +22,7 @@
     // Path aliases
     "paths": {
       "@api": ["./src/api/index.ts"],
-      "@hooks": ["./src/hooks/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@models/*": ["./src/models/*"],
       "@stores/*": ["./src/stores/*"],
       "@context/*": ["./src/context/*"],

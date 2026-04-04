@@ -4,9 +4,20 @@ export function getCurrentGroupId(params: Params) {
   return params.groupId;
 }
 
+export function getCurrentChannelId(params: Params): string | undefined {
+  return params.channelId;
+}
+
 export function navigateToGroup(
   navigate: (to: string | number, options?: Partial<NavigateOptions>) => void,
   groupId: string,
+  channelId?: string,
 ) {
-  navigate(`/${groupId}`);
+  let url = `/${groupId}`;
+
+  if (channelId) {
+    url += `/${channelId}`;
+  }
+
+  navigate(url);
 }

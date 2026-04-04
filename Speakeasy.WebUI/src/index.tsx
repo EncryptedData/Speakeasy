@@ -22,10 +22,10 @@ const App = lazy(() => import("./App"));
 const LoginPage = lazy(() => import("@components/auth/loginPage"));
 
 const AuthLayout = (props: RouteSectionProps) => {
-  const { authState } = useAuthContext();
+  const authContext = useAuthContext();
   return (
     <Show
-      when={authState() !== "loading"}
+      when={authContext.authState() !== "loading"}
       fallback={
         <div class="flex flex-1 items-center justify-center">Loading...</div>
       }
@@ -42,6 +42,7 @@ render(
         <AppContextProvider>
           <Router root={AuthLayout}>
             <Route path="/" component={App} />
+            <Route path="/:groupId/:channelId?" component={App} />
             <Route path="/login" component={LoginPage} />
             <Route path="*" component={() => <Navigate href={"/"} />} />
           </Router>

@@ -25,6 +25,8 @@ export type AppContext = {
 
   groups: GroupDictionary;
 
+  loadChannels: (groupId: string) => Promise<void>;
+
   loadGroups: () => Promise<void>;
 
   updateGroups: SetStoreFunction<GroupDictionary>;
@@ -33,12 +35,13 @@ export type AppContext = {
 export const AppContext = createContext<AppContext>({
   groups: {},
   channels: () => ({}),
+  loadChannels: () => Promise.resolve(),
   loadGroups: () => Promise.resolve(),
   updateGroups: () => ({}),
 } satisfies AppContext);
 
 export const AppContextProvider: ParentComponent = (props) => {
-  const { isLoggedIn } = useAuthContext();
+  const authContext = useAuthContext();
 
   const channelsLoading: Record<string, boolean> = {};
   const [channelStore, updateChannelStore] = createStore<
@@ -67,7 +70,7 @@ export const AppContextProvider: ParentComponent = (props) => {
 
   // Load groups on login. Clear state on logout
   createEffect(async () => {
-    if (!isLoggedIn()) {
+    if (!authContext.isLoggedIn()) {
       setGroups({});
       updateChannelStore({});
       return;
@@ -81,13 +84,13 @@ export const AppContextProvider: ParentComponent = (props) => {
     const allGroups = Object.keys(groups);
     if (!allGroups?.length) {
       return;
-    } else if (!isLoggedIn()) {
+    } else if (!authContext.isLoggedIn()) {
       return;
     }
 
     // Preload channels for the group one at a time. User can specifically request one if they navigate there
     for (const groupId of allGroups) {
-      if (channelsLoading[groupId]) {
+      if (channelsLoading[groupId] || channelStore[groupId]) {
         continue;
       }
 
@@ -113,6 +116,29 @@ export const AppContextProvider: ParentComponent = (props) => {
   const value: AppContext = {
     groups: groups,
     channels: () => channelStore,
+    loadChannels: async (groupId) => {
+      if (!groupId) {
+        return;
+      }
+
+      channelsLoading[groupId] = true;
+
+      try {
+        const response = await getApiV1GroupByIdChannels({
+          path: { id: groupId },
+        });
+
+        if (response.error || !response.data) {
+          // TODO: Error handling. Nothing in this case? This is eager loading
+          console.error(response.error);
+          return;
+        }
+
+        updateChannelStore(groupId, response.data);
+      } finally {
+        channelsLoading[groupId] = false;
+      }
+    },
     loadGroups,
     updateGroups: setGroups,
   };
