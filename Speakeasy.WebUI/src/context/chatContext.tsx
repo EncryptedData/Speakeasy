@@ -131,6 +131,10 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
   const chatContext = useChatContext();
 
   createEffect(() => {
+    if (!channelId()) {
+      return;
+    }
+
     chatContext.loadMessages(channelId());
   });
 
