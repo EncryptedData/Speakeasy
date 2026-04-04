@@ -170,6 +170,8 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
           // TODO: Toast or something for error
           console.error(sendResponse.error);
         }
+
+        createdMessage = sendResponse.data;
       } catch {
         didSendFail = true;
       }
