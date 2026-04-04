@@ -53,6 +53,7 @@ public class UserController : BaseV1ApiController
     }
 
     [HttpPost("profile-image")]
+    [RequestSizeLimit(ControllerConstants.FileSizes.TwoMegaBytes)]
     public async Task<ActionResult> UploadProfileImageAsync([FromForm] IFormFile file)
     {
         if (file.Length is 0)
@@ -82,6 +83,12 @@ public class UserController : BaseV1ApiController
         if (validatorResult.HasErrors || validatorResult.HasWarnings)
         {
             return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedImageNotValid));
+        }
+
+        if (validatorResult.FileProperties!.PixelHeight > ControllerConstants.Limits.ProfilePicture.Height ||
+            validatorResult.FileProperties.PixelWidth > ControllerConstants.Limits.ProfilePicture.Width)
+        {
+            return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedImageTooBig));
         }
         
         if (user.ProfilePicture is not null)

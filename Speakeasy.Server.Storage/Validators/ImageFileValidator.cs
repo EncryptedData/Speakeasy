@@ -14,6 +14,10 @@ public class ImageFileValidator : IImageValidator
         {
             var imageFormat = await Image.DetectFormatAsync(stream, cancellationToken);
 
+            stream.Position = 0;
+            
+            var imageInfo = await Image.IdentifyAsync(stream, cancellationToken);
+                
             ImageType imageType = imageFormat.DefaultMimeType switch
             {
                 MediaTypeNames.Image.Gif => ImageType.Gif,
@@ -30,6 +34,8 @@ public class ImageFileValidator : IImageValidator
                 {
                     MimeType = imageFormat.DefaultMimeType,
                     ImageType = imageType,
+                    PixelHeight = imageInfo.Height,
+                    PixelWidth = imageInfo.Width,
                 },
                 HasErrors = false,
                 HasWarnings = false,
