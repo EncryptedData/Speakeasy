@@ -12,6 +12,7 @@ import { makePersisted } from "@solid-primitives/storage";
 import {
   AccessTokenResponse,
   getApiV1AuthManageInfo,
+  getApiV1UserMe,
   postApiV1AuthRefresh,
 } from "@api";
 import { client } from "../api/client.gen";
@@ -111,9 +112,12 @@ export const AuthProvider: ParentComponent = (props) => {
     }
 
     // Token is valid — verify the session with the server
-    const info = await getApiV1AuthManageInfo({ auth: () => token });
+    const [info, me] = await Promise.all([
+      getApiV1AuthManageInfo({ auth: () => token }),
+      getApiV1UserMe({ auth: () => token }),
+    ]);
 
-    if (info.data?.email) {
+    if (info.data?.email && me.data?.id) {
       setEmail(info.data.email);
       setAuthState("authenticated");
     } else {

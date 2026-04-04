@@ -62,7 +62,6 @@ export type MessageDto = {
     id?: null | string;
     currentText: string;
     authorId?: null | string;
-    createdOn?: null | string;
     lastEditedOn?: null | string;
     hasBeenEdited?: null | boolean;
     isDeleted?: null | boolean;
@@ -102,6 +101,12 @@ export type TwoFactorResponse = {
     recoveryCodes?: null | Array<string>;
     isTwoFactorEnabled: boolean;
     isMachineRemembered: boolean;
+};
+
+export type UserDto = {
+    id?: null | string;
+    displayName?: null | string;
+    profileImage?: null | string;
 };
 
 export type PostApiV1AuthRegisterData = {
@@ -430,6 +435,22 @@ export type GetApiV1ChannelByIdResponses = {
 
 export type GetApiV1ChannelByIdResponse = GetApiV1ChannelByIdResponses[keyof GetApiV1ChannelByIdResponses];
 
+export type GetApiV1DownloadByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/Download/{id}';
+};
+
+export type GetApiV1DownloadByIdResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
 export type GetApiV1GroupByIdChannelsData = {
     body?: never;
     path: {
@@ -591,3 +612,60 @@ export type GetApiV1MessageByIdResponses = {
 };
 
 export type GetApiV1MessageByIdResponse = GetApiV1MessageByIdResponses[keyof GetApiV1MessageByIdResponses];
+
+export type GetApiV1UserByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/User/{id}';
+};
+
+export type GetApiV1UserByIdResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type GetApiV1UserByIdResponse = GetApiV1UserByIdResponses[keyof GetApiV1UserByIdResponses];
+
+export type GetApiV1UserMeData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/User/me';
+};
+
+export type GetApiV1UserMeResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type GetApiV1UserMeResponse = GetApiV1UserMeResponses[keyof GetApiV1UserMeResponses];
+
+export type PostApiV1UserProfileImageData = {
+    body: {
+        ContentType?: string;
+        ContentDisposition?: string;
+        Headers?: {
+            [key: string]: Array<string>;
+        };
+        Length?: number | string;
+        Name?: string;
+        FileName?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/User/profile-image';
+};
+
+export type PostApiV1UserProfileImageResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};

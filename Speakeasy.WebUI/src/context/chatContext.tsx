@@ -15,6 +15,7 @@ import {
   MessageDto,
   postApiV1ChannelByIdMessage,
 } from "@api";
+import { parseDateFromUuid } from "@utilities/uuid";
 
 const DEFAULT_TAKE = 75;
 
@@ -39,7 +40,7 @@ type ContinuationStateValue = { continuationToken: string };
 type ContinuationState = Record<string, ContinuationStateValue>;
 
 export const ChatProvider: ParentComponent = (props) => {
-  const { isLoggedIn } = useAuthContext();
+  const authContext = useAuthContext();
 
   const [continuationStore, updateContinuationStore] =
     createStore<ContinuationState>({});
@@ -51,7 +52,7 @@ export const ChatProvider: ParentComponent = (props) => {
   >({});
 
   createEffect(() => {
-    if (!isLoggedIn()) {
+    if (!authContext.isLoggedIn()) {
       updateContinuationStore({});
       updateChatState({});
     }
@@ -104,7 +105,7 @@ export const ChatProvider: ParentComponent = (props) => {
               ({
                 id: d.id || "",
                 author: d.authorId || "",
-                createdOn: new Date(d.createdOn!),
+                createdOn: parseDateFromUuid(d.id!),
                 currentText: d.currentText,
               }) satisfies ChatMessage,
           ),
@@ -131,6 +132,10 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
   const chatContext = useChatContext();
 
   createEffect(() => {
+    if (!channelId()) {
+      return;
+    }
+
     chatContext.loadMessages(channelId());
   });
 
@@ -165,6 +170,8 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
           // TODO: Toast or something for error
           console.error(sendResponse.error);
         }
+
+        createdMessage = sendResponse.data;
       } catch {
         didSendFail = true;
       }
@@ -177,9 +184,7 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
             matchingMessage.id = createdMessage?.id ?? matchingMessage.id;
             matchingMessage.isPending = false;
             matchingMessage.didSendFail = didSendFail;
-            matchingMessage.createdOn = createdMessage?.createdOn
-              ? new Date(createdMessage.createdOn)
-              : matchingMessage.createdOn;
+            matchingMessage.createdOn = parseDateFromUuid(createdMessage?.id!);
           }
         }),
       );

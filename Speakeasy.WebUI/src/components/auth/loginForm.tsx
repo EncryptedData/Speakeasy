@@ -25,7 +25,7 @@ type LoginFormState = {
 };
 
 export const LoginForm: Component<LoginFormProps> = (props) => {
-  const { updateAuth } = useAuthContext();
+  const authContext = useAuthContext();
 
   const [mode, setMode] = createSignal<LoginFormProps["mode"]>(
     props.mode ?? "login",
@@ -77,7 +77,7 @@ export const LoginForm: Component<LoginFormProps> = (props) => {
         if (loginResponse.error) {
           setError(loginForm, "password", "Invalid credentials.");
         } else if (loginResponse.data) {
-          updateAuth(loginResponse.data);
+          authContext.updateAuth(loginResponse.data);
           props.onAuthComplete?.();
         }
       }}
