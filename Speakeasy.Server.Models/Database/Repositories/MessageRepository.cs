@@ -22,16 +22,6 @@ public class MessageRepository : BaseRepository<Message>, IMessageRepository
         int take = 10, 
         bool trackEntities = false)
     {
-        DateTime? lastMessageTime = null;
-        if (lastMessageId is not null)
-        {
-            var message = await GetByIdAsync(lastMessageId.Value, false);
-            if (message is not null)
-            {
-                lastMessageTime = message.CreatedOn;
-            }
-        }
-        
         IQueryable<Message> query = _db.AsQueryable();
 
         if (trackEntities is false)
@@ -41,16 +31,15 @@ public class MessageRepository : BaseRepository<Message>, IMessageRepository
 
         query = ApplyIncludes(query);
 
-        if (lastMessageId is not null && lastMessageTime is not null)
+        if (lastMessageId is not null)
         {
             query = query
-                .Where(e => e.CreatedOn <= lastMessageTime)
-                .Where(e => e.Id != lastMessageId);
+                .Where(e => e.Id.CompareTo(lastMessageId.Value) < 0);
         }
 
         var result = await query
             .Where(e => e.Channel.Id == channelId)
-            .OrderByDescending(e => e.CreatedOn)
+            .OrderByDescending(e => e.Id)
             .Take(take)
             .ToListAsync();
 

@@ -110,10 +110,9 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
 
         var newMessage = new Message()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Author = user,
             Channel = channel,
-            CreatedOn = DateTime.UtcNow,
             CurrentText = text,
             Edits = [],
             HasBeenEdited = false,
