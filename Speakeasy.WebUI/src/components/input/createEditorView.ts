@@ -13,7 +13,7 @@ function markInputRule(pattern: RegExp, markType: MarkType): InputRule {
   return new InputRule(pattern, (state, match, start, end) => {
     const content = match[1];
     return state.tr
-      .replaceWith(start, end, schema.text(content, [markType.create()]))
+      .replaceWith(start, end, schema.text(content || "", [markType.create()]))
       .removeStoredMark(markType);
   });
 }
@@ -25,12 +25,22 @@ const INLINE_PATTERNS: [RegExp, MarkType][] = [
 ];
 
 function parseInlineText(text: string) {
-  const spans: { start: number; end: number; content: string; markType: MarkType }[] = [];
+  const spans: {
+    start: number;
+    end: number;
+    content: string;
+    markType: MarkType;
+  }[] = [];
   for (const [pattern, markType] of INLINE_PATTERNS) {
     pattern.lastIndex = 0;
     let m: RegExpExecArray | null;
     while ((m = pattern.exec(text)) !== null) {
-      spans.push({ start: m.index, end: m.index + m[0].length, content: m[1], markType });
+      spans.push({
+        start: m.index,
+        end: m.index + m[0].length,
+        content: m[1],
+        markType,
+      });
     }
   }
   spans.sort((a, b) => a.start - b.start);
@@ -64,7 +74,9 @@ export function createEditorView(
   let view: EditorView;
 
   const doc = initialText
-    ? schema.node("doc", null, [schema.node("paragraph", null, parseInlineText(initialText))])
+    ? schema.node("doc", null, [
+        schema.node("paragraph", null, parseInlineText(initialText)),
+      ])
     : undefined;
 
   view = new EditorView(element, {
