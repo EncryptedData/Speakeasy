@@ -1,5 +1,4 @@
 import {
-  Accessor,
   createContext,
   createEffect,
   createSignal,
@@ -15,7 +14,6 @@ import {
   getApiV1AuthManageInfo,
   getApiV1UserMe,
   postApiV1AuthRefresh,
-  UserDto,
 } from "@api";
 import { client } from "../api/client.gen";
 
@@ -29,11 +27,7 @@ type AuthState = "loading" | "authenticated" | "unauthenticated";
 
 export type AuthContext = {
   authState: () => AuthState;
-  me: Accessor<
-    UserDto & {
-      email: string;
-    }
-  >;
+  email: () => string | undefined;
   isLoggedIn: () => boolean;
   logout: () => void;
   updateAuth: (newAuth: AccessTokenResponse) => void;
@@ -41,9 +35,7 @@ export type AuthContext = {
 
 const AuthContext = createContext<AuthContext>({
   authState: () => "loading" as AuthState,
-  me: () => ({
-    email: "",
-  }),
+  email: () => undefined,
   isLoggedIn: () => false,
   logout: () => {},
   updateAuth: () => {},
@@ -59,15 +51,11 @@ export const AuthProvider: ParentComponent = (props) => {
   );
 
   const [authState, setAuthState] = createSignal<AuthState>("loading");
-  const [me, setMe] = createSignal<ReturnType<AuthContext["me"]>>({
-    email: "",
-  });
+  const [email, setEmail] = createSignal<string | undefined>();
 
   const clearAuth = () => {
     setAuthStore({ accessToken: "", refreshToken: "", expirationMs: 0 });
-    setMe({
-      email: "",
-    });
+    setEmail(undefined);
     setAuthState("unauthenticated");
     localStorage.clear();
   };
@@ -86,9 +74,7 @@ export const AuthProvider: ParentComponent = (props) => {
     const expirationMs = authStore.expirationMs;
 
     if (!token) {
-      setMe({
-        email: "",
-      });
+      setEmail(undefined);
       setAuthState("unauthenticated");
       return;
     }
@@ -132,10 +118,7 @@ export const AuthProvider: ParentComponent = (props) => {
     ]);
 
     if (info.data?.email && me.data?.id) {
-      setMe({
-        ...me.data,
-        email: info.data.email,
-      });
+      setEmail(info.data.email);
       setAuthState("authenticated");
     } else {
       clearAuth();
@@ -177,7 +160,7 @@ export const AuthProvider: ParentComponent = (props) => {
 
   const value: AuthContext = {
     authState,
-    me,
+    email,
     isLoggedIn: () => authState() === "authenticated",
     logout: clearAuth,
     updateAuth: applyTokens,
