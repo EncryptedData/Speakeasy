@@ -105,6 +105,7 @@ public class UserController : BaseV1ApiController
             OriginalFileName = file.FileName,
         };
 
+        temporaryFileStream.Position = 0;
         await _unitOfWork.FileRepository.AddFileAsync(temporaryFileStream, storedFile);
         await _unitOfWork.CommitAsync();
         
