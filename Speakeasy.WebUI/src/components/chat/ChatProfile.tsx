@@ -1,6 +1,7 @@
 import { Component, Show } from "solid-js";
 
 import { useUserState } from "@hooks/user";
+import { useProfileImage } from "@hooks/profileImage";
 import { DefaultProfilePicture } from "./defaultProfilePicture";
 
 export type ChatProfileProps = {
@@ -9,11 +10,12 @@ export type ChatProfileProps = {
 
 export const ChatProfile: Component<ChatProfileProps> = (props) => {
   const [user, loading] = useUserState(props.userId);
+  const imageUrl = useProfileImage(() => user().profileImage);
 
   return (
     <Show when={!loading()} fallback={<div />}>
-      {user().profileImage ? (
-        <img class="profile rounded-full" src={user().profileImage || ""} />
+      {imageUrl() ? (
+        <img class="profile rounded-full" src={imageUrl()} />
       ) : (
         <DefaultProfilePicture
           class="profile"

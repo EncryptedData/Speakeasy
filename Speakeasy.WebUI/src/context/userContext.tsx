@@ -7,6 +7,7 @@ import {
 import { createStore } from "solid-js/store";
 
 import { getApiV1UserById, type UserDto } from "@api";
+import { clearImageCache } from "@hooks/profileImage";
 import { useAuthContext } from "./authContext";
 
 /**
@@ -41,6 +42,7 @@ export const UserContextProvider: ParentComponent = (props) => {
   createEffect(() => {
     if (!authContext.isLoggedIn()) {
       updateUserStore({});
+      clearImageCache();
     }
   });
 
