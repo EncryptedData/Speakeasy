@@ -6,9 +6,8 @@ import { lazy, Show } from "solid-js";
 import { render } from "solid-js/web";
 import "./index.css";
 
-import { AuthProvider, useAuthContext } from "@context/authContext";
-import { ChatProvider } from "@context/chatContext";
-import { AppContextProvider } from "@context/appContext";
+import { useAuthContext } from "@context/authContext";
+import { Providers } from "@context/providers";
 
 const root = document.getElementById("root");
 
@@ -37,18 +36,14 @@ const AuthLayout = (props: RouteSectionProps) => {
 
 render(
   () => (
-    <AuthProvider>
-      <ChatProvider>
-        <AppContextProvider>
-          <Router root={AuthLayout}>
-            <Route path="/" component={App} />
-            <Route path="/:groupId/:channelId?" component={App} />
-            <Route path="/login" component={LoginPage} />
-            <Route path="*" component={() => <Navigate href={"/"} />} />
-          </Router>
-        </AppContextProvider>
-      </ChatProvider>
-    </AuthProvider>
+    <Providers>
+      <Router root={AuthLayout}>
+        <Route path="/" component={App} />
+        <Route path="/:groupId/:channelId?" component={App} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="*" component={() => <Navigate href={"/"} />} />
+      </Router>
+    </Providers>
   ),
   root!,
 );
