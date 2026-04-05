@@ -9,17 +9,20 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 public class GroupController : BaseRepositoryController<Group, GroupDto>
 {
     private readonly IModelConverter<Channel, ChannelDto> _channelConverter;
+    private readonly IModelConverter<CustomEmoji, CustomEmojiDto> _emojiConverter;
     private readonly ISpeakeasyV1HubService _hubService;
     
     public GroupController(
         IUnitOfWork uow, 
         IModelConverter<Group, GroupDto> groupConverter,
         IModelConverter<Channel, ChannelDto> channelConverter,
-        ISpeakeasyV1HubService hubService) : 
+        ISpeakeasyV1HubService hubService,
+        IModelConverter<CustomEmoji, CustomEmojiDto> emojiConverter) : 
         base(uow.GroupRepository, groupConverter, uow)
     {
         _channelConverter = channelConverter;
         _hubService = hubService;
+        _emojiConverter = emojiConverter;
     }
 
     [HttpGet("{id}/channels")]
@@ -34,6 +37,18 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
         var channels = await _unitOfWork.ChannelRepository.GetChannelsForGroup(id);
 
         return Ok(channels.Select(_channelConverter.ToTransmissionModel));
+    }
+
+    [HttpGet("{id}/emoji")]
+    public async Task<ActionResult<IAsyncEnumerable<CustomEmojiDto>>> GetEmojisAsync(Guid id)
+    {
+        if (!await _unitOfWork.GroupRepository.ContainsAsync(id))
+        {
+            return NotFound(ErrorDto.FromCode(ErrorCode.EntityNotFound));
+        }
+
+        return Ok(_unitOfWork.CustomEmojiRepository.GetAllForGroupAsyncEnumerable(id)
+            .Select(_emojiConverter.ToTransmissionModel));
     }
 
     [HttpGet]
