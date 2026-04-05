@@ -19,3 +19,8 @@
     overflow-y: auto;
     overflow-anchor: none;
 }
+
+.profile {
+    height: 30px;
+    width: 30px;
+}

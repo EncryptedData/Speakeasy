@@ -130,6 +130,7 @@ export function useChatContext() {
 
 export function useChatContextForChannel(channelId: Accessor<string>) {
   const chatContext = useChatContext();
+  const authContext = useAuthContext();
 
   createEffect(() => {
     if (!channelId()) {
@@ -150,7 +151,7 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
         ...innerMessages,
         {
           id: tempId,
-          author: "me",
+          author: authContext.me().id!,
           createdOn: new Date(),
           currentText: text,
           isPending: true,

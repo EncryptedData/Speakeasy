@@ -9,18 +9,9 @@ import {
 import { Virtualizer, VirtualizerHandle } from "virtua/solid";
 import { FiSend } from "solid-icons/fi";
 
-import { User } from "@models/User";
 import { TextInput } from "../input/textInput";
 import { ChatProfile } from "./ChatProfile";
 import { useChatContextForChannel } from "@context/chatContext";
-
-const [users] = createSignal<Record<string, User>>({
-  ["me"]: { userId: "1", profilePicture: "", username: "User1" },
-  ["1"]: { userId: "1", profilePicture: "", username: "User1" },
-  ["2"]: { userId: "2", profilePicture: "", username: "User2" },
-  ["3"]: { userId: "3", profilePicture: "", username: "User3" },
-  ["4"]: { userId: "4", profilePicture: "", username: "User4" },
-});
 
 export type ChatProps = {
   channelId: Accessor<string>;
@@ -80,9 +71,9 @@ export const Chat: Component<ChatProps> = (props) => {
 
             return (
               <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">
-                <div style={{ width: "50px", "min-width": "50px" }}>
+                <div class="profile">
                   <Show when={showProfile}>
-                    <ChatProfile user={users()[data.author]!} />
+                    <ChatProfile userId={data.author} />
                   </Show>
                 </div>
                 <div>
