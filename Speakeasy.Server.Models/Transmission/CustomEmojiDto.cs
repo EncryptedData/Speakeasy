@@ -14,4 +14,8 @@ public class CustomEmojiDto : ITransmissionNamedEntity
     public Guid? GroupId { get; set; }
     
     public Guid? Image { get; set; }
+    
+    public string? AuthorId { get; set; }
+    
+    public DateTime? CreatedOn { get; set; }
 }

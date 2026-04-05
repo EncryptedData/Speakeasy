@@ -12,6 +12,10 @@ public class CustomEmoji : IEntity
     
     public string Name { get; set; }
     
+    public User Author { get; set; }
+    
+    public DateTime CreatedOn { get; set; }
+    
     public Group? Group { get; set; }
     
     public StoredFile Image { get; set; }
