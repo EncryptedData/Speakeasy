@@ -7,5 +7,6 @@ public enum ErrorCode
     EmptyParameterExpectedId,
     UploadedFileLengthNotValid,
     UploadedImageNotValid,
-    UploadedImageTooBig
+    UploadedImageTooBig,
+    NameAlreadyTaken
 }

@@ -17,4 +17,6 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     public DbSet<Message> Messages { get; set; }
     
     public DbSet<StoredFile> Files { get; set; }
+    
+    public DbSet<CustomEmoji> CustomEmojis { get; set; }
 }
