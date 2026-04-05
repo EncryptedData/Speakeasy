@@ -32,8 +32,7 @@ public class CustomEmojiRepository : BaseRepository<CustomEmoji>, ICustomEmojiRe
             ? query.Where(e => e.Group == null || e.Group.Id == groupId)
             : query.Where(e => e.Group.Id == groupId); 
         
-        return query
-            .AsAsyncEnumerable();
+        return query.AsAsyncEnumerable();
     }
 
     public async Task<bool> ContainsNameAsync(string name)
