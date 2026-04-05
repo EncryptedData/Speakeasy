@@ -19,5 +19,12 @@ public static class ControllerConstants
 
             public const int Height = 400;
         }
+
+        public static class Emoji
+        {
+            public const int Width = 128;
+
+            public const int Height = 128;
+        }
     }
 }

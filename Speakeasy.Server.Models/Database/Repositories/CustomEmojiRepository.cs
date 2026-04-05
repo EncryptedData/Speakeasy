@@ -25,4 +25,9 @@ public class CustomEmojiRepository : BaseRepository<CustomEmoji>, ICustomEmojiRe
         
         return query.AsAsyncEnumerable();
     }
+
+    public async Task<bool> ContainsNameAsync(string name)
+    {
+        return await _db.AnyAsync(e => e.Name == name);
+    }
 }

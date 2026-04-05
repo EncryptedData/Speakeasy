@@ -7,4 +7,6 @@ public interface ICustomEmojiRepository : IRepository<CustomEmoji>
 
     IAsyncEnumerable<CustomEmoji> GetAllForGroupAsyncEnumerable(Guid groupId, bool includeGlobal = true,
         bool trackEntities = false);
+
+    Task<bool> ContainsNameAsync(string name);
 }

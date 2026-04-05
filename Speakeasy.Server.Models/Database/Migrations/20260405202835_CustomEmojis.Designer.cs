@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speakeasy.Server.Models.Database;
 
 #nullable disable
 
-namespace Speakeasy.Server.Models.Database.Migrations
+namespace Speakeasy.Server.Models.Migrations
 {
     [DbContext(typeof(SpeakeasyDbContext))]
-    partial class SpeakeasyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260405202835_CustomEmojis")]
+    partial class CustomEmojis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
