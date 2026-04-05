@@ -1,16 +1,20 @@
+using Speakeasy.Server.Models.Database;
+
 namespace Speakeasy.Server.Models.Abstractions;
 
 public interface IUnitOfWork : IAsyncDisposable
 {
-    public IChannelRepository ChannelRepository { get; }
+    IChannelRepository ChannelRepository { get; }
     
-    public IGroupRepository GroupRepository { get; }
+    IGroupRepository GroupRepository { get; }
     
-    public IMessageRepository MessageRepository { get; }
+    IMessageRepository MessageRepository { get; }
     
-    public IFileRepository FileRepository { get; set; }
+    IFileRepository FileRepository { get; set; }
     
-    public IUserRepository UserRepository { get; set; }
+    IUserRepository UserRepository { get; set; }
+    
+    ICustomEmojiRepository CustomEmojiRepository { get; set; }
 
-    public Task CommitAsync(CancellationToken cancellationToken = default);
+    Task CommitAsync(CancellationToken cancellationToken = default);
 }
