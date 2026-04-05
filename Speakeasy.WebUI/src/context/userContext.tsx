@@ -1,9 +1,4 @@
-import {
-  batch,
-  createContext,
-  useContext,
-  type ParentComponent,
-} from "solid-js";
+import { createContext, useContext, type ParentComponent } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { getApiV1UserById, type UserDto } from "@api";
