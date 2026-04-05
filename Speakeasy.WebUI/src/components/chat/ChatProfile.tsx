@@ -9,10 +9,11 @@ export type ChatProfileProps = {
 
 export const ChatProfile: Component<ChatProfileProps> = (props) => {
   const [user, loading] = useUserState(props.userId);
+
   return (
     <Show when={!loading()} fallback={<div />}>
       {user().profileImage ? (
-        <div class="profile rounded-full">{user().profileImage}</div>
+        <img class="profile rounded-full" src={user().profileImage || ""} />
       ) : (
         <DefaultProfilePicture
           class="profile"

@@ -1,7 +1,13 @@
-import { createContext, useContext, type ParentComponent } from "solid-js";
+import {
+  createContext,
+  createEffect,
+  useContext,
+  type ParentComponent,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { getApiV1UserById, type UserDto } from "@api";
+import { useAuthContext } from "./authContext";
 
 /**
  * UserId -> { UserDto, isLoading }
@@ -31,6 +37,12 @@ export const UserContext = createContext<UserContext>({
 
 export const UserContextProvider: ParentComponent = (props) => {
   const [usersStore, updateUserStore] = createStore<UsersDictionary>({});
+  const authContext = useAuthContext();
+  createEffect(() => {
+    if (!authContext.isLoggedIn()) {
+      updateUserStore({});
+    }
+  });
 
   const value: UserContext = {
     fetchUser: async (userId) => {
