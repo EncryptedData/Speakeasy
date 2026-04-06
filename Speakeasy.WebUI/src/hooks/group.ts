@@ -1,7 +1,13 @@
 import { useNavigate, useParams } from "@solidjs/router";
+import { createMemo } from "solid-js";
 
 import { useAppContext } from "@context/appContext";
-import { getCurrentGroupId, navigateToGroup } from "@utilities/route";
+import {
+  createGroupUrl,
+  getCurrentChannelId,
+  getCurrentGroupId,
+  navigateToGroup,
+} from "@utilities/route";
 import { type GroupDto, postApiV1Channel, postApiV1Group } from "@api";
 
 export function useGroupState() {
@@ -9,10 +15,11 @@ export function useGroupState() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const selectedGroupId = getCurrentGroupId(params);
+  const selectedGroupId = createMemo(() => getCurrentGroupId(params));
+  const selectedChannelId = createMemo(() => getCurrentChannelId(params));
 
   return {
-    channels: context.channels()[selectedGroupId || ""] || [],
+    channels: context.channels()[selectedGroupId() || ""] || [],
     createChannel: async (newChannelname: string) => {
       if (!selectedGroupId) {
         return;
@@ -47,9 +54,33 @@ export function useGroupState() {
       await context.loadGroups();
       navigateToGroup(navigate, response.id);
     },
-    selectedGroup: selectedGroupId
-      ? context.groups[selectedGroupId]
-      : undefined,
+    getGroupUrl: (groupId: string) => {
+      if (!groupId) {
+        return "/";
+      }
+
+      const channels = context.channels()[groupId];
+      return createGroupUrl(groupId, channels?.[0]?.id);
+    },
+    selectGroup: (groupId: string) => {
+      const group = context.groups[groupId];
+      if (!group) {
+        return;
+      }
+
+      const groupChannels = context.channels()[selectedGroupId() || ""] || [];
+      const firstChannelId = groupChannels[0]?.id;
+
+      navigateToGroup(navigate, group.id!, firstChannelId);
+    },
+    selectedChannel: () =>
+      selectedGroupId() && selectedChannelId()
+        ? context
+            .channels()
+            [selectedGroupId()!]?.find((c) => c.id === selectedChannelId())
+        : undefined,
+    selectedGroup: () =>
+      selectedGroupId ? context.groups[selectedGroupId()!] : undefined,
   };
 }
 

@@ -8,16 +8,23 @@ export function getCurrentChannelId(params: Params): string | undefined {
   return params.channelId;
 }
 
-export function navigateToGroup(
-  navigate: (to: string | number, options?: Partial<NavigateOptions>) => void,
+export function createGroupUrl(
   groupId: string,
-  channelId?: string,
-) {
+  channelId?: string | null,
+): string {
   let url = `/${groupId}`;
 
   if (channelId) {
     url += `/${channelId}`;
   }
 
-  navigate(url);
+  return url;
+}
+
+export function navigateToGroup(
+  navigate: (to: string | number, options?: Partial<NavigateOptions>) => void,
+  groupId: string,
+  channelId?: string | null,
+) {
+  navigate(createGroupUrl(groupId, channelId));
 }
