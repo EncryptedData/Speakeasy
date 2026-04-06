@@ -1,6 +1,6 @@
 import "./appSidebar.css";
 
-import { createEffect, createSignal, For } from "solid-js";
+import { createSignal, For } from "solid-js";
 
 import { CreateChannelDialog } from "@components/channel/createChannelDialog";
 import { CreateGroupDialog } from "@components/group/createGroupDialog";
@@ -10,14 +10,8 @@ import { useGroupState } from "@hooks/group";
 import { useAppContext } from "@context/appContext";
 import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
 import { clsx } from "@utilities/class";
-import { createGroupUrl } from "@utilities/route";
 
 export const AppSidebar = () => {
-  const [theme, setTheme] = createSignal<"dark" | "light">("dark");
-  createEffect(() => {
-    document.documentElement.dataset.theme = theme();
-  });
-
   const authContext = useAuthContext();
 
   const appState = useAppContext();
@@ -29,7 +23,7 @@ export const AppSidebar = () => {
   return (
     <>
       <div class="flex flex-1 flex-row gap-1 sidebar">
-        <div class="flex flex-col pl-0 bg-gray-800">
+        <div class="flex flex-col pl-0 bg-gray-800 groups">
           <For each={Object.values(appState.groups)}>
             {(val, index) => {
               const isSelected = () =>
@@ -53,27 +47,33 @@ export const AppSidebar = () => {
           </For>
         </div>
 
-        <div class="flex flex-col gap-4 p-4">
+        <div class="flex flex-1 flex-col gap-2 p-4 channels">
+          <div class="font-bold">{groupState.selectedGroup()?.name}</div>
+          <div class="border-b w-full" />
           <For each={groupState.channels()}>
             {(val, index) => {
               const isSelected = () =>
                 val.id === groupState.selectedChannel()?.id;
               return (
-                <div>
-                  {val.name} {isSelected() ? "(me)" : ""}
-                </div>
+                <a
+                  class={clsx(
+                    "listitem p-1 pl-4 flex items-center rounded-lg hover:bg-white/5 transition-all text-text-muted",
+                    isSelected() &&
+                      "active bg-white/10 hover:bg-white/10 font-white text-text-primary font-medium",
+                  )}
+                  href={groupState.getGroupUrl(
+                    groupState.selectedGroup()?.id!,
+                    val.id!,
+                  )}
+                >
+                  {val.name}
+                </a>
               );
             }}
           </For>
         </div>
       </div>
       <div class="flex flex-col mt-auto">
-        <Button
-          class="block mx-auto text-text-muted m-4"
-          onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-        >
-          Toggle theme (current: {theme()})
-        </Button>
         <Button onClick={() => setCreatingGroup(true)}>Create Group</Button>
         <Button onClick={() => setCreatingChannel(true)}>Create Channel</Button>
         <Button class="flex mt-auto" onClick={authContext.logout} type="button">

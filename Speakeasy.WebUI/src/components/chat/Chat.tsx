@@ -67,7 +67,7 @@ export const Chat: Component<ChatProps> = (props) => {
           {(data, index) => {
             // No need to show the profile for several messages in a row
             const showProfile =
-              index() > 0 && chats()[index() - 1]?.author != data.author;
+              index() === 0 || chats()[index() - 1]?.author != data.author;
 
             return (
               <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">

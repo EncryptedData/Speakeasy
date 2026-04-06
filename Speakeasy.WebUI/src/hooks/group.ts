@@ -55,13 +55,18 @@ export function useGroupState() {
       await context.loadGroups();
       navigateToGroup(navigate, response.id);
     },
-    getGroupUrl: (groupId: string) => {
+    getGroupUrl: (groupId: string, channelId?: string) => {
       if (!groupId) {
         return "/";
       }
 
-      const channels = context.channels()[groupId];
-      return createGroupUrl(groupId, channels?.[0]?.id);
+      if (channelId) {
+        return createGroupUrl(groupId, channelId);
+      } else {
+        const channels = context.channels()[groupId];
+
+        return createGroupUrl(groupId, channels?.[0]?.id);
+      }
     },
     selectGroup: (groupId: string) => {
       const group = context.groups[groupId];

@@ -39,11 +39,16 @@ const App: Component = () => {
     }
   });
 
-  const channelId = getCurrentChannelId(params);
+  const channelId = () => getCurrentChannelId(params);
 
   return (
     <Root sizes={sizes()} onSizesChange={setSizes} class="size-full">
-      <Panel initialSize={0.2} maxSize={0.4} class="flex flex-col">
+      <Panel
+        initialSize={0.2}
+        minSize={0.2}
+        maxSize={0.4}
+        class="flex flex-col"
+      >
         <AppSidebar />
       </Panel>
       <Handle aria-label="Resize Handle" class="group basis-3 px-0.75">
