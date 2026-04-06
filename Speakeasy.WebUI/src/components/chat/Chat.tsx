@@ -105,7 +105,7 @@ export const Chat: Component<ChatProps> = (props) => {
         }}
       >
         <div class="flex-1 flex chat__input">
-          <div class="size-full p-2 text-center disabled:invisible" hidden={!groupSelected() && !channelSelected()}>
+          <div class="size-full p-2 text-center disabled:invisible" hidden={groupSelected() && channelSelected()}>
             Select a group and channel to begin chatting...
           </div>
           <TextInput
