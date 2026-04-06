@@ -43,6 +43,14 @@ export const Chat: Component<ChatProps> = (props) => {
     setShift(false);
   });
 
+  function groupSelected() {
+    return groupState.selectedGroup === undefined;
+  }
+
+  function channelSelected() {
+    return groupState.selectedChannel === undefined;
+  }
+
   return (
     <div class=" bg-bg-chat flex flex-col chat__container">
       <div class="flex flex-col flex-1 chat__virtualizer">
@@ -97,15 +105,18 @@ export const Chat: Component<ChatProps> = (props) => {
         }}
       >
         <div class="flex-1 flex chat__input">
+          <div class="size-full p-2 text-center disabled:invisible" hidden={!groupSelected() && !channelSelected()}>
+            Select a group and channel to begin chatting...
+          </div>
           <TextInput
-            disabled={groupState.selectedGroup === undefined}
-            class="flex-1 pr-12"
+            class="flex-1 pr-12 disabled:collapse bg-bg-base active:bg-bg-surface"
             onChange={(e) => setMessage(e.currentTarget.value)}
             value={message()}
             placeholder="Enter a message..."
+            disabled={!groupSelected() && !channelSelected()}
           />
           <button
-            class="p-2 rounded bg-bg-surface hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
+            class="p-2 rounded bg-bg-surface hover:bg-bg-surface-hover active:bg-bg-elevated-hover disabled:collapse transition-colors"
             disabled={!message()}
             type="submit"
           >
