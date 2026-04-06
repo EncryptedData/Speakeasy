@@ -1,20 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Speakeasy.Server.Models.Abstractions;
+
 #pragma warning disable CS8618
 
 namespace Speakeasy.Server.Models.Database;
 
 [PrimaryKey(nameof(Id))]
-[Index(nameof(Name))]
-public class Group : INamedEntity
+public class CustomEmoji : IEntity
 {
     public Guid Id { get; set; }
     
     public string Name { get; set; }
     
+    public User Author { get; set; }
+    
     public DateTime CreatedOn { get; set; }
     
-    public List<Channel> Channels { get; set; }
+    public Group? Group { get; set; }
     
-    public List<CustomEmoji> CustomEmojis { get; set; }
+    public StoredFile Image { get; set; }
 }

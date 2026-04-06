@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
         MessageRepository = new MessageRepository(_context);
         FileRepository = new FileRepository(fileStore, _context);
         UserRepository = new UserRepository(_context);
+        CustomEmojiRepository = new CustomEmojiRepository(_context);
     }
     
     public IChannelRepository ChannelRepository { get; }
@@ -26,6 +27,8 @@ public class UnitOfWork : IUnitOfWork
     public IFileRepository FileRepository { get; set; }
 
     public IUserRepository UserRepository { get; set; }
+    
+    public ICustomEmojiRepository CustomEmojiRepository { get; set; }
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
