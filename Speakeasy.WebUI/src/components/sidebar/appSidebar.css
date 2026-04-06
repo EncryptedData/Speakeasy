@@ -1,0 +1,19 @@
+.sidebar .profile {
+    height: 35px;
+    width: 35px;
+}
+
+.sidebar .groups .listitem:hover .pill {
+    background: white;
+    height: 50%;
+}
+
+.sidebar .groups .listitem.active .pill {
+    background: white;
+    height: 75%;
+}
+
+.sidebar .groups .listitem {
+    height: 60px;
+    width: 60px;
+}

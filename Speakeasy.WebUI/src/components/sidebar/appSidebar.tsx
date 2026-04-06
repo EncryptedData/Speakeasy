@@ -1,19 +1,21 @@
-import { createEffect, createSignal } from "solid-js";
+import "./appSidebar.css";
+
+import { createSignal, For } from "solid-js";
 
 import { CreateChannelDialog } from "@components/channel/createChannelDialog";
+import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
 import { CreateGroupDialog } from "@components/group/createGroupDialog";
 import { Button } from "@components/input/button";
-import { useGroupState } from "@hooks/group";
+import { useAppContext } from "@context/appContext";
 import { useAuthContext } from "@context/authContext";
+import { useGroupState } from "@hooks/group";
+import { clsx } from "@utilities/class";
+import { Tooltip } from "@components/tooltip/tooltip";
 
 export const AppSidebar = () => {
-  const [theme, setTheme] = createSignal<"dark" | "light">("dark");
-  createEffect(() => {
-    document.documentElement.dataset.theme = theme();
-  });
-
   const authContext = useAuthContext();
 
+  const appState = useAppContext();
   const groupState = useGroupState();
 
   const [creatingGroup, setCreatingGroup] = createSignal(false);
@@ -21,24 +23,88 @@ export const AppSidebar = () => {
 
   return (
     <>
-      <p class="text-4xl text-accent text-center py-20">
-        Hello tailwind; Sup!!
-      </p>
-      <p class="text-md text-accent text-center py-20">
-        {groupState.selectedGroup?.id || ""}
-      </p>
+      <div class="flex flex-1 flex-row gap-1 sidebar">
+        <div class="flex flex-col pl-0 bg-gray-800 groups">
+          <For each={Object.values(appState.groups)}>
+            {(val, index) => {
+              const isSelected = () =>
+                val.id === groupState.selectedGroup()?.id;
+              return (
+                <Tooltip
+                  content={<div>{val.name}</div>}
+                  openDelay={0}
+                  placement="right"
+                >
+                  <a
+                    class={clsx(
+                      "listitem flex items-center",
+                      isSelected() && "active",
+                    )}
+                    href={groupState.getGroupUrl(val.id!)}
+                  >
+                    <div class="pill rounded-r-md w-1 transition-all" />
+                    <DefaultProfilePicture
+                      class="profile m-2"
+                      displayName={val.name}
+                    />
+                  </a>
+                </Tooltip>
+              );
+            }}
+          </For>
+          <button
+            class={clsx(
+              "listitem flex items-center justify-center rounded-full bg-red cursor-pointer",
+            )}
+            onClick={() => setCreatingGroup(true)}
+            title="Create a Group"
+          >
+            <div class="profile flex items-center justify-center rounded-full bg-white/20 hover:bg-bg-base transition-all">
+              +
+            </div>
+          </button>
+        </div>
 
-      <Button
-        class="block mx-auto text-text-muted m-4"
-        onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-      >
-        Toggle theme (current: {theme()})
-      </Button>
-      <Button onClick={() => setCreatingGroup(true)}>Create Group</Button>
-      <Button onClick={() => setCreatingChannel(true)}>Create Channel</Button>
-      <Button class="flex mt-auto" onClick={authContext.logout} type="button">
-        Logout
-      </Button>
+        <div class="flex flex-1 flex-col gap-2 p-4 channels">
+          <div class={"flex gap-1"}>
+            <div class="font-bold">{groupState.selectedGroup()?.name}</div>
+            <button
+              class="ml-auto min-w-8 min-h-8 w-8 h-8 cursor-pointer p-1 rounded-full hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
+              onClick={() => setCreatingChannel(true)}
+            >
+              +
+            </button>
+          </div>
+          <div class="border-b w-full" />
+          <For each={groupState.channels()}>
+            {(val, index) => {
+              const isSelected = () =>
+                val.id === groupState.selectedChannel()?.id;
+              return (
+                <a
+                  class={clsx(
+                    "listitem p-1 pl-4 flex items-center rounded-lg hover:bg-white/5 transition-all text-text-muted",
+                    isSelected() &&
+                      "active bg-white/10 hover:bg-white/10 font-white text-text-primary font-medium",
+                  )}
+                  href={groupState.getGroupUrl(
+                    groupState.selectedGroup()?.id!,
+                    val.id!,
+                  )}
+                >
+                  {val.name}
+                </a>
+              );
+            }}
+          </For>
+        </div>
+      </div>
+      <div class="flex flex-col mt-auto">
+        <Button class="flex mt-auto" onClick={authContext.logout} type="button">
+          Logout
+        </Button>
+      </div>
+
       <CreateGroupDialog
         open={creatingGroup()}
         onOpenChange={setCreatingGroup}

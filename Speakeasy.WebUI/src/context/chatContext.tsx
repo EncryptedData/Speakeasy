@@ -67,6 +67,8 @@ export const ChatProvider: ParentComponent = (props) => {
     loadMessages: async (channelId: string) => {
       if (loadingState[channelId]) {
         return;
+      } else if (!channelId) {
+        return;
       }
 
       updateLoadingState(channelId, true);

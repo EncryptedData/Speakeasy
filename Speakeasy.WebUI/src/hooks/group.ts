@@ -1,7 +1,13 @@
 import { useNavigate, useParams } from "@solidjs/router";
+import { createMemo } from "solid-js";
 
 import { useAppContext } from "@context/appContext";
-import { getCurrentGroupId, navigateToGroup } from "@utilities/route";
+import {
+  createGroupUrl,
+  getCurrentChannelId,
+  getCurrentGroupId,
+  navigateToGroup,
+} from "@utilities/route";
 import { type GroupDto, postApiV1Channel, postApiV1Group } from "@api";
 
 export function useGroupState() {
@@ -9,18 +15,20 @@ export function useGroupState() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const selectedGroupId = getCurrentGroupId(params);
+  const selectedGroupId = createMemo(() => getCurrentGroupId(params));
+  const selectedChannelId = createMemo(() => getCurrentChannelId(params));
 
   return {
-    channels: context.channels()[selectedGroupId || ""] || [],
+    channels: () => context.channels()[selectedGroupId() || ""] || [],
     createChannel: async (newChannelname: string) => {
-      if (!selectedGroupId) {
+      const selectedGroup = selectedGroupId();
+      if (!selectedGroup) {
         return;
       }
 
       const channelResponse = await postApiV1Channel({
         body: {
-          groupId: selectedGroupId,
+          groupId: selectedGroup,
           name: newChannelname,
         },
       });
@@ -33,8 +41,8 @@ export function useGroupState() {
         return undefined;
       }
 
-      await context.loadChannels(selectedGroupId);
-      navigateToGroup(navigate, selectedGroupId, channelResponse.data.id!);
+      await context.loadChannels(selectedGroup);
+      navigateToGroup(navigate, selectedGroup, channelResponse.data.id!);
     },
     createGroup: async (newGroupName: string) => {
       const response = await createGroup(newGroupName);
@@ -47,9 +55,38 @@ export function useGroupState() {
       await context.loadGroups();
       navigateToGroup(navigate, response.id);
     },
-    selectedGroup: selectedGroupId
-      ? context.groups[selectedGroupId]
-      : undefined,
+    getGroupUrl: (groupId: string, channelId?: string) => {
+      if (!groupId) {
+        return "/";
+      }
+
+      if (channelId) {
+        return createGroupUrl(groupId, channelId);
+      } else {
+        const channels = context.channels()[groupId];
+
+        return createGroupUrl(groupId, channels?.[0]?.id);
+      }
+    },
+    selectGroup: (groupId: string) => {
+      const group = context.groups[groupId];
+      if (!group) {
+        return;
+      }
+
+      const groupChannels = context.channels()[selectedGroupId() || ""] || [];
+      const firstChannelId = groupChannels[0]?.id;
+
+      navigateToGroup(navigate, group.id!, firstChannelId);
+    },
+    selectedChannel: () =>
+      selectedGroupId() && selectedChannelId()
+        ? context
+            .channels()
+            [selectedGroupId()!]?.find((c) => c.id === selectedChannelId())
+        : undefined,
+    selectedGroup: () =>
+      selectedGroupId ? context.groups[selectedGroupId()!] : undefined,
   };
 }
 

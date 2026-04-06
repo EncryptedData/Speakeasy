@@ -1,4 +1,4 @@
-import "./chat.css";
+import { FiSend } from "solid-icons/fi";
 import {
   Accessor,
   Component,
@@ -7,11 +7,11 @@ import {
   Show,
 } from "solid-js";
 import { Virtualizer, VirtualizerHandle } from "virtua/solid";
-import { FiSend } from "solid-icons/fi";
+import "./chat.css";
 
+import { useChatContextForChannel } from "@context/chatContext";
 import { TextInput } from "../input/textInput";
 import { ChatProfile } from "./ChatProfile";
-import { useChatContextForChannel } from "@context/chatContext";
 
 export type ChatProps = {
   channelId: Accessor<string>;
@@ -67,7 +67,7 @@ export const Chat: Component<ChatProps> = (props) => {
           {(data, index) => {
             // No need to show the profile for several messages in a row
             const showProfile =
-              index() > 0 && chats()[index() - 1]?.author != data.author;
+              index() === 0 || chats()[index() - 1]?.author != data.author;
 
             return (
               <div class="px-4 py-0.5 flex gap-4 hover:bg-bg-base-hover transition">
