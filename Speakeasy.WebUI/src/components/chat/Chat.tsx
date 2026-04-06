@@ -109,7 +109,7 @@ export const Chat: Component<ChatProps> = (props) => {
         </div>
         <div class="flex-1 flex chat__input" hidden={!(groupSelected() && channelSelected())}>
           <TextInput
-            class="flex-1 pr-12 disabled:collapse bg-bg-base active:bg-bg-surface"
+            class="flex-1 pr-12 bg-bg-base active:bg-bg-surface"
             onChange={(e) => setMessage(e.currentTarget.value)}
             value={message()}
             placeholder="Enter a message..."
