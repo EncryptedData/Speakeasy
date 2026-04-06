@@ -28,8 +28,8 @@ export const AppSidebar = () => {
 
   return (
     <>
-      <div class="flex flex-row gap-1 sidebar">
-        <div class="flex flex-col p-4 pl-0">
+      <div class="flex flex-1 flex-row gap-1 sidebar">
+        <div class="flex flex-col pl-0 bg-gray-800">
           <For each={Object.values(appState.groups)}>
             {(val, index) => {
               const isSelected = () =>

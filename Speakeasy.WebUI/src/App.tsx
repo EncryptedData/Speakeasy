@@ -50,7 +50,7 @@ const App: Component = () => {
         <div class="size-full rounded-sm transition-colors group-data-active:bg-corvu-300 group-data-dragging:bg-corvu-100" />
       </Handle>
       <Panel initialSize={0.8} class="rounded-lg bg-corvu-100">
-        <Chat channelId={() => channelId || ""} />
+        <Chat channelId={channelId} />
       </Panel>
     </Root>
   );

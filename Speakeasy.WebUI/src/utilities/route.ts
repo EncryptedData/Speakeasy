@@ -4,8 +4,8 @@ export function getCurrentGroupId(params: Params) {
   return params.groupId;
 }
 
-export function getCurrentChannelId(params: Params): string | undefined {
-  return params.channelId;
+export function getCurrentChannelId(params: Params) {
+  return () => params.channelId || "";
 }
 
 export function createGroupUrl(
