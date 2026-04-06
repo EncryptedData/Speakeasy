@@ -30,7 +30,11 @@ export const AppSidebar = () => {
               const isSelected = () =>
                 val.id === groupState.selectedGroup()?.id;
               return (
-                <Tooltip content={<div>{val.name}</div>} placement="right">
+                <Tooltip
+                  content={<div>{val.name}</div>}
+                  openDelay={0}
+                  placement="right"
+                >
                   <a
                     class={clsx(
                       "listitem flex items-center",
