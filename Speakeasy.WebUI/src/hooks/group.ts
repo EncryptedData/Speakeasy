@@ -19,15 +19,16 @@ export function useGroupState() {
   const selectedChannelId = createMemo(() => getCurrentChannelId(params));
 
   return {
-    channels: context.channels()[selectedGroupId() || ""] || [],
+    channels: () => context.channels()[selectedGroupId() || ""] || [],
     createChannel: async (newChannelname: string) => {
-      if (!selectedGroupId) {
+      const selectedGroup = selectedGroupId();
+      if (!selectedGroup) {
         return;
       }
 
       const channelResponse = await postApiV1Channel({
         body: {
-          groupId: selectedGroupId,
+          groupId: selectedGroup,
           name: newChannelname,
         },
       });
@@ -40,8 +41,8 @@ export function useGroupState() {
         return undefined;
       }
 
-      await context.loadChannels(selectedGroupId);
-      navigateToGroup(navigate, selectedGroupId, channelResponse.data.id!);
+      await context.loadChannels(selectedGroup);
+      navigateToGroup(navigate, selectedGroup, channelResponse.data.id!);
     },
     createGroup: async (newGroupName: string) => {
       const response = await createGroup(newGroupName);

@@ -54,7 +54,7 @@ export const AppSidebar = () => {
         </div>
 
         <div class="flex flex-col gap-4 p-4">
-          <For each={Object.values(groupState.channels)}>
+          <For each={groupState.channels()}>
             {(val, index) => {
               const isSelected = () =>
                 val.id === groupState.selectedChannel()?.id;
