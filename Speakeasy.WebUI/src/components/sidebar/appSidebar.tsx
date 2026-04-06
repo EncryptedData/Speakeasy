@@ -3,13 +3,14 @@ import "./appSidebar.css";
 import { createSignal, For } from "solid-js";
 
 import { CreateChannelDialog } from "@components/channel/createChannelDialog";
+import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
 import { CreateGroupDialog } from "@components/group/createGroupDialog";
 import { Button } from "@components/input/button";
+import { useAppContext } from "@context/appContext";
 import { useAuthContext } from "@context/authContext";
 import { useGroupState } from "@hooks/group";
-import { useAppContext } from "@context/appContext";
-import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
 import { clsx } from "@utilities/class";
+import { Tooltip } from "@components/tooltip/tooltip";
 
 export const AppSidebar = () => {
   const authContext = useAuthContext();
@@ -29,19 +30,21 @@ export const AppSidebar = () => {
               const isSelected = () =>
                 val.id === groupState.selectedGroup()?.id;
               return (
-                <a
-                  class={clsx(
-                    "listitem p-0.5 pl-0 flex items-center",
-                    isSelected() && "active",
-                  )}
-                  href={groupState.getGroupUrl(val.id!)}
-                >
-                  <div class="pill rounded-r-md w-1 transition-all" />
-                  <DefaultProfilePicture
-                    class="profile m-2"
-                    displayName={val.name}
-                  />
-                </a>
+                <Tooltip content={<div>{val.name}</div>} placement="right">
+                  <a
+                    class={clsx(
+                      "listitem flex items-center",
+                      isSelected() && "active",
+                    )}
+                    href={groupState.getGroupUrl(val.id!)}
+                  >
+                    <div class="pill rounded-r-md w-1 transition-all" />
+                    <DefaultProfilePicture
+                      class="profile m-2"
+                      displayName={val.name}
+                    />
+                  </a>
+                </Tooltip>
               );
             }}
           </For>
@@ -62,7 +65,7 @@ export const AppSidebar = () => {
           <div class={"flex gap-1"}>
             <div class="font-bold">{groupState.selectedGroup()?.name}</div>
             <button
-              class="ml-auto w-8 h-8 cursor-pointer p-1 rounded-full hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
+              class="ml-auto min-w-8 min-h-8 w-8 h-8 cursor-pointer p-1 rounded-full hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
               onClick={() => setCreatingChannel(true)}
             >
               +

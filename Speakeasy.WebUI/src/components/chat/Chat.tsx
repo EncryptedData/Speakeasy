@@ -1,4 +1,4 @@
-import "./chat.css";
+import { FiSend } from "solid-icons/fi";
 import {
   Accessor,
   Component,
@@ -7,11 +7,11 @@ import {
   Show,
 } from "solid-js";
 import { Virtualizer, VirtualizerHandle } from "virtua/solid";
-import { FiSend } from "solid-icons/fi";
+import "./chat.css";
 
+import { useChatContextForChannel } from "@context/chatContext";
 import { TextInput } from "../input/textInput";
 import { ChatProfile } from "./ChatProfile";
-import { useChatContextForChannel } from "@context/chatContext";
 
 export type ChatProps = {
   channelId: Accessor<string>;
