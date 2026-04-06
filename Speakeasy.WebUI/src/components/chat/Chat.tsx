@@ -12,15 +12,18 @@ import "./chat.css";
 import { useChatContextForChannel } from "@context/chatContext";
 import { TextInput } from "../input/textInput";
 import { ChatProfile } from "./ChatProfile";
+import { useGroupState } from "@hooks/group";
 
 export type ChatProps = {
   channelId: Accessor<string>;
 };
 
+
+
 export const Chat: Component<ChatProps> = (props) => {
   const chatContext = useChatContextForChannel(props.channelId);
   const chats = chatContext.messages;
-
+  const groupState = useGroupState();
   const [message, setMessage] = createSignal("");
   const [shift, setShift] = createSignal(false);
   const [virtualizerHandle, setVirtualizerHandle] = createSignal<
@@ -97,6 +100,7 @@ export const Chat: Component<ChatProps> = (props) => {
       >
         <div class="flex-1 flex chat__input">
           <TextInput
+            disabled={groupState.selectedGroup === undefined}
             class="flex-1 pr-12"
             onChange={(e) => setMessage(e.currentTarget.value)}
             value={message()}
