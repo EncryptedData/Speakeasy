@@ -18,8 +18,6 @@ export type ChatProps = {
   channelId: Accessor<string>;
 };
 
-
-
 export const Chat: Component<ChatProps> = (props) => {
   const chatContext = useChatContextForChannel(props.channelId);
   const chats = chatContext.messages;
