@@ -5,6 +5,8 @@
  * @example
  * <div class={clsx('bg-white', isEnabled && 'bg-red')} />
  */
-export function clsx(...classes: (string | false)[]): string {
+export function clsx(
+  ...classes: (string | null | undefined | false)[]
+): string {
   return classes.filter((c) => !!c).join(" ");
 }
