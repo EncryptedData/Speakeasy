@@ -1,29 +1,26 @@
+import { Root, Panel, Handle } from "@corvu/resizable";
+import { makePersisted } from "@solid-primitives/storage";
 import { createEffect, createSignal, type Component } from "solid-js";
 
-import { Chat } from "@components/chat/Chat";
+import { AppSidebar } from "@components/sidebar/appSidebar";
+import { useAppContext } from "@context/appContext";
 import { useAuthContext } from "@context/authContext";
 import { useNavigate, useParams } from "@solidjs/router";
-import { Button } from "@components/input/button";
-import { CreateGroupDialog } from "@components/group/createGroupDialog";
-import { useGroupState } from "@hooks/group";
-import { CreateChannelDialog } from "@components/channel/createChannelDialog";
 import {
   getCurrentChannelId,
   getCurrentGroupId,
   navigateToGroup,
 } from "@utilities/route";
-import { useAppContext } from "@context/appContext";
+import { Chat } from "@components/chat/Chat";
 
 const App: Component = () => {
-  const [theme, setTheme] = createSignal<"dark" | "light">("dark");
   const params = useParams();
 
-  createEffect(() => {
-    document.documentElement.dataset.theme = theme();
+  const [sizes, setSizes] = makePersisted(createSignal([]), {
+    name: "resizable-sizes",
   });
 
   const appContext = useAppContext();
-  const groupState = useGroupState();
 
   const authContext = useAuthContext();
   const navigate = useNavigate();
@@ -44,44 +41,18 @@ const App: Component = () => {
 
   const channelId = getCurrentChannelId(params);
 
-  const [creatingGroup, setCreatingGroup] = createSignal(false);
-  const [creatingChannel, setCreatingChannel] = createSignal(false);
-
   return (
-    <div class="flex flex-1">
-      <div class="flex-1 flex flex-col">
-        <p class="text-4xl text-accent text-center py-20">
-          Hello tailwind; Sup!!
-        </p>
-        <p class="text-md text-accent text-center py-20">
-          {groupState.selectedGroup?.id || ""}
-        </p>
-
-        <Button
-          class="block mx-auto text-text-muted m-4"
-          onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-        >
-          Toggle theme (current: {theme()})
-        </Button>
-        <Button onClick={() => setCreatingGroup(true)}>Create Group</Button>
-        <Button onClick={() => setCreatingChannel(true)}>Create Channel</Button>
-        <Button class="flex mt-auto" onClick={authContext.logout} type="button">
-          Logout
-        </Button>
-      </div>
-      <div class="flex flex-4">
+    <Root sizes={sizes()} onSizesChange={setSizes} class="size-full">
+      <Panel initialSize={0.2} maxSize={0.4} class="flex flex-col p-4">
+        <AppSidebar />
+      </Panel>
+      <Handle aria-label="Resize Handle" class="group basis-3 px-0.75">
+        <div class="size-full rounded-sm transition-colors group-data-active:bg-corvu-300 group-data-dragging:bg-corvu-100" />
+      </Handle>
+      <Panel initialSize={0.8} class="rounded-lg bg-corvu-100">
         <Chat channelId={() => channelId || ""} />
-      </div>
-
-      <CreateGroupDialog
-        open={creatingGroup()}
-        onOpenChange={setCreatingGroup}
-      />
-      <CreateChannelDialog
-        open={creatingChannel()}
-        onOpenChange={setCreatingChannel}
-      />
-    </div>
+      </Panel>
+    </Root>
   );
 };
 

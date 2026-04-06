@@ -11,6 +11,9 @@ importers:
       '@corvu/dialog':
         specifier: ^0.2.4
         version: 0.2.4(solid-js@1.9.11)
+      '@corvu/resizable':
+        specifier: ^0.2.5
+        version: 0.2.5(solid-js@1.9.11)
       '@modular-forms/solid':
         specifier: ^0.25.1
         version: 0.25.1(solid-js@1.9.11)(typescript@5.9.3)
@@ -167,6 +170,11 @@ packages:
 
   '@corvu/dialog@0.2.4':
     resolution: {integrity: sha512-n54vJq+fOy8GVrnYBdJpD6JXNuyx7LOeMrRxwzAvZnYGpW8+AA12tnb/P/2emJj/HjOO5otheGKb0breshdFlA==}
+    peerDependencies:
+      solid-js: ^1.8
+
+  '@corvu/resizable@0.2.5':
+    resolution: {integrity: sha512-psax38DraM9SXtaNh/sfvizGO6xLCL4sqT4rWYlMZP5ZsUM05Q30tvXgnTo2roQFNOz2e06WofhDsBXTjY6g4A==}
     peerDependencies:
       solid-js: ^1.8
 
@@ -1720,6 +1728,11 @@ snapshots:
       solid-js: 1.9.11
       solid-presence: 0.2.0(solid-js@1.9.11)
       solid-prevent-scroll: 0.1.10(solid-js@1.9.11)
+
+  '@corvu/resizable@0.2.5(solid-js@1.9.11)':
+    dependencies:
+      '@corvu/utils': 0.4.2(solid-js@1.9.11)
+      solid-js: 1.9.11
 
   '@corvu/utils@0.4.2(solid-js@1.9.11)':
     dependencies:
