@@ -31,7 +31,7 @@ export const AppSidebar = () => {
               return (
                 <a
                   class={clsx(
-                    "listitem p-1 pl-0 flex items-center",
+                    "listitem p-0.5 pl-0 flex items-center",
                     isSelected() && "active",
                   )}
                   href={groupState.getGroupUrl(val.id!)}
@@ -45,10 +45,29 @@ export const AppSidebar = () => {
               );
             }}
           </For>
+          <button
+            class={clsx(
+              "listitem flex items-center justify-center rounded-full bg-red cursor-pointer",
+            )}
+            onClick={() => setCreatingGroup(true)}
+            title="Create a Group"
+          >
+            <div class="profile flex items-center justify-center rounded-full bg-white/20 hover:bg-bg-base transition-all">
+              +
+            </div>
+          </button>
         </div>
 
         <div class="flex flex-1 flex-col gap-2 p-4 channels">
-          <div class="font-bold">{groupState.selectedGroup()?.name}</div>
+          <div class={"flex gap-1"}>
+            <div class="font-bold">{groupState.selectedGroup()?.name}</div>
+            <button
+              class="ml-auto w-8 h-8 cursor-pointer p-1 rounded-full hover:bg-bg-surface-hover active:bg-bg-elevated-hover transition-colors"
+              onClick={() => setCreatingChannel(true)}
+            >
+              +
+            </button>
+          </div>
           <div class="border-b w-full" />
           <For each={groupState.channels()}>
             {(val, index) => {
@@ -74,8 +93,6 @@ export const AppSidebar = () => {
         </div>
       </div>
       <div class="flex flex-col mt-auto">
-        <Button onClick={() => setCreatingGroup(true)}>Create Group</Button>
-        <Button onClick={() => setCreatingChannel(true)}>Create Channel</Button>
         <Button class="flex mt-auto" onClick={authContext.logout} type="button">
           Logout
         </Button>
