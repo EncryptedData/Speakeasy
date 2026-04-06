@@ -9,6 +9,13 @@ public class CustomEmojiRepository : BaseRepository<CustomEmoji>, ICustomEmojiRe
     {
     }
 
+    protected override IQueryable<CustomEmoji> ApplyIncludes(IQueryable<CustomEmoji> query)
+    {
+        return query.Include(e => e.Group)
+            .Include(e => e.Image)
+            .Include(e => e.Author);
+    }
+
     public IAsyncEnumerable<CustomEmoji> GetAllForGroupAsyncEnumerable(Guid groupId, bool includeGlobal = true,
         bool trackEntities = false)
     {
@@ -18,6 +25,8 @@ public class CustomEmojiRepository : BaseRepository<CustomEmoji>, ICustomEmojiRe
         {
             query = query.AsNoTracking();
         }
+
+        query = ApplyIncludes(query);
 
         query = includeGlobal
             ? query.Where(e => e.Group == null || e.Group.Id == groupId)
