@@ -11,6 +11,7 @@ import { useAuthContext } from "@context/authContext";
 import { useGroupState } from "@hooks/group";
 import { clsx } from "@utilities/class";
 import { Tooltip } from "@components/tooltip/tooltip";
+import { ChatProfile } from "@components/chat/ChatProfile";
 
 export const AppSidebar = () => {
   const authContext = useAuthContext();
@@ -105,8 +106,12 @@ export const AppSidebar = () => {
           </For>
         </div>
       </div>
-      <div class="absolute shadow-md bottom-2 left-2 right-2 flex flex-col mt-auto bg-bg-elevated rounded-md">
-        <Button class="flex" onClick={authContext.logout} type="button">
+      <div class="absolute shadow-md bottom-2 left-2 right-0 flex gap-2 p-2 px-4 items-center mt-auto bg-bg-elevated rounded-md">
+        <ChatProfile size="lg" userId={authContext.me().id!} />
+        <div class="overflow-hidden text-ellipsis">
+          {authContext.me().displayName}
+        </div>
+        <Button class="flex ml-auto" onClick={authContext.logout} type="button">
           Logout
         </Button>
       </div>
