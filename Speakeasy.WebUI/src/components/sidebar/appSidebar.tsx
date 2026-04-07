@@ -34,7 +34,7 @@ export const AppSidebar = () => {
   return (
     <>
       <div class="flex flex-1 flex-row gap-1 sidebar">
-        <div class="flex flex-col pl-0 bg-gray-800 groups">
+        <div class="flex flex-col pl-0 bg-gray-800 pb-20 groups">
           <For each={Object.values(appState.groups)}>
             {(val, index) => {
               return (
@@ -73,7 +73,7 @@ export const AppSidebar = () => {
           </button>
         </div>
 
-        <div class="flex flex-1 flex-col gap-2 p-4 channels">
+        <div class="flex flex-1 flex-col gap-2 p-4  pb-20 channels">
           <div class={"flex gap-1"}>
             <div class="font-bold">{groupState.selectedGroup()?.name}</div>
             <button
@@ -105,8 +105,8 @@ export const AppSidebar = () => {
           </For>
         </div>
       </div>
-      <div class="flex flex-col mt-auto">
-        <Button class="flex mt-auto" onClick={authContext.logout} type="button">
+      <div class="absolute shadow-md bottom-2 left-2 right-2 flex flex-col mt-auto bg-bg-elevated rounded-md">
+        <Button class="flex" onClick={authContext.logout} type="button">
           Logout
         </Button>
       </div>

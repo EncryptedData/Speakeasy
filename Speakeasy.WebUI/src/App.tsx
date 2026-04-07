@@ -47,7 +47,7 @@ const App: Component = () => {
         initialSize={0.2}
         minSize={0.2}
         maxSize={0.4}
-        class="flex flex-col"
+        class="flex flex-col relative"
       >
         <AppSidebar />
       </Panel>
