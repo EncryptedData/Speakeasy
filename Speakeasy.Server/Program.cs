@@ -86,6 +86,7 @@ public class Program
         
         // Add Model converters
         services.AddSingleton<IModelConverter<Group, GroupDto>, GroupModelConverter>();
+        services.AddSingleton<IModelConverter<GroupRole, GroupRoleDto>, GroupRoleModelConverter>();
         services.AddSingleton<IModelConverter<CustomEmoji, CustomEmojiDto>, CustomEmojiModelConverter>();
         
         // These need to be scoped because it accesses the HttpContext which can't be a singleton

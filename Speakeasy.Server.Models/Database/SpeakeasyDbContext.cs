@@ -12,6 +12,8 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     
     public DbSet<Group> Groups { get; set; }
     
+    public DbSet<GroupRole> GroupRoles { get; set; }
+    
     public DbSet<Channel> Channels { get; set; }
     
     public DbSet<Message> Messages { get; set; }

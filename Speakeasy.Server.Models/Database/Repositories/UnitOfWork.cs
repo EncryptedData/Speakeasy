@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
         MessageRepository = new MessageRepository(_context);
         FileRepository = new FileRepository(fileStore, _context);
         UserRepository = new UserRepository(_context);
+        GroupRoleRepository = new GroupRoleRepository(_context);
         CustomEmojiRepository = new CustomEmojiRepository(_context);
     }
     
@@ -27,6 +28,8 @@ public class UnitOfWork : IUnitOfWork
     public IFileRepository FileRepository { get; set; }
 
     public IUserRepository UserRepository { get; set; }
+    
+    public IGroupRoleRepository GroupRoleRepository { get; set; }
     
     public ICustomEmojiRepository CustomEmojiRepository { get; set; }
 

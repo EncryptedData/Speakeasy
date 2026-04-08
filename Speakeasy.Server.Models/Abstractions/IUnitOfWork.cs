@@ -12,7 +12,9 @@ public interface IUnitOfWork : IAsyncDisposable
     
     IFileRepository FileRepository { get; set; }
     
-    IUserRepository UserRepository { get; set; }
+    public IUserRepository UserRepository { get; set; }
+    
+    public IGroupRoleRepository GroupRoleRepository { get; set; }
     
     ICustomEmojiRepository CustomEmojiRepository { get; set; }
 
