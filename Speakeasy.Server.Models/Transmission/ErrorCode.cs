@@ -8,5 +8,8 @@ public enum ErrorCode
     UploadedFileLengthNotValid,
     UploadedImageNotValid,
     UploadedImageTooBig,
+    RoleAlreadyExists,
+    NotEnoughRolesLeft,
+    NoDefaultRolesLeft,
     NameAlreadyTaken
 }

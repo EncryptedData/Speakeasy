@@ -20,7 +20,10 @@ public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRole
 
     public override async Task<ActionResult> PutAsync(GroupRoleDto dto)
     {
-        if(dto.Id is null) return NotFound();
+        if(dto.Id is null)
+        {
+            return NotFound();
+        }
         
         // Get the group
         var groupSpecified = await _unitOfWork.GroupRepository.GetByIdAsync(dto.GroupId);
@@ -39,7 +42,7 @@ public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRole
                 && r.IsDefault
                 && !groupSpecified.Roles.Any(g => g.IsDefault))
             {
-                return BadRequest("Default cannot be set to false on this role when no other default roles remain!");
+                return BadRequest(ErrorDto.FromCode(ErrorCode.NoDefaultRolesLeft));
             }
 
             // Else, just set it to true or false.
@@ -65,6 +68,13 @@ public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRole
             }
         }
         
+        // Lastly, enforce a name cannot be the same as another.
+        if (groupSpecified.Roles.Any(gr =>
+                gr.Name.Equals(dto.Name, StringComparison.CurrentCultureIgnoreCase) && gr.Id != dto.Id))
+        {
+            return BadRequest(ErrorDto.FromCode(ErrorCode.RoleAlreadyExists));
+        }
+        
         return await base.PutAsync(dto);
     }
 
@@ -80,7 +90,8 @@ public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRole
         if (group.Roles.Any(
                 r => r.Name.Equals(dto.Name, StringComparison.CurrentCultureIgnoreCase)))
         {
-            return BadRequest("A role already contains that name!");
+            // return BadRequest("A role already contains that name!");
+            return BadRequest(ErrorDto.FromCode(ErrorCode.RoleAlreadyExists));
         }
         
         return await base.PostAsync(dto);
@@ -99,14 +110,14 @@ public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRole
 
         if (roles.Count == 1)
         {
-            return BadRequest("You can't delete the last role remaining.");
+            return BadRequest(ErrorDto.FromCode(ErrorCode.NotEnoughRolesLeft));
         }
         
         roles.Remove(selectedRole);
 
         if (!roles.Any(gr => gr.IsDefault))
         {
-            return BadRequest("You can't delete the last default role.");
+            return BadRequest(ErrorDto.FromCode(ErrorCode.NoDefaultRolesLeft));
         }
         
         // If each role is greater than the one being deleted, then simply subtract one from it.
