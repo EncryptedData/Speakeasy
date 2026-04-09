@@ -6,15 +6,32 @@ namespace Speakeasy.Server.Models.Converters;
 
 public class GroupModelConverter : IModelConverter<Group, GroupDto>
 {
-    public Task<Group> ToDatabaseModelAsync(IUnitOfWork uow, GroupDto dto)
+    public async Task<Group> ToDatabaseModelAsync(IUnitOfWork uow, GroupDto dto)
     {
-        return Task.FromResult(new Group()
+        var group = new Group
         {
             Id = Guid.NewGuid(),
             Name = dto.Name,
             Channels = [],
-            CreatedOn = DateTime.UtcNow,
-        });
+            Roles = [],
+            CreatedOn = DateTime.UtcNow
+        };
+        
+        // Generate default group.
+        var groupRole = new GroupRole
+        {
+            Id = Guid.NewGuid(),
+            Name = "Default",
+            Group = group,
+            Hierarchy = 0,
+            IsDefault = true
+        };
+
+        group.Roles.Add(groupRole);
+        
+        await uow.GroupRoleRepository.AddAsync(groupRole);
+        
+        return group;
     }
 
     public GroupDto ToTransmissionModel(Group entity)

@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speakeasy.Server.Models.Database;
 
 #nullable disable
 
-namespace Speakeasy.Server.Models.Database.Migrations
+namespace Speakeasy.Server.Models.Migrations
 {
     [DbContext(typeof(SpeakeasyDbContext))]
-    partial class SpeakeasyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260407001410_GroupRole")]
+    partial class GroupRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,39 +183,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("Channels");
-                });
-
-            modelBuilder.Entity("Speakeasy.Server.Models.Database.CustomEmoji", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("CustomEmojis");
                 });
 
             modelBuilder.Entity("Speakeasy.Server.Models.Database.Group", b =>
@@ -492,29 +462,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Speakeasy.Server.Models.Database.CustomEmoji", b =>
-                {
-                    b.HasOne("Speakeasy.Server.Models.Database.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("Speakeasy.Server.Models.Database.Group", "Group")
-                        .WithMany("CustomEmojis")
-                        .HasForeignKey("GroupId");
-
-                    b.HasOne("Speakeasy.Server.Models.Database.StoredFile", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Image");
-                });
-
             modelBuilder.Entity("Speakeasy.Server.Models.Database.Message", b =>
                 {
                     b.HasOne("Speakeasy.Server.Models.Database.User", "Author")
@@ -562,8 +509,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
                     b.Navigation("Channels");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("CustomEmojis");
                 });
 
             modelBuilder.Entity("Speakeasy.Server.Models.Database.Message", b =>

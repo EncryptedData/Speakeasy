@@ -3,7 +3,7 @@ using Speakeasy.Server.Models.Abstractions;
 
 namespace Speakeasy.Server.Models.Transmission;
 
-public class GroupDto : ITransmissionNamedEntity
+public class GroupRoleDto : ITransmissionNamedEntity
 {
     public Guid? Id { get; set; }
     
@@ -11,9 +11,11 @@ public class GroupDto : ITransmissionNamedEntity
     [Length(1, ModelConstants.Limits.MaxNameLength)]
     public string Name { get; set; }
     
-    public DateTime CreatedOn { get; set; }
+    [Required]
+    public Guid GroupId { get; set; }
     
-    public List<Guid>? Channels { get; set; }
+    [Required]
+    public int Hierarchy { get; set; }
     
-    public List<Guid>? GroupRoles { get; set; }
+    public bool? IsDefault { get; set; }
 }

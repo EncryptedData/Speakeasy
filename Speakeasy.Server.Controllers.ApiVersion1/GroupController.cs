@@ -9,6 +9,7 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 public class GroupController : BaseRepositoryController<Group, GroupDto>
 {
     private readonly IModelConverter<Channel, ChannelDto> _channelConverter;
+    private readonly IModelConverter<GroupRole, GroupRoleDto> _roleConverter;
     private readonly IModelConverter<CustomEmoji, CustomEmojiDto> _emojiConverter;
     private readonly ISpeakeasyV1HubService _hubService;
     
@@ -16,13 +17,28 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
         IUnitOfWork uow, 
         IModelConverter<Group, GroupDto> groupConverter,
         IModelConverter<Channel, ChannelDto> channelConverter,
-        ISpeakeasyV1HubService hubService,
+        ISpeakeasyV1HubService hubService, 
+        IModelConverter<GroupRole, GroupRoleDto> roleConverter,
         IModelConverter<CustomEmoji, CustomEmojiDto> emojiConverter) : 
         base(uow.GroupRepository, groupConverter, uow)
     {
         _channelConverter = channelConverter;
         _hubService = hubService;
         _emojiConverter = emojiConverter;
+        _roleConverter = roleConverter;
+    }
+
+    [HttpGet("{id}/roles")]
+    public async Task<ActionResult<IEnumerable<GroupRoleDto>>> GetRoles(Guid id)
+    {
+        var group = await _unitOfWork.GroupRepository.GetByIdAsync(id);
+
+        if (group is null)
+        {
+            return NotFound(ErrorDto.FromCode(ErrorCode.EntityNotFound));
+        }
+
+        return Ok(group.Roles.Select(_roleConverter.ToTransmissionModel));
     }
 
     [HttpGet("{id}/channels")]

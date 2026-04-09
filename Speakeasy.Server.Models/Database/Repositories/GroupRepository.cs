@@ -12,7 +12,9 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
 
     protected override IQueryable<Group> ApplyIncludes(IQueryable<Group> query)
     {
-        return query.Include(e => e.Channels);
+        return query
+            .Include(e => e.Channels)
+            .Include(e => e.Roles);
     }
 
     public IAsyncEnumerable<Group> GetAll(bool trackEntities = false)
@@ -28,4 +30,6 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
 
         return query.AsAsyncEnumerable();
     }
+    
+    
 }
