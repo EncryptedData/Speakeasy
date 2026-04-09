@@ -22,4 +22,6 @@ public class MessageDto : ITransmissionEntity
     
     [JsonIgnore]
     public Guid? ChannelId { get; set; }
+    
+    public IEnumerable<MessageReactionDto>? Reactions { get; set; }
 }

@@ -5,15 +5,22 @@ namespace Speakeasy.Server.Models.Database.Repositories;
 
 public class MessageRepository : BaseRepository<Message>, IMessageRepository
 {
+    private DbSet<MessageReaction> _reactionsDb;
+    
     public MessageRepository(SpeakeasyDbContext context) : 
         base(context.Messages)
     {
+        _reactionsDb = context.Set<MessageReaction>();
     }
 
     protected override IQueryable<Message> ApplyIncludes(IQueryable<Message> query)
     {
         return query.Include(e => e.Author)
-            .Include(e => e.Channel);
+            .Include(e => e.Channel)
+            .Include(e => e.Reactions)
+                .ThenInclude(e => e.CustomEmoji)
+            .Include(e => e.Reactions)
+                .ThenInclude(e => e.Reactors);
     }
 
     public async Task<IEnumerable<Message>> GetMessagesForChannelAsync(
@@ -44,5 +51,15 @@ public class MessageRepository : BaseRepository<Message>, IMessageRepository
             .ToListAsync();
 
         return result;
+    }
+
+    public async Task AddMessageReactionAsync(MessageReaction reaction)
+    {
+        await _reactionsDb.AddAsync(reaction);
+    }
+
+    public void RemoveMessageReaction(MessageReaction reaction)
+    {
+        _reactionsDb.Remove(reaction);
     }
 }

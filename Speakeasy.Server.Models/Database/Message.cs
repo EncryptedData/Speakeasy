@@ -22,4 +22,6 @@ public class Message : IEntity
     public List<MessageEdits> Edits { get; set; }
     
     public Channel Channel { get; set; }
+    
+    public List<MessageReaction> Reactions { get; set; }
 }
