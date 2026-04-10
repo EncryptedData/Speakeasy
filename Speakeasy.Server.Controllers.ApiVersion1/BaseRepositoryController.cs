@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Transmission;
@@ -38,6 +39,7 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
     }
 
     [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public virtual async Task<ActionResult> PutAsync(
         [FromBody] TTransmission dto)
     {
@@ -63,6 +65,7 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public virtual async Task<ActionResult<TTransmission>> PostAsync([FromBody] TTransmission dto)
     {
         if (dto.Id is not null)
@@ -84,6 +87,7 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public virtual async Task<ActionResult> DeleteAsync(Guid id)
     {
         var model = await _repository.GetByIdAsync(id);
