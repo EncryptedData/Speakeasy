@@ -11,6 +11,7 @@ import { useAuthContext } from "@context/authContext";
 import { useGroupState } from "@hooks/group";
 import { clsx } from "@utilities/class";
 import { Tooltip } from "@components/tooltip/tooltip";
+import { ContextMenu } from "@components/contextMenu/contextMenu";
 
 export const AppSidebar = () => {
   const authContext = useAuthContext();
@@ -35,26 +36,28 @@ export const AppSidebar = () => {
                   openDelay={0}
                   placement="right"
                 >
-                  <a
-                    class={clsx(
-                      "listitem flex items-center",
-                      isSelected() && "active",
-                    )}
-                    href={groupState.getGroupUrl(val.id!)}
-                  >
-                    <div class="pill rounded-r-md w-1 transition-all" />
-                    <DefaultProfilePicture
-                      class="profile m-2"
-                      displayName={val.name}
-                    />
-                  </a>
+                  <ContextMenu options={[]}>
+                    <a
+                      class={clsx(
+                        "listitem flex items-center",
+                        isSelected() && "active",
+                      )}
+                      href={groupState.getGroupUrl(val.id!)}
+                    >
+                      <div class="pill rounded-r-md w-1 transition-all" />
+                      <DefaultProfilePicture
+                        class="profile m-2"
+                        displayName={val.name}
+                      />
+                    </a>
+                  </ContextMenu>
                 </Tooltip>
               );
             }}
           </For>
           <button
             class={clsx(
-              "listitem flex items-center justify-center rounded-full bg-red cursor-pointer",
+              "listitem flex items-center justify-center rounded-full cursor-pointer",
             )}
             onClick={() => setCreatingGroup(true)}
             title="Create a Group"
