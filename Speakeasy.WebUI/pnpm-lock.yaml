@@ -11,6 +11,9 @@ importers:
       '@corvu/dialog':
         specifier: ^0.2.4
         version: 0.2.4(solid-js@1.9.11)
+      '@corvu/popover':
+        specifier: ^0.2.0
+        version: 0.2.0(solid-js@1.9.11)
       '@corvu/resizable':
         specifier: ^0.2.5
         version: 0.2.5(solid-js@1.9.11)
@@ -176,6 +179,11 @@ packages:
     peerDependencies:
       solid-js: ^1.8
 
+  '@corvu/popover@0.2.0':
+    resolution: {integrity: sha512-zynRWyRV7mk2uX7t/COQL4OEa6H6FBgOxxlXLQJ1BV8hTiBJwmfAN/yB/9jy+zlp0G9vp64E8VdsNn6gxUEUEQ==}
+    peerDependencies:
+      solid-js: ^1.8
+
   '@corvu/resizable@0.2.5':
     resolution: {integrity: sha512-psax38DraM9SXtaNh/sfvizGO6xLCL4sqT4rWYlMZP5ZsUM05Q30tvXgnTo2roQFNOz2e06WofhDsBXTjY6g4A==}
     peerDependencies:
@@ -183,6 +191,11 @@ packages:
 
   '@corvu/tooltip@0.2.2':
     resolution: {integrity: sha512-gyOBJ43GNAecDtmWc68A5YJvifXWwK0VZZdTOcFbX0rVQUA2ihBMltRE4oj7/lKidg2gXALjmFr71Blt5s3YuQ==}
+    peerDependencies:
+      solid-js: ^1.8
+
+  '@corvu/utils@0.3.2':
+    resolution: {integrity: sha512-ZWlyWEE8qV9+CB9OAyo2bTrZGXQN9ZeM+JfYv89zoR+lRACKTDuoOZEdiyL8Uc7U5dUSH1uTqKhTTnaHWb+wZA==}
     peerDependencies:
       solid-js: ^1.8
 
@@ -1737,6 +1750,13 @@ snapshots:
       solid-presence: 0.2.0(solid-js@1.9.11)
       solid-prevent-scroll: 0.1.10(solid-js@1.9.11)
 
+  '@corvu/popover@0.2.0(solid-js@1.9.11)':
+    dependencies:
+      '@corvu/dialog': 0.2.4(solid-js@1.9.11)
+      '@corvu/utils': 0.3.2(solid-js@1.9.11)
+      '@floating-ui/dom': 1.7.6
+      solid-js: 1.9.11
+
   '@corvu/resizable@0.2.5(solid-js@1.9.11)':
     dependencies:
       '@corvu/utils': 0.4.2(solid-js@1.9.11)
@@ -1749,6 +1769,11 @@ snapshots:
       solid-dismissible: 0.1.1(solid-js@1.9.11)
       solid-js: 1.9.11
       solid-presence: 0.2.0(solid-js@1.9.11)
+
+  '@corvu/utils@0.3.2(solid-js@1.9.11)':
+    dependencies:
+      '@floating-ui/dom': 1.7.6
+      solid-js: 1.9.11
 
   '@corvu/utils@0.4.2(solid-js@1.9.11)':
     dependencies:
