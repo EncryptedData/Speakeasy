@@ -16,5 +16,7 @@ public class Group : INamedEntity
     
     public List<Channel> Channels { get; set; }
     
+    public List<GroupRole> Roles { get; set; }
+    
     public List<CustomEmoji> CustomEmojis { get; set; }
 }
