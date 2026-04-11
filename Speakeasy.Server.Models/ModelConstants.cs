@@ -23,5 +23,15 @@ public static class ModelConstants
         /// The maximum message length
         /// </summary>
         public const int MaxMessageLength = 4096;
+
+        /// <summary>
+        /// The amount of UTF-16 characters that can combine into a single Emoji
+        /// </summary>
+        public const int EmojiCharacterStringLength = 4;
+
+        /// <summary>
+        /// The maximum amount of Reactions allowed on a given Message
+        /// </summary>
+        public const int MaxMessageReactions = 32;
     }
 }

@@ -11,5 +11,6 @@ public enum ErrorCode
     RoleAlreadyExists,
     NotEnoughRolesLeft,
     NoDefaultRolesLeft,
-    NameAlreadyTaken
+    NameAlreadyTaken,
+    TooManyMessageReactions
 }

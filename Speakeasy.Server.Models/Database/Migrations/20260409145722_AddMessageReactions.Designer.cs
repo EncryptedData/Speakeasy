@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speakeasy.Server.Models.Database;
@@ -11,9 +12,11 @@ using Speakeasy.Server.Models.Database;
 namespace Speakeasy.Server.Models.Database.Migrations
 {
     [DbContext(typeof(SpeakeasyDbContext))]
-    partial class SpeakeasyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260409145722_AddMessageReactions")]
+    partial class AddMessageReactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,32 +251,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("Speakeasy.Server.Models.Database.GroupRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Hierarchy")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("GroupRoles");
                 });
 
             modelBuilder.Entity("Speakeasy.Server.Models.Database.Message", b =>
@@ -536,17 +513,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Speakeasy.Server.Models.Database.GroupRole", b =>
-                {
-                    b.HasOne("Speakeasy.Server.Models.Database.Group", "Group")
-                        .WithMany("Roles")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-                });
-
             modelBuilder.Entity("Speakeasy.Server.Models.Database.CustomEmoji", b =>
                 {
                     b.HasOne("Speakeasy.Server.Models.Database.User", "Author")
@@ -632,8 +598,6 @@ namespace Speakeasy.Server.Models.Database.Migrations
             modelBuilder.Entity("Speakeasy.Server.Models.Database.Group", b =>
                 {
                     b.Navigation("Channels");
-
-                    b.Navigation("Roles");
 
                     b.Navigation("CustomEmojis");
                 });

@@ -33,6 +33,7 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
             HasBeenEdited = false,
             IsDeleted = false,
             LastEditedOn = null,
+            Reactions = []
         };
     }
 
@@ -46,7 +47,8 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
                 IsDeleted = entity.IsDeleted,
             };
         }
-        
+
+        var entityReactions = entity.Reactions ?? [];
         return new MessageDto()
         {
             Id = entity.Id,
@@ -55,7 +57,13 @@ public class MessageModelConverter : IModelConverter<Message, MessageDto>
             IsDeleted = entity.IsDeleted,
             LastEditedOn = entity.LastEditedOn,
             AuthorId = entity.Author.Id,
-            ChannelId = entity.Channel.Id
+            ChannelId = entity.Channel.Id,
+            Reactions = entityReactions.Select(e => new MessageReactionDto()
+            {
+                Users = e.Reactors.Select(e => e.Id),
+                CustomEmojiId = e.CustomEmoji?.Id,
+                Emoji = e.EmojiChar,
+            }),
         };
     }
 
