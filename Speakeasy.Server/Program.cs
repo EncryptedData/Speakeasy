@@ -11,6 +11,7 @@ using Speakeasy.Server.Models.Converters;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
+using Speakeasy.Server.Models.Services;
 using Speakeasy.Server.Models.Transmission;
 using Speakeasy.Server.Storage;
 using Speakeasy.Server.Storage.Abstractions;
@@ -97,6 +98,8 @@ public class Program
         services.AddAuthorization();
         services.AddIdentityApiEndpoints<User>()
             .AddEntityFrameworkStores<SpeakeasyDbContext>();
+
+        services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
         services.AddOpenApi(options =>
         {

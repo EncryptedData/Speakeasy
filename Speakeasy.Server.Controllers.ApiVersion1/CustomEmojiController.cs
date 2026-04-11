@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Speakeasy.Server.Models;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
+using Speakeasy.Server.Models.Services;
 using Speakeasy.Server.Models.Transmission;
 using Speakeasy.Server.Models.Transmission.Post;
 using Speakeasy.Server.Storage.Abstractions;
@@ -11,21 +12,21 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 
 public class CustomEmojiController : BaseRepositoryController<CustomEmoji, CustomEmojiDto>
 {
-    private IImageValidator _imageValidator;
-    private ITemporaryFileStore _temporaryFileStore;
-    private UserManager<User> _userManager;
+    private readonly IImageValidator _imageValidator;
+    private readonly ITemporaryFileStore _temporaryFileStore;
+    private readonly ICurrentUserProvider _currentUserProvider;
     
     public CustomEmojiController(
         IModelConverter<CustomEmoji, CustomEmojiDto> converter, 
         IUnitOfWork uow,
         IImageValidator imageValidator,
         ITemporaryFileStore temporaryFileStore,
-        UserManager<User> userManager) : 
+        ICurrentUserProvider currentUserProvider) : 
         base(uow.CustomEmojiRepository, converter, uow)
     {
         _imageValidator = imageValidator;
         _temporaryFileStore = temporaryFileStore;
-        _userManager = userManager;
+        _currentUserProvider = currentUserProvider;
     }
 
     
@@ -39,8 +40,7 @@ public class CustomEmojiController : BaseRepositoryController<CustomEmoji, Custo
     [RequestSizeLimit(ControllerConstants.FileSizes.MegaByte)]
     public async Task<ActionResult<CustomEmojiDto>> PostFormAsync([FromForm] CustomEmojiUploadFormDto dto)
     {
-        var user = await _userManager.GetUserAsync(User);
-        ArgumentNullException.ThrowIfNull(user);
+        var user = await _currentUserProvider.GetCurrentUserAsync();
         
         if (dto.File.Length is 0)
         {

@@ -5,6 +5,7 @@ using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Models;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Database;
+using Speakeasy.Server.Models.Services;
 using Speakeasy.Server.Models.Transmission;
 
 namespace Speakeasy.Server.Controllers.ApiVersion1;
@@ -12,18 +13,18 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
 {
     private readonly IModelConverter<Message, MessageDto> _messageConverter;
-    private readonly UserManager<User> _userManager;
+    private readonly ICurrentUserProvider _currentUserProvider;
     private readonly ISpeakeasyV1HubService _hubService;
     
     public ChannelController(IUnitOfWork uow,
         IModelConverter<Channel, ChannelDto> channelConverter,
         IModelConverter<Message, MessageDto> messageConverter,
-        UserManager<User> userManager,
+        ICurrentUserProvider currentUserProvider,
         ISpeakeasyV1HubService hubService) : 
         base(uow.ChannelRepository, channelConverter, uow)
     {
         _messageConverter = messageConverter;
-        _userManager = userManager;
+        _currentUserProvider = currentUserProvider;
         _hubService = hubService;
     }
 
@@ -105,8 +106,7 @@ public class ChannelController : BaseRepositoryController<Channel, ChannelDto>
             return NotFound();
         }
 
-        var user = await _userManager.GetUserAsync(User);
-        ArgumentNullException.ThrowIfNull(user);
+        var user = await _currentUserProvider.GetCurrentUserAsync();
 
         var newMessage = new Message()
         {
