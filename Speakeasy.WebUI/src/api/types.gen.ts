@@ -18,6 +18,21 @@ export type ChannelDto = {
     createdBy?: null | string;
 };
 
+export type CustomEmojiDto = {
+    id?: null | string;
+    name: string;
+    groupId?: null | string;
+    image?: null | string;
+    authorId?: null | string;
+    createdOn?: null | string;
+};
+
+export type ErrorCode = number;
+
+export type ErrorDto = {
+    error?: ErrorCode;
+};
+
 export type ForgotPasswordRequest = {
     email: string;
 };
@@ -27,6 +42,15 @@ export type GroupDto = {
     name: string;
     createdOn?: string;
     channels?: null | Array<string>;
+    groupRoles?: null | Array<string>;
+};
+
+export type GroupRoleDto = {
+    id?: null | string;
+    name: string;
+    groupId: string;
+    hierarchy: number | string;
+    isDefault?: null | boolean;
 };
 
 export type HttpValidationProblemDetails = {
@@ -39,6 +63,8 @@ export type HttpValidationProblemDetails = {
         [key: string]: Array<string>;
     };
 };
+
+export type IFormFile = Blob | File;
 
 export type InfoRequest = {
     newEmail?: null | string;
@@ -66,6 +92,14 @@ export type MessageDto = {
     hasBeenEdited?: null | boolean;
     isDeleted?: null | boolean;
     channelId?: null | string;
+};
+
+export type ProblemDetails = {
+    type?: null | string;
+    title?: null | string;
+    status?: null | number | string;
+    detail?: null | string;
+    instance?: null | string;
 };
 
 export type RefreshRequest = {
@@ -339,11 +373,28 @@ export type PostApiV1ChannelData = {
     url: '/api/v1/Channel';
 };
 
+export type PostApiV1ChannelErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1ChannelError = PostApiV1ChannelErrors[keyof PostApiV1ChannelErrors];
+
 export type PostApiV1ChannelResponses = {
     /**
-     * OK
+     * Created
      */
-    200: ChannelDto;
+    201: ChannelDto;
 };
 
 export type PostApiV1ChannelResponse = PostApiV1ChannelResponses[keyof PostApiV1ChannelResponses];
@@ -355,11 +406,28 @@ export type PutApiV1ChannelData = {
     url: '/api/v1/Channel';
 };
 
+export type PutApiV1ChannelErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PutApiV1ChannelError = PutApiV1ChannelErrors[keyof PutApiV1ChannelErrors];
+
 export type PutApiV1ChannelResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type GetApiV1ChannelByIdMessagesData = {
@@ -373,6 +441,23 @@ export type GetApiV1ChannelByIdMessagesData = {
     };
     url: '/api/v1/Channel/{id}/messages';
 };
+
+export type GetApiV1ChannelByIdMessagesErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1ChannelByIdMessagesError = GetApiV1ChannelByIdMessagesErrors[keyof GetApiV1ChannelByIdMessagesErrors];
 
 export type GetApiV1ChannelByIdMessagesResponses = {
     /**
@@ -392,6 +477,23 @@ export type PostApiV1ChannelByIdMessageData = {
     url: '/api/v1/Channel/{id}/message';
 };
 
+export type PostApiV1ChannelByIdMessageErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1ChannelByIdMessageError = PostApiV1ChannelByIdMessageErrors[keyof PostApiV1ChannelByIdMessageErrors];
+
 export type PostApiV1ChannelByIdMessageResponses = {
     /**
      * OK
@@ -410,11 +512,28 @@ export type DeleteApiV1ChannelByIdData = {
     url: '/api/v1/Channel/{id}';
 };
 
+export type DeleteApiV1ChannelByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeleteApiV1ChannelByIdError = DeleteApiV1ChannelByIdErrors[keyof DeleteApiV1ChannelByIdErrors];
+
 export type DeleteApiV1ChannelByIdResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type GetApiV1ChannelByIdData = {
@@ -426,6 +545,23 @@ export type GetApiV1ChannelByIdData = {
     url: '/api/v1/Channel/{id}';
 };
 
+export type GetApiV1ChannelByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1ChannelByIdError = GetApiV1ChannelByIdErrors[keyof GetApiV1ChannelByIdErrors];
+
 export type GetApiV1ChannelByIdResponses = {
     /**
      * OK
@@ -434,6 +570,142 @@ export type GetApiV1ChannelByIdResponses = {
 };
 
 export type GetApiV1ChannelByIdResponse = GetApiV1ChannelByIdResponses[keyof GetApiV1ChannelByIdResponses];
+
+export type PostApiV1CustomEmojiData = {
+    body: {
+        Name?: string;
+        File?: IFormFile;
+        GroupId?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/CustomEmoji';
+};
+
+export type PostApiV1CustomEmojiErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1CustomEmojiError = PostApiV1CustomEmojiErrors[keyof PostApiV1CustomEmojiErrors];
+
+export type PostApiV1CustomEmojiResponses = {
+    /**
+     * OK
+     */
+    200: CustomEmojiDto;
+};
+
+export type PostApiV1CustomEmojiResponse = PostApiV1CustomEmojiResponses[keyof PostApiV1CustomEmojiResponses];
+
+export type PutApiV1CustomEmojiData = {
+    body: CustomEmojiDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/CustomEmoji';
+};
+
+export type PutApiV1CustomEmojiErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PutApiV1CustomEmojiError = PutApiV1CustomEmojiErrors[keyof PutApiV1CustomEmojiErrors];
+
+export type PutApiV1CustomEmojiResponses = {
+    /**
+     * No Content
+     */
+    204: unknown;
+};
+
+export type DeleteApiV1CustomEmojiByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/CustomEmoji/{id}';
+};
+
+export type DeleteApiV1CustomEmojiByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeleteApiV1CustomEmojiByIdError = DeleteApiV1CustomEmojiByIdErrors[keyof DeleteApiV1CustomEmojiByIdErrors];
+
+export type DeleteApiV1CustomEmojiByIdResponses = {
+    /**
+     * No Content
+     */
+    204: unknown;
+};
+
+export type GetApiV1CustomEmojiByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/CustomEmoji/{id}';
+};
+
+export type GetApiV1CustomEmojiByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1CustomEmojiByIdError = GetApiV1CustomEmojiByIdErrors[keyof GetApiV1CustomEmojiByIdErrors];
+
+export type GetApiV1CustomEmojiByIdResponses = {
+    /**
+     * OK
+     */
+    200: CustomEmojiDto;
+};
+
+export type GetApiV1CustomEmojiByIdResponse = GetApiV1CustomEmojiByIdResponses[keyof GetApiV1CustomEmojiByIdResponses];
 
 export type GetApiV1DownloadByIdData = {
     body?: never;
@@ -444,12 +716,57 @@ export type GetApiV1DownloadByIdData = {
     url: '/api/v1/Download/{id}';
 };
 
-export type GetApiV1DownloadByIdResponses = {
+export type GetApiV1DownloadByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1DownloadByIdError = GetApiV1DownloadByIdErrors[keyof GetApiV1DownloadByIdErrors];
+
+export type GetApiV1GroupByIdRolesData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/Group/{id}/roles';
+};
+
+export type GetApiV1GroupByIdRolesErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupByIdRolesError = GetApiV1GroupByIdRolesErrors[keyof GetApiV1GroupByIdRolesErrors];
+
+export type GetApiV1GroupByIdRolesResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: Array<GroupRoleDto>;
 };
+
+export type GetApiV1GroupByIdRolesResponse = GetApiV1GroupByIdRolesResponses[keyof GetApiV1GroupByIdRolesResponses];
 
 export type GetApiV1GroupByIdChannelsData = {
     body?: never;
@@ -460,6 +777,23 @@ export type GetApiV1GroupByIdChannelsData = {
     url: '/api/v1/Group/{id}/channels';
 };
 
+export type GetApiV1GroupByIdChannelsErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupByIdChannelsError = GetApiV1GroupByIdChannelsErrors[keyof GetApiV1GroupByIdChannelsErrors];
+
 export type GetApiV1GroupByIdChannelsResponses = {
     /**
      * OK
@@ -469,12 +803,64 @@ export type GetApiV1GroupByIdChannelsResponses = {
 
 export type GetApiV1GroupByIdChannelsResponse = GetApiV1GroupByIdChannelsResponses[keyof GetApiV1GroupByIdChannelsResponses];
 
+export type GetApiV1GroupByIdEmojiData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/Group/{id}/emoji';
+};
+
+export type GetApiV1GroupByIdEmojiErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupByIdEmojiError = GetApiV1GroupByIdEmojiErrors[keyof GetApiV1GroupByIdEmojiErrors];
+
+export type GetApiV1GroupByIdEmojiResponses = {
+    /**
+     * OK
+     */
+    200: Array<CustomEmojiDto>;
+};
+
+export type GetApiV1GroupByIdEmojiResponse = GetApiV1GroupByIdEmojiResponses[keyof GetApiV1GroupByIdEmojiResponses];
+
 export type GetApiV1GroupData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/api/v1/Group';
 };
+
+export type GetApiV1GroupErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupError = GetApiV1GroupErrors[keyof GetApiV1GroupErrors];
 
 export type GetApiV1GroupResponses = {
     /**
@@ -492,11 +878,28 @@ export type PostApiV1GroupData = {
     url: '/api/v1/Group';
 };
 
+export type PostApiV1GroupErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1GroupError = PostApiV1GroupErrors[keyof PostApiV1GroupErrors];
+
 export type PostApiV1GroupResponses = {
     /**
-     * OK
+     * Created
      */
-    200: GroupDto;
+    201: GroupDto;
 };
 
 export type PostApiV1GroupResponse = PostApiV1GroupResponses[keyof PostApiV1GroupResponses];
@@ -508,11 +911,28 @@ export type PutApiV1GroupData = {
     url: '/api/v1/Group';
 };
 
+export type PutApiV1GroupErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PutApiV1GroupError = PutApiV1GroupErrors[keyof PutApiV1GroupErrors];
+
 export type PutApiV1GroupResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type DeleteApiV1GroupByIdData = {
@@ -524,11 +944,28 @@ export type DeleteApiV1GroupByIdData = {
     url: '/api/v1/Group/{id}';
 };
 
+export type DeleteApiV1GroupByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeleteApiV1GroupByIdError = DeleteApiV1GroupByIdErrors[keyof DeleteApiV1GroupByIdErrors];
+
 export type DeleteApiV1GroupByIdResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type GetApiV1GroupByIdData = {
@@ -540,6 +977,23 @@ export type GetApiV1GroupByIdData = {
     url: '/api/v1/Group/{id}';
 };
 
+export type GetApiV1GroupByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupByIdError = GetApiV1GroupByIdErrors[keyof GetApiV1GroupByIdErrors];
+
 export type GetApiV1GroupByIdResponses = {
     /**
      * OK
@@ -549,6 +1003,138 @@ export type GetApiV1GroupByIdResponses = {
 
 export type GetApiV1GroupByIdResponse = GetApiV1GroupByIdResponses[keyof GetApiV1GroupByIdResponses];
 
+export type PostApiV1GroupRoleData = {
+    body: GroupRoleDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/GroupRole';
+};
+
+export type PostApiV1GroupRoleErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1GroupRoleError = PostApiV1GroupRoleErrors[keyof PostApiV1GroupRoleErrors];
+
+export type PostApiV1GroupRoleResponses = {
+    /**
+     * Created
+     */
+    201: GroupRoleDto;
+};
+
+export type PostApiV1GroupRoleResponse = PostApiV1GroupRoleResponses[keyof PostApiV1GroupRoleResponses];
+
+export type PutApiV1GroupRoleData = {
+    body: GroupRoleDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/GroupRole';
+};
+
+export type PutApiV1GroupRoleErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PutApiV1GroupRoleError = PutApiV1GroupRoleErrors[keyof PutApiV1GroupRoleErrors];
+
+export type PutApiV1GroupRoleResponses = {
+    /**
+     * No Content
+     */
+    204: unknown;
+};
+
+export type DeleteApiV1GroupRoleByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/GroupRole/{id}';
+};
+
+export type DeleteApiV1GroupRoleByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeleteApiV1GroupRoleByIdError = DeleteApiV1GroupRoleByIdErrors[keyof DeleteApiV1GroupRoleByIdErrors];
+
+export type DeleteApiV1GroupRoleByIdResponses = {
+    /**
+     * No Content
+     */
+    204: unknown;
+};
+
+export type GetApiV1GroupRoleByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/GroupRole/{id}';
+};
+
+export type GetApiV1GroupRoleByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1GroupRoleByIdError = GetApiV1GroupRoleByIdErrors[keyof GetApiV1GroupRoleByIdErrors];
+
+export type GetApiV1GroupRoleByIdResponses = {
+    /**
+     * OK
+     */
+    200: GroupRoleDto;
+};
+
+export type GetApiV1GroupRoleByIdResponse = GetApiV1GroupRoleByIdResponses[keyof GetApiV1GroupRoleByIdResponses];
+
 export type PostApiV1MessageData = {
     body: MessageDto;
     path?: never;
@@ -556,11 +1142,28 @@ export type PostApiV1MessageData = {
     url: '/api/v1/Message';
 };
 
+export type PostApiV1MessageErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PostApiV1MessageError = PostApiV1MessageErrors[keyof PostApiV1MessageErrors];
+
 export type PostApiV1MessageResponses = {
     /**
-     * OK
+     * Created
      */
-    200: MessageDto;
+    201: MessageDto;
 };
 
 export type PostApiV1MessageResponse = PostApiV1MessageResponses[keyof PostApiV1MessageResponses];
@@ -572,11 +1175,28 @@ export type PutApiV1MessageData = {
     url: '/api/v1/Message';
 };
 
+export type PutApiV1MessageErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type PutApiV1MessageError = PutApiV1MessageErrors[keyof PutApiV1MessageErrors];
+
 export type PutApiV1MessageResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type DeleteApiV1MessageByIdData = {
@@ -588,11 +1208,28 @@ export type DeleteApiV1MessageByIdData = {
     url: '/api/v1/Message/{id}';
 };
 
+export type DeleteApiV1MessageByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeleteApiV1MessageByIdError = DeleteApiV1MessageByIdErrors[keyof DeleteApiV1MessageByIdErrors];
+
 export type DeleteApiV1MessageByIdResponses = {
     /**
-     * OK
+     * No Content
      */
-    200: unknown;
+    204: unknown;
 };
 
 export type GetApiV1MessageByIdData = {
@@ -603,6 +1240,23 @@ export type GetApiV1MessageByIdData = {
     query?: never;
     url: '/api/v1/Message/{id}';
 };
+
+export type GetApiV1MessageByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1MessageByIdError = GetApiV1MessageByIdErrors[keyof GetApiV1MessageByIdErrors];
 
 export type GetApiV1MessageByIdResponses = {
     /**
@@ -622,6 +1276,23 @@ export type GetApiV1UserByIdData = {
     url: '/api/v1/User/{id}';
 };
 
+export type GetApiV1UserByIdErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1UserByIdError = GetApiV1UserByIdErrors[keyof GetApiV1UserByIdErrors];
+
 export type GetApiV1UserByIdResponses = {
     /**
      * OK
@@ -637,6 +1308,23 @@ export type GetApiV1UserMeData = {
     query?: never;
     url: '/api/v1/User/me';
 };
+
+export type GetApiV1UserMeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetApiV1UserMeError = GetApiV1UserMeErrors[keyof GetApiV1UserMeErrors];
 
 export type GetApiV1UserMeResponses = {
     /**
@@ -663,9 +1351,19 @@ export type PostApiV1UserProfileImageData = {
     url: '/api/v1/User/profile-image';
 };
 
-export type PostApiV1UserProfileImageResponses = {
+export type PostApiV1UserProfileImageErrors = {
     /**
-     * OK
+     * Bad Request
      */
-    200: unknown;
+    400: ErrorDto;
+    /**
+     * Unauthorized
+     */
+    401: ProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
 };
+
+export type PostApiV1UserProfileImageError = PostApiV1UserProfileImageErrors[keyof PostApiV1UserProfileImageErrors];
