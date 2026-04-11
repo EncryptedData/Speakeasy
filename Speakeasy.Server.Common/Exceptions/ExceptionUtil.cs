@@ -7,7 +7,7 @@ public static class ExceptionUtil
     /// <summary>
     /// Throws an exception if the provided obj is null
     /// </summary>
-    /// <param name="obj">The variable to tuse</param>
+    /// <param name="obj">The variable to use</param>
     /// <param name="provider">How to build the exception</param>
     /// <typeparam name="TException">The exception to throw</typeparam>
     /// <exception cref="ArgumentNullException"></exception>
