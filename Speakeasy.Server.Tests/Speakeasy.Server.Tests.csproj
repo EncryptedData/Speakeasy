@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Speakeasy.Server.Common\Speakeasy.Server.Common.csproj" />
       <ProjectReference Include="..\Speakeasy.Server.Controllers.ApiVersion1\Speakeasy.Server.Controllers.ApiVersion1.csproj" />
       <ProjectReference Include="..\Speakeasy.Server.Models\Speakeasy.Server.Models.csproj" />
     </ItemGroup>
