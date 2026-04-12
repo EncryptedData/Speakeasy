@@ -4,5 +4,6 @@
   <Project Path="Speakeasy.Server.Models/Speakeasy.Server.Models.csproj" />
   <Project Path="Speakeasy.Server.Storage/Speakeasy.Server.Storage.csproj" />
   <Project Path="Speakeasy.Server.Tests/Speakeasy.Server.Tests.csproj" />
+  <Project Path="Speakeasy.Server.Tool/Speakeasy.Server.Tool.csproj" />
   <Project Path="Speakeasy.Server/Speakeasy.Server.csproj" />
 </Solution>
