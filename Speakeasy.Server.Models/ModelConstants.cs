@@ -33,5 +33,10 @@ public static class ModelConstants
         /// The maximum amount of Reactions allowed on a given Message
         /// </summary>
         public const int MaxMessageReactions = 32;
+
+        /// <summary>
+        /// The maximum number of tags you can assign to entities that support tags
+        /// </summary>
+        public const int MaxNumberOfTags = 32;
     }
 }

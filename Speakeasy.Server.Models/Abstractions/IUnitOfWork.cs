@@ -10,13 +10,15 @@ public interface IUnitOfWork : IAsyncDisposable
     
     IMessageRepository MessageRepository { get; }
     
-    IFileRepository FileRepository { get; set; }
+    IFileRepository FileRepository { get; }
     
-    public IUserRepository UserRepository { get; set; }
+    IUserRepository UserRepository { get; }
     
-    public IGroupRoleRepository GroupRoleRepository { get; set; }
+    IGroupRoleRepository GroupRoleRepository { get; }
     
-    ICustomEmojiRepository CustomEmojiRepository { get; set; }
+    ICustomEmojiRepository CustomEmojiRepository { get; }
+    
+    IGifRepository GifRepository { get; }
 
     Task CommitAsync(CancellationToken cancellationToken = default);
 }

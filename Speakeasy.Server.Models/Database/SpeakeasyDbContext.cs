@@ -22,6 +22,8 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     
     public DbSet<CustomEmoji> CustomEmojis { get; set; }
     
+    public DbSet<Gif> Gifs { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Must be called first because the identity library
