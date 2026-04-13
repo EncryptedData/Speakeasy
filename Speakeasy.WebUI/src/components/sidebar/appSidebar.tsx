@@ -1,6 +1,6 @@
 import "./appSidebar.css";
 
-import { createSelector, createSignal, For } from "solid-js";
+import { createSelector, createSignal, For, Show } from "solid-js";
 
 import { CreateChannelDialog } from "@components/channel/createChannelDialog";
 import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
@@ -85,25 +85,34 @@ export const AppSidebar = () => {
             </button>
           </div>
           <div class="border-b w-full" />
-          <For each={groupState.channels()}>
-            {(val, index) => {
-              return (
-                <a
-                  class={clsx(
-                    "listitem p-1 pl-4 flex items-center rounded-lg hover:bg-white/5 transition-all text-text-muted",
-                    isChannelSelected(val.id!) &&
-                      "active bg-white/10 hover:bg-white/10 font-white text-text-primary font-medium",
-                  )}
-                  href={groupState.getGroupUrl(
-                    groupState.selectedGroup()?.id!,
-                    val.id!,
-                  )}
-                >
-                  {val.name}
-                </a>
-              );
-            }}
-          </For>
+          <Show
+            when={Object.keys(appState.groups).length > 0 && groupState.channels().length > 0}
+            fallback={
+              <div class="text-sm text-text-muted">
+                No {Object.keys(appState.groups).length === 0 ? "groups" : "channels"} yet. Create one to get started.
+              </div>
+            }
+          >
+            <For each={groupState.channels()}>
+              {(val, index) => {
+                return (
+                  <a
+                    class={clsx(
+                      "listitem p-1 pl-4 flex items-center rounded-lg hover:bg-white/5 transition-all text-text-muted",
+                      isChannelSelected(val.id!) &&
+                        "active bg-white/10 hover:bg-white/10 font-white text-text-primary font-medium",
+                    )}
+                    href={groupState.getGroupUrl(
+                      groupState.selectedGroup()?.id!,
+                      val.id!,
+                    )}
+                  >
+                    {val.name}
+                  </a>
+                );
+              }}
+            </For>
+          </Show>
         </div>
       </div>
       <div class="absolute shadow-md bottom-2 left-2 right-0 flex gap-2 p-2 px-4 items-center mt-auto bg-bg-elevated rounded-md">

@@ -1,6 +1,6 @@
 import { Root, Panel, Handle } from "@corvu/resizable";
 import { makePersisted } from "@solid-primitives/storage";
-import { createEffect, createSignal, type Component } from "solid-js";
+import { createEffect, createSignal, Show, type Component } from "solid-js";
 
 import { AppSidebar } from "@components/sidebar/appSidebar";
 import { useAppContext } from "@context/appContext";
@@ -55,7 +55,16 @@ const App: Component = () => {
         <div class="size-full rounded-sm transition-colors group-data-active:bg-corvu-300 group-data-dragging:bg-corvu-100" />
       </Handle>
       <Panel initialSize={0.8} class="rounded-lg bg-corvu-100">
-        <Chat channelId={channelId} />
+        <Show
+          when={channelId()}
+          fallback={
+            <div class="flex size-full items-center justify-center text-gray-400">
+              Select a channel from the sidebar to start chatting.
+            </div>
+          }
+        >
+          <Chat channelId={channelId} />
+        </Show>
       </Panel>
     </Root>
   );
