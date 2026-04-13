@@ -15,17 +15,20 @@ public class UserController : BaseV1ApiController
     private readonly UserManager<User> _userManager;
     private readonly IImageValidator _imageValidator;
     private readonly ITemporaryFileStore _temporaryFileStore;
+    private readonly ICurrentUserProvider _currentUserProvider;
     
     public UserController(
         IUnitOfWork unitOfWork, 
         UserManager<User> userManager, 
         IImageValidator imageValidator,
-        ITemporaryFileStore temporaryFileStore)
+        ITemporaryFileStore temporaryFileStore,
+        ICurrentUserProvider currentUserProvider)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _imageValidator = imageValidator;
         _temporaryFileStore = temporaryFileStore;
+        _currentUserProvider = currentUserProvider;
     }
 
     [HttpGet("{id}")]
@@ -43,11 +46,7 @@ public class UserController : BaseV1ApiController
     [HttpGet("me")]
     public async Task<ActionResult<UserDto>> GetMeAsync()
     {
-        var userId = _userManager.GetUserId(User);
-        ArgumentNullException.ThrowIfNull(userId);
-
-        var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId, trackEntities: false);
-        ArgumentNullException.ThrowIfNull(user);
+        var user = await _currentUserProvider.GetCurrentUserAsync();
 
         return Ok(ToTransmissionModel(user));
     }
@@ -60,12 +59,8 @@ public class UserController : BaseV1ApiController
         {
             return BadRequest(ErrorDto.FromCode(ErrorCode.UploadedFileLengthNotValid));
         }
-        
-        var userId = _userManager.GetUserId(User);
-        ArgumentNullException.ThrowIfNull(userId);
 
-        var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
-        ArgumentNullException.ThrowIfNull(user);
+        var user = await _currentUserProvider.GetCurrentUserAsync();
 
         await using var temporaryFile = _temporaryFileStore.CreateTemporaryFile();
         var temporaryFileStream = temporaryFile.GetStream();

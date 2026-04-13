@@ -2,7 +2,7 @@
 
 import { type Client, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { DeleteApiV1ChannelByIdData, DeleteApiV1ChannelByIdResponses, DeleteApiV1GroupByIdData, DeleteApiV1GroupByIdResponses, DeleteApiV1MessageByIdData, DeleteApiV1MessageByIdResponses, GetApiV1AuthManageInfoData, GetApiV1AuthManageInfoErrors, GetApiV1AuthManageInfoResponses, GetApiV1ChannelByIdData, GetApiV1ChannelByIdMessagesData, GetApiV1ChannelByIdMessagesResponses, GetApiV1ChannelByIdResponses, GetApiV1DownloadByIdData, GetApiV1DownloadByIdResponses, GetApiV1GroupByIdChannelsData, GetApiV1GroupByIdChannelsResponses, GetApiV1GroupByIdData, GetApiV1GroupByIdResponses, GetApiV1GroupData, GetApiV1GroupResponses, GetApiV1MessageByIdData, GetApiV1MessageByIdResponses, GetApiV1UserByIdData, GetApiV1UserByIdResponses, GetApiV1UserMeData, GetApiV1UserMeResponses, MapIdentityApiApiV1AuthConfirmEmailData, MapIdentityApiApiV1AuthConfirmEmailResponses, PostApiV1AuthForgotPasswordData, PostApiV1AuthForgotPasswordErrors, PostApiV1AuthForgotPasswordResponses, PostApiV1AuthLoginData, PostApiV1AuthLoginResponses, PostApiV1AuthManage2FaData, PostApiV1AuthManage2FaErrors, PostApiV1AuthManage2FaResponses, PostApiV1AuthManageInfoData, PostApiV1AuthManageInfoErrors, PostApiV1AuthManageInfoResponses, PostApiV1AuthRefreshData, PostApiV1AuthRefreshResponses, PostApiV1AuthRegisterData, PostApiV1AuthRegisterErrors, PostApiV1AuthRegisterResponses, PostApiV1AuthResendConfirmationEmailData, PostApiV1AuthResendConfirmationEmailResponses, PostApiV1AuthResetPasswordData, PostApiV1AuthResetPasswordErrors, PostApiV1AuthResetPasswordResponses, PostApiV1ChannelByIdMessageData, PostApiV1ChannelByIdMessageResponses, PostApiV1ChannelData, PostApiV1ChannelResponses, PostApiV1GroupData, PostApiV1GroupResponses, PostApiV1MessageData, PostApiV1MessageResponses, PostApiV1UserProfileImageData, PostApiV1UserProfileImageResponses, PutApiV1ChannelData, PutApiV1ChannelResponses, PutApiV1GroupData, PutApiV1GroupResponses, PutApiV1MessageData, PutApiV1MessageResponses } from './types.gen';
+import type { DeleteApiV1ChannelByIdData, DeleteApiV1ChannelByIdErrors, DeleteApiV1ChannelByIdResponses, DeleteApiV1CustomEmojiByIdData, DeleteApiV1CustomEmojiByIdErrors, DeleteApiV1CustomEmojiByIdResponses, DeleteApiV1GroupByIdData, DeleteApiV1GroupByIdErrors, DeleteApiV1GroupByIdResponses, DeleteApiV1GroupRoleByIdData, DeleteApiV1GroupRoleByIdErrors, DeleteApiV1GroupRoleByIdResponses, DeleteApiV1MessageByIdData, DeleteApiV1MessageByIdErrors, DeleteApiV1MessageByIdResponses, GetApiV1AuthManageInfoData, GetApiV1AuthManageInfoErrors, GetApiV1AuthManageInfoResponses, GetApiV1ChannelByIdData, GetApiV1ChannelByIdErrors, GetApiV1ChannelByIdMessagesData, GetApiV1ChannelByIdMessagesErrors, GetApiV1ChannelByIdMessagesResponses, GetApiV1ChannelByIdResponses, GetApiV1CustomEmojiByIdData, GetApiV1CustomEmojiByIdErrors, GetApiV1CustomEmojiByIdResponses, GetApiV1DownloadByIdData, GetApiV1DownloadByIdErrors, GetApiV1GroupByIdChannelsData, GetApiV1GroupByIdChannelsErrors, GetApiV1GroupByIdChannelsResponses, GetApiV1GroupByIdData, GetApiV1GroupByIdEmojiData, GetApiV1GroupByIdEmojiErrors, GetApiV1GroupByIdEmojiResponses, GetApiV1GroupByIdErrors, GetApiV1GroupByIdResponses, GetApiV1GroupByIdRolesData, GetApiV1GroupByIdRolesErrors, GetApiV1GroupByIdRolesResponses, GetApiV1GroupData, GetApiV1GroupErrors, GetApiV1GroupResponses, GetApiV1GroupRoleByIdData, GetApiV1GroupRoleByIdErrors, GetApiV1GroupRoleByIdResponses, GetApiV1MessageByIdData, GetApiV1MessageByIdErrors, GetApiV1MessageByIdResponses, GetApiV1UserByIdData, GetApiV1UserByIdErrors, GetApiV1UserByIdResponses, GetApiV1UserMeData, GetApiV1UserMeErrors, GetApiV1UserMeResponses, MapIdentityApiApiV1AuthConfirmEmailData, MapIdentityApiApiV1AuthConfirmEmailResponses, PostApiV1AuthForgotPasswordData, PostApiV1AuthForgotPasswordErrors, PostApiV1AuthForgotPasswordResponses, PostApiV1AuthLoginData, PostApiV1AuthLoginResponses, PostApiV1AuthManage2FaData, PostApiV1AuthManage2FaErrors, PostApiV1AuthManage2FaResponses, PostApiV1AuthManageInfoData, PostApiV1AuthManageInfoErrors, PostApiV1AuthManageInfoResponses, PostApiV1AuthRefreshData, PostApiV1AuthRefreshResponses, PostApiV1AuthRegisterData, PostApiV1AuthRegisterErrors, PostApiV1AuthRegisterResponses, PostApiV1AuthResendConfirmationEmailData, PostApiV1AuthResendConfirmationEmailResponses, PostApiV1AuthResetPasswordData, PostApiV1AuthResetPasswordErrors, PostApiV1AuthResetPasswordResponses, PostApiV1ChannelByIdMessageData, PostApiV1ChannelByIdMessageErrors, PostApiV1ChannelByIdMessageResponses, PostApiV1ChannelData, PostApiV1ChannelErrors, PostApiV1ChannelResponses, PostApiV1CustomEmojiData, PostApiV1CustomEmojiErrors, PostApiV1CustomEmojiResponses, PostApiV1GroupData, PostApiV1GroupErrors, PostApiV1GroupResponses, PostApiV1GroupRoleData, PostApiV1GroupRoleErrors, PostApiV1GroupRoleResponses, PostApiV1MessageData, PostApiV1MessageErrors, PostApiV1MessageResponses, PostApiV1UserProfileImageData, PostApiV1UserProfileImageErrors, PutApiV1ChannelData, PutApiV1ChannelErrors, PutApiV1ChannelResponses, PutApiV1CustomEmojiData, PutApiV1CustomEmojiErrors, PutApiV1CustomEmojiResponses, PutApiV1GroupData, PutApiV1GroupErrors, PutApiV1GroupResponses, PutApiV1GroupRoleData, PutApiV1GroupRoleErrors, PutApiV1GroupRoleResponses, PutApiV1MessageData, PutApiV1MessageErrors, PutApiV1MessageResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -100,7 +100,7 @@ export const postApiV1AuthManageInfo = <ThrowOnError extends boolean = false>(op
     }
 });
 
-export const postApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelResponses, unknown, ThrowOnError>({
+export const postApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelResponses, PostApiV1ChannelErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel',
     ...options,
@@ -110,7 +110,7 @@ export const postApiV1Channel = <ThrowOnError extends boolean = false>(options: 
     }
 });
 
-export const putApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PutApiV1ChannelData, ThrowOnError>) => (options.client ?? client).put<PutApiV1ChannelResponses, unknown, ThrowOnError>({
+export const putApiV1Channel = <ThrowOnError extends boolean = false>(options: Options<PutApiV1ChannelData, ThrowOnError>) => (options.client ?? client).put<PutApiV1ChannelResponses, PutApiV1ChannelErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel',
     ...options,
@@ -120,13 +120,13 @@ export const putApiV1Channel = <ThrowOnError extends boolean = false>(options: O
     }
 });
 
-export const getApiV1ChannelByIdMessages = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdMessagesData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdMessagesResponses, unknown, ThrowOnError>({
+export const getApiV1ChannelByIdMessages = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdMessagesData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdMessagesResponses, GetApiV1ChannelByIdMessagesErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel/{id}/messages',
     ...options
 });
 
-export const postApiV1ChannelByIdMessage = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelByIdMessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelByIdMessageResponses, unknown, ThrowOnError>({
+export const postApiV1ChannelByIdMessage = <ThrowOnError extends boolean = false>(options: Options<PostApiV1ChannelByIdMessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1ChannelByIdMessageResponses, PostApiV1ChannelByIdMessageErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel/{id}/message',
     ...options,
@@ -136,47 +136,82 @@ export const postApiV1ChannelByIdMessage = <ThrowOnError extends boolean = false
     }
 });
 
-export const deleteApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1ChannelByIdResponses, unknown, ThrowOnError>({
+export const deleteApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1ChannelByIdResponses, DeleteApiV1ChannelByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel/{id}',
     ...options
 });
 
-export const getApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdResponses, unknown, ThrowOnError>({
+export const getApiV1ChannelById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1ChannelByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1ChannelByIdResponses, GetApiV1ChannelByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Channel/{id}',
     ...options
 });
 
-export const getApiV1DownloadById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1DownloadByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1DownloadByIdResponses, unknown, ThrowOnError>({
+export const postApiV1CustomEmoji = <ThrowOnError extends boolean = false>(options: Options<PostApiV1CustomEmojiData, ThrowOnError>) => (options.client ?? client).post<PostApiV1CustomEmojiResponses, PostApiV1CustomEmojiErrors, ThrowOnError>({
+    ...urlSearchParamsBodySerializer,
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/CustomEmoji',
+    ...options,
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ...options.headers
+    }
+});
+
+export const putApiV1CustomEmoji = <ThrowOnError extends boolean = false>(options: Options<PutApiV1CustomEmojiData, ThrowOnError>) => (options.client ?? client).put<PutApiV1CustomEmojiResponses, PutApiV1CustomEmojiErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/CustomEmoji',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json-patch+json',
+        ...options.headers
+    }
+});
+
+export const deleteApiV1CustomEmojiById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1CustomEmojiByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1CustomEmojiByIdResponses, DeleteApiV1CustomEmojiByIdErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/CustomEmoji/{id}',
+    ...options
+});
+
+export const getApiV1CustomEmojiById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1CustomEmojiByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1CustomEmojiByIdResponses, GetApiV1CustomEmojiByIdErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/CustomEmoji/{id}',
+    ...options
+});
+
+export const getApiV1DownloadById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1DownloadByIdData, ThrowOnError>) => (options.client ?? client).get<unknown, GetApiV1DownloadByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Download/{id}',
     ...options
 });
 
-export const getApiV1GroupByIdChannels = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdChannelsData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdChannelsResponses, unknown, ThrowOnError>({
+export const getApiV1GroupByIdRoles = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdRolesData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdRolesResponses, GetApiV1GroupByIdRolesErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group/{id}/roles',
+    ...options
+});
+
+export const getApiV1GroupByIdChannels = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdChannelsData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdChannelsResponses, GetApiV1GroupByIdChannelsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group/{id}/channels',
     ...options
 });
 
-export const getApiV1Group = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1GroupData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1GroupResponses, unknown, ThrowOnError>({
+export const getApiV1GroupByIdEmoji = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdEmojiData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdEmojiResponses, GetApiV1GroupByIdEmojiErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group/{id}/emoji',
+    ...options
+});
+
+export const getApiV1Group = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1GroupData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1GroupResponses, GetApiV1GroupErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group',
     ...options
 });
 
-export const postApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PostApiV1GroupData, ThrowOnError>) => (options.client ?? client).post<PostApiV1GroupResponses, unknown, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/Group',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json-patch+json',
-        ...options.headers
-    }
-});
-
-export const putApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PutApiV1GroupData, ThrowOnError>) => (options.client ?? client).put<PutApiV1GroupResponses, unknown, ThrowOnError>({
+export const postApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PostApiV1GroupData, ThrowOnError>) => (options.client ?? client).post<PostApiV1GroupResponses, PostApiV1GroupErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group',
     ...options,
@@ -186,19 +221,61 @@ export const putApiV1Group = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const deleteApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1GroupByIdResponses, unknown, ThrowOnError>({
+export const putApiV1Group = <ThrowOnError extends boolean = false>(options: Options<PutApiV1GroupData, ThrowOnError>) => (options.client ?? client).put<PutApiV1GroupResponses, PutApiV1GroupErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/Group',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json-patch+json',
+        ...options.headers
+    }
+});
+
+export const deleteApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1GroupByIdResponses, DeleteApiV1GroupByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group/{id}',
     ...options
 });
 
-export const getApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdResponses, unknown, ThrowOnError>({
+export const getApiV1GroupById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupByIdResponses, GetApiV1GroupByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Group/{id}',
     ...options
 });
 
-export const postApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PostApiV1MessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1MessageResponses, unknown, ThrowOnError>({
+export const postApiV1GroupRole = <ThrowOnError extends boolean = false>(options: Options<PostApiV1GroupRoleData, ThrowOnError>) => (options.client ?? client).post<PostApiV1GroupRoleResponses, PostApiV1GroupRoleErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/GroupRole',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json-patch+json',
+        ...options.headers
+    }
+});
+
+export const putApiV1GroupRole = <ThrowOnError extends boolean = false>(options: Options<PutApiV1GroupRoleData, ThrowOnError>) => (options.client ?? client).put<PutApiV1GroupRoleResponses, PutApiV1GroupRoleErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/GroupRole',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json-patch+json',
+        ...options.headers
+    }
+});
+
+export const deleteApiV1GroupRoleById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1GroupRoleByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1GroupRoleByIdResponses, DeleteApiV1GroupRoleByIdErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/GroupRole/{id}',
+    ...options
+});
+
+export const getApiV1GroupRoleById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1GroupRoleByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1GroupRoleByIdResponses, GetApiV1GroupRoleByIdErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/GroupRole/{id}',
+    ...options
+});
+
+export const postApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PostApiV1MessageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1MessageResponses, PostApiV1MessageErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message',
     ...options,
@@ -208,7 +285,7 @@ export const postApiV1Message = <ThrowOnError extends boolean = false>(options: 
     }
 });
 
-export const putApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PutApiV1MessageData, ThrowOnError>) => (options.client ?? client).put<PutApiV1MessageResponses, unknown, ThrowOnError>({
+export const putApiV1Message = <ThrowOnError extends boolean = false>(options: Options<PutApiV1MessageData, ThrowOnError>) => (options.client ?? client).put<PutApiV1MessageResponses, PutApiV1MessageErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message',
     ...options,
@@ -218,31 +295,31 @@ export const putApiV1Message = <ThrowOnError extends boolean = false>(options: O
     }
 });
 
-export const deleteApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1MessageByIdResponses, unknown, ThrowOnError>({
+export const deleteApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<DeleteApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteApiV1MessageByIdResponses, DeleteApiV1MessageByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message/{id}',
     ...options
 });
 
-export const getApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1MessageByIdResponses, unknown, ThrowOnError>({
+export const getApiV1MessageById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1MessageByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1MessageByIdResponses, GetApiV1MessageByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/Message/{id}',
     ...options
 });
 
-export const getApiV1UserById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1UserByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1UserByIdResponses, unknown, ThrowOnError>({
+export const getApiV1UserById = <ThrowOnError extends boolean = false>(options: Options<GetApiV1UserByIdData, ThrowOnError>) => (options.client ?? client).get<GetApiV1UserByIdResponses, GetApiV1UserByIdErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/User/{id}',
     ...options
 });
 
-export const getApiV1UserMe = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1UserMeData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1UserMeResponses, unknown, ThrowOnError>({
+export const getApiV1UserMe = <ThrowOnError extends boolean = false>(options?: Options<GetApiV1UserMeData, ThrowOnError>) => (options?.client ?? client).get<GetApiV1UserMeResponses, GetApiV1UserMeErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/User/me',
     ...options
 });
 
-export const postApiV1UserProfileImage = <ThrowOnError extends boolean = false>(options: Options<PostApiV1UserProfileImageData, ThrowOnError>) => (options.client ?? client).post<PostApiV1UserProfileImageResponses, unknown, ThrowOnError>({
+export const postApiV1UserProfileImage = <ThrowOnError extends boolean = false>(options: Options<PostApiV1UserProfileImageData, ThrowOnError>) => (options.client ?? client).post<unknown, PostApiV1UserProfileImageErrors, ThrowOnError>({
     ...urlSearchParamsBodySerializer,
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/User/profile-image',

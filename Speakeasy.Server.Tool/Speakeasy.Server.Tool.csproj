@@ -4,15 +4,16 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-      <PackageReference Include="System.IO.Abstractions" Version="22.1.0" />
+      <PackageReference Include="System.CommandLine" Version="2.0.5" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Speakeasy.Server.Common\Speakeasy.Server.Common.csproj" />
+      <ProjectReference Include="..\Speakeasy.Server.Models\Speakeasy.Server.Models.csproj" />
+      <ProjectReference Include="..\Speakeasy.Server\Speakeasy.Server.csproj" />
     </ItemGroup>
 
 </Project>

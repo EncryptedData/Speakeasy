@@ -6,11 +6,13 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
 using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
+using Speakeasy.Server.Conventions;
 using Speakeasy.Server.Models.Abstractions;
 using Speakeasy.Server.Models.Converters;
 using Speakeasy.Server.Models.Database;
 using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
+using Speakeasy.Server.Models.Services;
 using Speakeasy.Server.Models.Transmission;
 using Speakeasy.Server.Storage;
 using Speakeasy.Server.Storage.Abstractions;
@@ -58,7 +60,7 @@ public class Program
             .Enrich.FromLogContext()
             .WriteTo.Console());
 
-        services.AddControllers()
+        services.AddControllers(options => options.Conventions.Add(new InferSuccessCodeResponseConvention()))
             .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver()
@@ -97,6 +99,8 @@ public class Program
         services.AddAuthorization();
         services.AddIdentityApiEndpoints<User>()
             .AddEntityFrameworkStores<SpeakeasyDbContext>();
+
+        services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
         services.AddOpenApi(options =>
         {

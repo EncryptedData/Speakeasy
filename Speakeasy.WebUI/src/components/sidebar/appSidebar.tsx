@@ -1,6 +1,6 @@
 import "./appSidebar.css";
 
-import { createSignal, For } from "solid-js";
+import { createSelector, createSignal, For } from "solid-js";
 
 import { CreateChannelDialog } from "@components/channel/createChannelDialog";
 import { DefaultProfilePicture } from "@components/chat/defaultProfilePicture";
@@ -11,7 +11,7 @@ import { useAuthContext } from "@context/authContext";
 import { useGroupState } from "@hooks/group";
 import { clsx } from "@utilities/class";
 import { Tooltip } from "@components/tooltip/tooltip";
-import { ContextMenu } from "@components/contextMenu/contextMenu";
+import { ChatProfile } from "@components/chat/ChatProfile";
 
 export const AppSidebar = () => {
   const authContext = useAuthContext();
@@ -22,42 +22,48 @@ export const AppSidebar = () => {
   const [creatingGroup, setCreatingGroup] = createSignal(false);
   const [creatingChannel, setCreatingChannel] = createSignal(false);
 
+  const isGroupSelected = createSelector(
+    groupState.selectedGroup,
+    (id: string, selectedGroup) => selectedGroup?.id === id,
+  );
+
+  const isChannelSelected = createSelector(
+    groupState.selectedChannel,
+    (id: string, selectedChannel) => selectedChannel?.id === id,
+  );
+
   return (
     <>
       <div class="flex flex-1 flex-row gap-1 sidebar">
-        <div class="flex flex-col pl-0 bg-gray-800 groups">
+        <div class="flex flex-col pl-0 bg-gray-800 pb-20 groups">
           <For each={Object.values(appState.groups)}>
             {(val, index) => {
-              const isSelected = () =>
-                val.id === groupState.selectedGroup()?.id;
               return (
                 <Tooltip
                   content={<div>{val.name}</div>}
                   openDelay={0}
                   placement="right"
                 >
-                  <ContextMenu options={[]}>
-                    <a
-                      class={clsx(
-                        "listitem flex items-center",
-                        isSelected() && "active",
-                      )}
-                      href={groupState.getGroupUrl(val.id!)}
-                    >
-                      <div class="pill rounded-r-md w-1 transition-all" />
-                      <DefaultProfilePicture
-                        class="profile m-2"
-                        displayName={val.name}
-                      />
-                    </a>
-                  </ContextMenu>
+                  <a
+                    class={clsx(
+                      "listitem flex items-center",
+                      isGroupSelected(val.id!) && "active",
+                    )}
+                    href={groupState.getGroupUrl(val.id!)}
+                  >
+                    <div class="pill rounded-r-md w-1 transition-all" />
+                    <DefaultProfilePicture
+                      class="profile m-2"
+                      displayName={val.name}
+                    />
+                  </a>
                 </Tooltip>
               );
             }}
           </For>
           <button
             class={clsx(
-              "listitem flex items-center justify-center rounded-full cursor-pointer",
+              "listitem flex items-center justify-center rounded-full bg-red cursor-pointer",
             )}
             onClick={() => setCreatingGroup(true)}
             title="Create a Group"
@@ -68,7 +74,7 @@ export const AppSidebar = () => {
           </button>
         </div>
 
-        <div class="flex flex-1 flex-col gap-2 p-4 channels">
+        <div class="flex flex-1 flex-col gap-2 p-4  pb-20 channels">
           <div class={"flex gap-1"}>
             <div class="font-bold">{groupState.selectedGroup()?.name}</div>
             <button
@@ -81,13 +87,11 @@ export const AppSidebar = () => {
           <div class="border-b w-full" />
           <For each={groupState.channels()}>
             {(val, index) => {
-              const isSelected = () =>
-                val.id === groupState.selectedChannel()?.id;
               return (
                 <a
                   class={clsx(
                     "listitem p-1 pl-4 flex items-center rounded-lg hover:bg-white/5 transition-all text-text-muted",
-                    isSelected() &&
+                    isChannelSelected(val.id!) &&
                       "active bg-white/10 hover:bg-white/10 font-white text-text-primary font-medium",
                   )}
                   href={groupState.getGroupUrl(
@@ -102,8 +106,12 @@ export const AppSidebar = () => {
           </For>
         </div>
       </div>
-      <div class="flex flex-col mt-auto">
-        <Button class="flex mt-auto" onClick={authContext.logout} type="button">
+      <div class="absolute shadow-md bottom-2 left-2 right-0 flex gap-2 p-2 px-4 items-center mt-auto bg-bg-elevated rounded-md">
+        <ChatProfile size="lg" userId={authContext.me().id!} />
+        <div class="overflow-hidden text-ellipsis">
+          {authContext.me().displayName}
+        </div>
+        <Button class="flex ml-auto" onClick={authContext.logout} type="button">
           Logout
         </Button>
       </div>
