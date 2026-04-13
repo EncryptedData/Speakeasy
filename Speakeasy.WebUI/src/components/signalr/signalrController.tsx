@@ -66,6 +66,7 @@ export const SignalRController: VoidComponent = () => {
       return;
     }
 
+    chatContext.setShift(true);
     chatContext.updateMessages(
       produce((m) => {
         const innerMessages = m[channelId]!;

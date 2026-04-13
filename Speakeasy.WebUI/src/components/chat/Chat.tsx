@@ -22,7 +22,6 @@ export const Chat: Component<ChatProps> = (props) => {
   const chats = chatContext.messages;
 
   const [message, setMessage] = createSignal("");
-  const [shift, setShift] = createSignal(false);
   const [virtualizerHandle, setVirtualizerHandle] = createSignal<
     VirtualizerHandle | undefined
   >();
@@ -39,7 +38,7 @@ export const Chat: Component<ChatProps> = (props) => {
 
   createEffect(() => {
     chats();
-    setShift(false);
+    chatContext.setShift(false);
   });
 
   return (
@@ -49,7 +48,7 @@ export const Chat: Component<ChatProps> = (props) => {
         <Virtualizer
           ref={setVirtualizerHandle}
           data={chats()}
-          shift={shift()}
+          shift={chatContext.shift()}
           onScroll={async (offset) => {
             const handle = virtualizerHandle();
             if (!handle) return;
@@ -59,7 +58,7 @@ export const Chat: Component<ChatProps> = (props) => {
 
             if (offset < 400) {
               // todo: manage race conditions here
-              setShift(true);
+              chatContext.setShift(true);
               await chatContext.loadMessages();
             }
           }}
