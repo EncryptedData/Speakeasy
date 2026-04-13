@@ -29,6 +29,7 @@
     "@corvu/dialog": "^0.2.4",
     "@corvu/resizable": "^0.2.5",
     "@corvu/tooltip": "^0.2.2",
+    "@microsoft/signalr": "^10.0.0",
     "@modular-forms/solid": "^0.25.1",
     "@solid-primitives/storage": "^4.3.4",
     "@solidjs/router": "^0.16.1",
