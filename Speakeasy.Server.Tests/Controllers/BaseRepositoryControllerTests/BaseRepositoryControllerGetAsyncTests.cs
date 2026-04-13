@@ -10,7 +10,7 @@ public class BaseRepositoryControllerGetAsyncTests : BaseRepositoryControllerTes
     {
         SetEntityInRepository(null);
 
-        var result = await Unit.GetAsync(ExampleEntity.Id);
+        var result = await Unit.GetByIdAsync(ExampleEntity.Id);
         
         result.Result.Should().BeOfType<NotFoundObjectResult>()
             .Which.Value.Should().BeOfType<ErrorDto>()
@@ -20,7 +20,7 @@ public class BaseRepositoryControllerGetAsyncTests : BaseRepositoryControllerTes
     [Test]
     public async Task ReturnsDtoModelFromConverter()
     {
-        var result = await Unit.GetAsync(ExampleEntity.Id);
+        var result = await Unit.GetByIdAsync(ExampleEntity.Id);
 
         result.Result.Should().BeOfType<OkObjectResult>()
             .Which.Value.Should().Be(ExampleEntityDto);

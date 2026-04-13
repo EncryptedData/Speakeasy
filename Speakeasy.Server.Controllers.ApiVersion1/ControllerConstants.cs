@@ -9,6 +9,8 @@ public static class ControllerConstants
         public const int MegaByte = KiloByte * KiloByte;
 
         public const int TwoMegaBytes = MegaByte * 2;
+
+        public const int SixTeenMegabytes = MegaByte * 16;
     }
 
     public static class Limits
@@ -25,6 +27,15 @@ public static class ControllerConstants
             public const int Width = 128;
 
             public const int Height = 128;
+        }
+
+        public static class Gif
+        {
+            public const int Width = 1024;
+
+            public const int Height = 1024;
+
+            public const int MaximumTake = 25;
         }
     }
 }
