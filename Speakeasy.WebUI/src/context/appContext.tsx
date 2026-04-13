@@ -15,6 +15,8 @@ import {
   GroupDto,
 } from "@api";
 
+export type ChannelDictionary = Record<string, ChannelDto[]>;
+
 export type GroupDictionary = Record<string, GroupDto>;
 
 export type AppContext = {
@@ -29,6 +31,8 @@ export type AppContext = {
 
   loadGroups: () => Promise<void>;
 
+  updateChannels: SetStoreFunction<ChannelDictionary>;
+
   updateGroups: SetStoreFunction<GroupDictionary>;
 };
 
@@ -37,6 +41,7 @@ export const AppContext = createContext<AppContext>({
   channels: () => ({}),
   loadChannels: () => Promise.resolve(),
   loadGroups: () => Promise.resolve(),
+  updateChannels: () => ({}),
   updateGroups: () => ({}),
 } satisfies AppContext);
 
@@ -44,9 +49,7 @@ export const AppContextProvider: ParentComponent = (props) => {
   const authContext = useAuthContext();
 
   const channelsLoading: Record<string, boolean> = {};
-  const [channelStore, updateChannelStore] = createStore<
-    Record<string, ChannelDto[]>
-  >({});
+  const [channelStore, updateChannelStore] = createStore<ChannelDictionary>({});
   const [groups, setGroups] = createStore<GroupDictionary>({});
 
   async function loadGroups() {
@@ -140,6 +143,7 @@ export const AppContextProvider: ParentComponent = (props) => {
       }
     },
     loadGroups,
+    updateChannels: updateChannelStore,
     updateGroups: setGroups,
   };
 
