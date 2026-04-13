@@ -16,6 +16,8 @@ public class UnitOfWork : IUnitOfWork
         FileRepository = new FileRepository(fileStore, _context);
         UserRepository = new UserRepository(_context);
         GroupRoleRepository = new GroupRoleRepository(_context);
+        GroupRolePermissionRepository = new GroupRolePermissionRepository(_context);
+        GroupRoleClaimRepository = new GroupRoleClaimRepository(_context);
         CustomEmojiRepository = new CustomEmojiRepository(_context);
     }
     
@@ -30,6 +32,10 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository UserRepository { get; set; }
     
     public IGroupRoleRepository GroupRoleRepository { get; set; }
+    
+    public IGroupRolePermissionRepository GroupRolePermissionRepository { get; set; }
+    
+    public IGroupRoleClaimRepository GroupRoleClaimRepository { get; set; }
     
     public ICustomEmojiRepository CustomEmojiRepository { get; set; }
 

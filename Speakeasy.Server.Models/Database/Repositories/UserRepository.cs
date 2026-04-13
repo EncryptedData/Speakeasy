@@ -31,6 +31,22 @@ public class UserRepository : IUserRepository
         return await query.FirstOrDefaultAsync(e => e.Id == id);
     }
 
+    public IAsyncEnumerable<User> GetUsersByGroupAsync(Guid id, bool trackEntities = true)
+    {
+        IQueryable<User> query = _db;
+
+        if (trackEntities is false)
+        {
+            query = query.AsNoTracking();
+        }
+
+        query = ApplyIncludes(query);
+
+        // User IDs are stored as string, not Guid, even though under the hood they are generated from the Guid class.
+
+        return query.Where(e => e.Id == id.ToString()).ToAsyncEnumerable();
+    }
+
     public async Task<bool> ContainsIdAsync(string id)
     {
         return await _db.AnyAsync(e => e.Id == id);

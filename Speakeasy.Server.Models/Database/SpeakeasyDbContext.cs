@@ -14,6 +14,10 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     
     public DbSet<GroupRole> GroupRoles { get; set; }
     
+    public DbSet<GroupRolePermission> GroupRolePermissions { get; set; }
+    
+    public DbSet<GroupRoleClaim> GroupRoleClaims { get; set; }
+    
     public DbSet<Channel> Channels { get; set; }
     
     public DbSet<Message> Messages { get; set; }

@@ -14,6 +14,8 @@ using Speakeasy.Server.Models.Database.Repositories;
 using Speakeasy.Server.Models.Options;
 using Speakeasy.Server.Models.Services;
 using Speakeasy.Server.Models.Transmission;
+using Speakeasy.Server.Security;
+using Speakeasy.Server.Security.Abstractions;
 using Speakeasy.Server.Storage;
 using Speakeasy.Server.Storage.Abstractions;
 using Speakeasy.Server.Storage.Options;
@@ -89,11 +91,16 @@ public class Program
         // Add Model converters
         services.AddSingleton<IModelConverter<Group, GroupDto>, GroupModelConverter>();
         services.AddSingleton<IModelConverter<GroupRole, GroupRoleDto>, GroupRoleModelConverter>();
+        services.AddSingleton<IModelConverter<GroupRolePermission, GroupRolePermissionDto>, GroupRolePermissionModelConverter>();
         services.AddSingleton<IModelConverter<CustomEmoji, CustomEmojiDto>, CustomEmojiModelConverter>();
         
         // These need to be scoped because it accesses the HttpContext which can't be a singleton
         services.AddScoped<IModelConverter<Channel, ChannelDto>, ChannelModelConverter>();
         services.AddScoped<IModelConverter<Message, MessageDto>, MessageModelConverter>();
+        
+        // These need to be scoped because it accesses the currentUserProvider, which is scoped.
+        services.AddScoped<IModelConverter<GroupRoleClaim, GroupRoleClaimDto>, GroupRoleClaimModelConverter>();
+        services.AddScoped<IGroupSecurity, GroupSecurity>();
         
         // Add ASP.NET Core Identity services
         services.AddAuthorization();
@@ -101,6 +108,7 @@ public class Program
             .AddEntityFrameworkStores<SpeakeasyDbContext>();
 
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+        services.AddScoped<IGroupSecurity, GroupSecurity>();
 
         services.AddOpenApi(options =>
         {

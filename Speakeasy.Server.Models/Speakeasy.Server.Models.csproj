@@ -30,4 +30,12 @@
       <ProjectReference Include="..\Speakeasy.Server.Storage\Speakeasy.Server.Storage.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="appsettings.local.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

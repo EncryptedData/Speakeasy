@@ -18,8 +18,9 @@ public class GroupRoleModelConverter : IModelConverter<GroupRole, GroupRoleDto>
             // We ensure that the role hierarchy is continuous between 0 -> group.Roles.Count - 1
             Hierarchy = group.Roles.Count,
             IsDefault = dto.IsDefault ?? false,
-            Group = group
-        };;
+            Group = group,
+            GroupRolePermissions = []
+        };
     }
 
     public GroupRoleDto ToTransmissionModel(GroupRole entity)

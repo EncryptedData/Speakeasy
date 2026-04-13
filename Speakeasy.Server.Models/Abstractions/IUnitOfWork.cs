@@ -16,6 +16,10 @@ public interface IUnitOfWork : IAsyncDisposable
     
     public IGroupRoleRepository GroupRoleRepository { get; set; }
     
+    public IGroupRolePermissionRepository GroupRolePermissionRepository { get; set; }
+    
+    public IGroupRoleClaimRepository GroupRoleClaimRepository { get; set; }
+    
     ICustomEmojiRepository CustomEmojiRepository { get; set; }
 
     Task CommitAsync(CancellationToken cancellationToken = default);

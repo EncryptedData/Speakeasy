@@ -9,17 +9,21 @@ namespace Speakeasy.Server.Controllers.ApiVersion1;
 
 public class GroupRoleController : BaseRepositoryController<GroupRole, GroupRoleDto>
 {
+    private ICurrentUserProvider _currentUserProvider;
     
     public GroupRoleController(
-        IModelConverter<GroupRole, GroupRoleDto> converter, 
+        IModelConverter<GroupRole, GroupRoleDto> converter,
+        ICurrentUserProvider currentUserProvider,
         IUnitOfWork uow) : 
         base(uow.GroupRoleRepository, converter, uow)
     {
-        
+        _currentUserProvider = currentUserProvider;
     }
 
     public override async Task<ActionResult> PutAsync(GroupRoleDto dto)
     {
+        
+        
         if(dto.Id is null)
         {
             return NotFound();

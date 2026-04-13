@@ -30,6 +30,4 @@ public class GroupRepository : BaseRepository<Group>, IGroupRepository
 
         return query.AsAsyncEnumerable();
     }
-    
-    
 }

@@ -29,7 +29,7 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
     }
 
     [HttpGet("{id}/roles")]
-    public async Task<ActionResult<IEnumerable<GroupRoleDto>>> GetRoles(Guid id)
+    public async Task<ActionResult<IEnumerable<GroupRoleDto>>> GetRolesAsync(Guid id)
     {
         var group = await _unitOfWork.GroupRepository.GetByIdAsync(id);
 
@@ -65,6 +65,17 @@ public class GroupController : BaseRepositoryController<Group, GroupDto>
 
         return Ok(_unitOfWork.CustomEmojiRepository.GetAllForGroupAsyncEnumerable(id)
             .Select(_emojiConverter.ToTransmissionModel));
+    }
+
+    [HttpGet("{id}/users")]
+    public async Task<ActionResult<IAsyncEnumerable<UserDto>>> GetUsersAsyncEnumerable(Guid id)
+    {
+        if (!await _unitOfWork.GroupRepository.ContainsAsync(id))
+        {
+            return NotFound(ErrorDto.FromCode(ErrorCode.EntityNotFound));
+        }
+
+        return Ok(_unitOfWork.UserRepository.GetUsersByGroupAsync(id));
     }
 
     [HttpGet]

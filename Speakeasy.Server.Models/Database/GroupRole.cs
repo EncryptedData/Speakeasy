@@ -18,4 +18,5 @@ public class GroupRole : INamedEntity
     
     public int Hierarchy { get; set; }
     
+    public List<GroupRolePermission> GroupRolePermissions { get; set; }
 }

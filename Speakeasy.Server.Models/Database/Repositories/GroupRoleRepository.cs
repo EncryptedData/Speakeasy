@@ -13,7 +13,9 @@ public class GroupRoleRepository : BaseRepository<GroupRole>, IGroupRoleReposito
 
     protected override IQueryable<GroupRole> ApplyIncludes(IQueryable<GroupRole> query)
     {
-        return query.Include(g => g.Group)
+        return query
+                .Include(g => g.GroupRolePermissions)
+                .Include(g => g.Group)
             .ThenInclude(g => g.Roles);
     }
 
@@ -21,13 +23,14 @@ public class GroupRoleRepository : BaseRepository<GroupRole>, IGroupRoleReposito
     {
         IQueryable<GroupRole> query = _db;
 
-        if (trackEntities is false)
+        if (!trackEntities)
         {
             query = query.AsNoTracking();
         }
         
         query = ApplyIncludes(query);
 
-        return query.AsAsyncEnumerable();
+        return query
+            .Where(g => g.Group.Id == groupId).AsAsyncEnumerable();
     }
 }
