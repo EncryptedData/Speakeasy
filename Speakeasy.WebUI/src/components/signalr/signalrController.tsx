@@ -6,30 +6,27 @@ import { useChatContext } from "@context/chatContext";
 import { HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import {
   getApiV1ChannelById,
-  getApiV1Group,
   getApiV1GroupById,
   MessageDto,
 } from "@api";
 import { produce } from "solid-js/store";
 import { parseDateFromUuid } from "@utilities/uuid";
 
-const client = new HubConnectionBuilder()
-  .withUrl(`${import.meta.env.VITE_API_URL}/hub/v1`)
-  .build();
+export function createSignalRClient() {
+  const c = new HubConnectionBuilder()
+    .withUrl(`${import.meta.env.VITE_API_URL}/hub/v1`)
+    .build();
 
-if (import.meta.env.DEV) {
-  client.onclose((error) => {
-    console.error(`SignalR disconnected`, error);
-  });
+  if (import.meta.env.DEV) {
+    c.onclose((error) => console.error("SignalR disconnected", error));
+    c.onreconnected(() => console.info("SignalR reconnected"));
+    c.on("send", (data) => console.info("SignalR sent message", data));
+  }
 
-  client.onreconnected(() => {
-    console.info("SignalR reconnected");
-  });
-
-  client.on("send", (data) => {
-    console.info("SignalR sent message", data);
-  });
+  return c;
 }
+
+const client = createSignalRClient();
 
 export const SignalRController: VoidComponent = () => {
   const authContext = useAuthContext();
@@ -45,7 +42,7 @@ export const SignalRController: VoidComponent = () => {
     for (const groupId of Object.keys(appContext.groups)) {
       const channels = appContext.channels()[groupId];
       const foundIndex = channels?.findIndex((c) => c.id === channelId);
-      if (!!foundIndex && foundIndex > -1) {
+      if (foundIndex !== undefined && foundIndex > -1) {
         return {
           groupId,
           channelIndex: foundIndex,
@@ -73,7 +70,7 @@ export const SignalRController: VoidComponent = () => {
       produce((m) => {
         const innerMessages = m[channelId]!;
 
-        for (let i = innerMessages.length; i > 0; i--) {
+        for (let i = innerMessages.length - 1; i > 0; i--) {
           const currentMessage = innerMessages[i]!;
 
           const createdOn = parseDateFromUuid(message.id!);
@@ -161,7 +158,7 @@ export const SignalRController: VoidComponent = () => {
       (c) => c.id === channelId,
     );
 
-    if (matchingChannelIndex) {
+    if (matchingChannelIndex > -1) {
       appContext.updateChannels(
         response.data.groupId,
         matchingChannelIndex,
@@ -172,7 +169,7 @@ export const SignalRController: VoidComponent = () => {
     }
   }
 
-  function onGroupCreated(groupId: string) {
+  function onGroupCreated(_groupId: string) {
     appContext.loadGroups();
   }
 
@@ -198,23 +195,22 @@ export const SignalRController: VoidComponent = () => {
     appContext.updateGroups(groupId, response.data);
   }
 
+  const handlers: [string, (...args: any[]) => void][] = [
+    ["MessageReceived", onMessageReceived],
+    ["ChannelCreated", onChannelCreated],
+    ["ChannelDeleted", onChannelDeleted],
+    ["ChannelUpdated", onChannelUpdated],
+    ["GroupCreated", onGroupCreated],
+    ["GroupDeleted", onGroupDeleted],
+    ["GroupUpdated", onGroupUpdated],
+  ];
+
   function onClientConnected() {
-    client.on("MessageReceived", onMessageReceived);
-    client.on("ChannelCreated", onChannelCreated);
-    client.on("ChannelDeleted", onChannelDeleted);
-    client.on("ChannelUpdated", onChannelUpdated);
-    client.on("GroupCreated", onGroupCreated);
-    client.on("GroupDeleted", onGroupDeleted);
-    client.on("GroupUpdated", onGroupUpdated);
+    handlers.forEach(([event, handler]) => client.on(event, handler));
   }
+
   function cleanup() {
-    client.off("MessageReceived", onMessageReceived);
-    client.off("ChannelCreated", onChannelCreated);
-    client.off("ChannelDeleted", onChannelDeleted);
-    client.off("ChannelUpdated", onChannelUpdated);
-    client.off("GroupCreated", onGroupCreated);
-    client.off("GroupDeleted", onGroupDeleted);
-    client.off("GroupUpdated", onGroupUpdated);
+    handlers.forEach(([event, handler]) => client.off(event, handler));
   }
 
   createEffect(async () => {
@@ -224,8 +220,12 @@ export const SignalRController: VoidComponent = () => {
       }
       cleanup();
     } else {
-      await client.start();
-      onClientConnected();
+      try {
+        await client.start();
+        onClientConnected();
+      } catch (error) {
+        console.error("SignalR failed to connect", error);
+      }
     }
   });
 
