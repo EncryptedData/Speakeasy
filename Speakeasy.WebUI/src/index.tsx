@@ -8,6 +8,7 @@ import "./index.css";
 
 import { useAuthContext } from "@context/authContext";
 import { Providers } from "@context/providers";
+import { SignalRController } from "@components/signalr/signalrController";
 
 const root = document.getElementById("root");
 
@@ -37,6 +38,7 @@ const AuthLayout = (props: RouteSectionProps) => {
 render(
   () => (
     <Providers>
+      <SignalRController />
       <Router root={AuthLayout}>
         <Route path="/" component={App} />
         <Route path="/:groupId/:channelId?" component={App} />

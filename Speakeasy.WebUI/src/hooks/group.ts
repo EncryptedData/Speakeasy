@@ -48,11 +48,9 @@ export function useGroupState() {
       const response = await createGroup(newGroupName);
 
       if (!response?.id) {
-        //;
         return;
       }
 
-      await context.loadGroups();
       navigateToGroup(navigate, response.id);
     },
     getGroupUrl: (groupId: string, channelId?: string) => {

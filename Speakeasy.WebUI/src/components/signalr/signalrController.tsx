@@ -57,6 +57,8 @@ export const SignalRController: VoidComponent = () => {
   }
 
   function onMessageReceived(channelId: string, message: MessageDto) {
+    console.log(channelId, message);
+
     if (message.authorId === authContext.me()?.id) {
       return;
     }
@@ -102,6 +104,9 @@ export const SignalRController: VoidComponent = () => {
         channelId,
         response.error,
       );
+      return;
+    } else if (response.data.createdBy === authContext.me().id) {
+      // Logic which creates the channel handles reloading state
       return;
     }
 
@@ -213,15 +218,14 @@ export const SignalRController: VoidComponent = () => {
   }
 
   createEffect(async () => {
-    if (
-      !authContext.isLoggedIn() &&
-      client.state !== HubConnectionState.Disconnected
-    ) {
-      await client.stop();
-      onClientConnected();
+    if (!authContext.isLoggedIn()) {
+      if (client.state !== HubConnectionState.Disconnected) {
+        await client.stop();
+      }
+      cleanup();
     } else {
       await client.start();
-      cleanup();
+      onClientConnected();
     }
   });
 
