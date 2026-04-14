@@ -24,7 +24,7 @@ public abstract class BaseRepositoryController<TDatabase, TTransmission> :
     }
 
     [HttpGet("{id:guid}")]
-    public virtual async Task<ActionResult<TTransmission>> GetAsync(Guid id)
+    public virtual async Task<ActionResult<TTransmission>> GetByIdAsync(Guid id)
     {
         var entity = await _repository.GetByIdAsync(id);
 

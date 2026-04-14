@@ -17,6 +17,7 @@ public class UnitOfWork : IUnitOfWork
         UserRepository = new UserRepository(_context);
         GroupRoleRepository = new GroupRoleRepository(_context);
         CustomEmojiRepository = new CustomEmojiRepository(_context);
+        GifRepository = new GifRepository(_context);
     }
     
     public IChannelRepository ChannelRepository { get; }
@@ -25,13 +26,15 @@ public class UnitOfWork : IUnitOfWork
     
     public IMessageRepository MessageRepository { get; }
     
-    public IFileRepository FileRepository { get; set; }
+    public IFileRepository FileRepository { get; }
 
-    public IUserRepository UserRepository { get; set; }
+    public IUserRepository UserRepository { get; }
     
-    public IGroupRoleRepository GroupRoleRepository { get; set; }
+    public IGroupRoleRepository GroupRoleRepository { get; }
     
-    public ICustomEmojiRepository CustomEmojiRepository { get; set; }
+    public ICustomEmojiRepository CustomEmojiRepository { get; }
+    
+    public IGifRepository GifRepository { get; }
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
