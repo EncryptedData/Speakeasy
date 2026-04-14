@@ -2,8 +2,10 @@ import {
   Accessor,
   createContext,
   createEffect,
+  createSignal,
   onMount,
   type ParentComponent,
+  Setter,
   useContext,
 } from "solid-js";
 import { createStore, produce, type SetStoreFunction } from "solid-js/store";
@@ -27,6 +29,13 @@ export type ChatContext = {
   loadingState: () => Record<string, boolean>;
   loadMessages: (channelId: string) => Promise<void>;
   updateMessages: SetStoreFunction<ReturnType<ChatContext["messages"]>>;
+
+  /**
+   * Used by virtualizer to correctly handle inserts to the virtualized list at the bottom
+   * Set to true before inserting at the end of the messages array
+   */
+  shift: Accessor<boolean>;
+  setShift: Setter<boolean>;
 };
 
 export const ChatContext = createContext<ChatContext>({
@@ -34,6 +43,8 @@ export const ChatContext = createContext<ChatContext>({
   loadingState: () => ({}),
   loadMessages: () => Promise.resolve(),
   updateMessages: () => {},
+  shift: () => true,
+  setShift: () => ({}),
 } satisfies ChatContext);
 
 type ContinuationStateValue = { continuationToken: string };
@@ -50,6 +61,7 @@ export const ChatProvider: ParentComponent = (props) => {
   const [loadingState, updateLoadingState] = createStore<
     Record<string, boolean>
   >({});
+  const [shift, setShift] = createSignal(false);
 
   createEffect(() => {
     if (!authContext.isLoggedIn()) {
@@ -119,6 +131,9 @@ export const ChatProvider: ParentComponent = (props) => {
     },
     messages: () => chatState,
     updateMessages: updateChatState,
+
+    shift,
+    setShift,
   };
 
   return (
@@ -192,5 +207,7 @@ export function useChatContextForChannel(channelId: Accessor<string>) {
         }),
       );
     },
+    shift: chatContext.shift,
+    setShift: chatContext.setShift,
   };
 }

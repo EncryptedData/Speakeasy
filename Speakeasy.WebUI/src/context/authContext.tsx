@@ -173,6 +173,7 @@ export const AuthProvider: ParentComponent = (props) => {
   // Configure our api client to use the current access token
   client.setConfig({
     auth: () => authStore.accessToken,
+    baseUrl: import.meta.env.VITE_API_URL,
   });
 
   const value: AuthContext = {
