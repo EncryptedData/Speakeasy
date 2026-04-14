@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@corvu/dialog": "^0.2.4",
+    "@corvu/popover": "^0.2.0",
     "@corvu/resizable": "^0.2.5",
     "@corvu/tooltip": "^0.2.2",
     "@modular-forms/solid": "^0.25.1",
