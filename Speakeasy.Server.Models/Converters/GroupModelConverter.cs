@@ -6,6 +6,13 @@ namespace Speakeasy.Server.Models.Converters;
 
 public class GroupModelConverter : IModelConverter<Group, GroupDto>
 {
+    private readonly ICurrentUserProvider _currentUserProvider;
+
+    public GroupModelConverter(ICurrentUserProvider currentUserProvider)
+    {
+        _currentUserProvider = currentUserProvider;
+    }
+        
     public async Task<Group> ToDatabaseModelAsync(IUnitOfWork uow, GroupDto dto)
     {
         var group = new Group
@@ -14,6 +21,7 @@ public class GroupModelConverter : IModelConverter<Group, GroupDto>
             Name = dto.Name,
             Channels = [],
             Roles = [],
+            Claims = [],
             CreatedOn = DateTime.UtcNow
         };
         
@@ -26,10 +34,21 @@ public class GroupModelConverter : IModelConverter<Group, GroupDto>
             Hierarchy = 0,
             IsDefault = true
         };
-
+        
+        var groupUserClaim = new GroupUserClaim
+        {
+            Id = Guid.NewGuid(),
+            Group = group,
+            User = await _currentUserProvider.GetCurrentUserAsync(),
+            Permission = GroupUserClaimPermission.Admin
+        };
+        
+        group.Claims.Add(groupUserClaim);
+        
         group.Roles.Add(groupRole);
         
         await uow.GroupRoleRepository.AddAsync(groupRole);
+        await uow.GroupRepository.AddClaimAsync(groupUserClaim);
         
         return group;
     }
