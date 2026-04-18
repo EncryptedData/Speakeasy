@@ -1,10 +1,12 @@
 using System.IO.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.OpenApi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
+using Speakeasy.Server.Common.Exceptions;
 using Speakeasy.Server.Controllers.ApiVersion1.Hubs;
 using Speakeasy.Server.Conventions;
 using Speakeasy.Server.Models.Abstractions;
@@ -72,6 +74,11 @@ public class Program
             });
 
         services.AddHttpContextAccessor();
+
+        var allowedOrigins = config.GetSection("Server:AllowedCorsOrigins").Get<string[]>() ?? ["*"];
+        ExceptionUtil.ThrowIfFalse<Exception>(allowedOrigins.Any());
+
+        services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins(allowedOrigins)));
 
         var connectionStringOptions = config.GetSection("ConnectionStrings").Get<ConnectionStringOptions>();
         ArgumentNullException.ThrowIfNull(connectionStringOptions);
@@ -168,6 +175,7 @@ public class Program
     {
         // Use attribute base routing
         app.UseRouting();
+        app.UseCors();
         app.UseAuthorization();
         app.MapControllers();
         app.MapGroup("api/v1/auth")
