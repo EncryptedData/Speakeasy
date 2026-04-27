@@ -94,7 +94,6 @@ public class Program
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         // Add Model converters
-        services.AddSingleton<IModelConverter<Group, GroupDto>, GroupModelConverter>();
         services.AddSingleton<IModelConverter<GroupRole, GroupRoleDto>, GroupRoleModelConverter>();
         services.AddSingleton<IModelConverter<CustomEmoji, CustomEmojiDto>, CustomEmojiModelConverter>();
         services.AddSingleton<IModelConverter<Gif, GifDto>, GifModelConverter>();
@@ -102,6 +101,7 @@ public class Program
         // These need to be scoped because it accesses the HttpContext which can't be a singleton
         services.AddScoped<IModelConverter<Channel, ChannelDto>, ChannelModelConverter>();
         services.AddScoped<IModelConverter<Message, MessageDto>, MessageModelConverter>();
+        services.AddScoped<IModelConverter<Group, GroupDto>, GroupModelConverter>();
         
         // Add ASP.NET Core Identity services
         services.AddAuthorization();

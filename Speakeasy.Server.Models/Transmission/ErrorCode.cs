@@ -12,5 +12,8 @@ public enum ErrorCode
     NotEnoughRolesLeft,
     NoDefaultRolesLeft,
     NameAlreadyTaken,
-    TooManyMessageReactions
+    TooManyMessageReactions,
+    InvalidParameter,
+    ClaimAlreadyExists,
+    SoleAdminCannotBeRemoved
 }

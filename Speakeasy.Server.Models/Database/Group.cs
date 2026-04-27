@@ -19,4 +19,6 @@ public class Group : INamedEntity
     public List<GroupRole> Roles { get; set; }
     
     public List<CustomEmoji> CustomEmojis { get; set; }
+    
+    public List<GroupUserClaim> Claims { get; set; }
 }

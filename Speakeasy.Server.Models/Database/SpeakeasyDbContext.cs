@@ -24,6 +24,8 @@ public class SpeakeasyDbContext : IdentityDbContext<User>
     
     public DbSet<Gif> Gifs { get; set; }
     
+    public DbSet<GroupUserClaim> GroupUserClaims { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Must be called first because the identity library
